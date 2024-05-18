@@ -52,12 +52,13 @@ const InputPasswordToggle = forwardRef((props, ref) => {
           "is-invalid": invalid,
         })}
       >
-        <Input
+        <input
           ref={ref}
           invalid={invalid}
           type={inputVisibility === false ? "password" : "text"}
           placeholder={placeholder ? placeholder : "············"}
           className={classnames({
+            "form-control": true,
             [inputClassName]: inputClassName,
           })}
           /*eslint-disable */

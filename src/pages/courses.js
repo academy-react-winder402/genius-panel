@@ -24,6 +24,7 @@ import { Button, Input, Row, Col, Card } from "reactstrap";
 // ** Styles
 import "@styles/react/apps/app-invoice.scss";
 import "@styles/react/libs/tables/react-dataTable-component.scss";
+import BreadCrumbs from "../@core/components/breadcrumbs";
 
 const CustomHeader = ({ handleFilter, handlePerPage }) => {
   return (
@@ -171,7 +172,11 @@ const CoursesPage = () => {
 
   return (
     <div className="invoice-list-wrapper">
-      <Card>
+      <BreadCrumbs
+        title="لیست دوره ها"
+        data={[{ title: "دوره ها" }, { title: "لیست دوره ها" }]}
+      />
+      <Card className="rounded overflow-hidden">
         <div className="invoice-list-dataTable react-dataTable">
           <DataTable
             noHeader

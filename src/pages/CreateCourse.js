@@ -10,6 +10,7 @@ import GlobalData from "../@core/components/create-course/steps/GlobalData";
 // ** Icons Imports
 import { FileText, User, MapPin, Link } from "react-feather";
 import BreadCrumbs from "../@core/components/breadcrumbs";
+import UploadImage from "../@core/components/create-course/steps/UploadImage";
 
 const CreateCoursePage = () => {
   // ** Ref
@@ -20,17 +21,17 @@ const CreateCoursePage = () => {
 
   const steps = [
     {
-      id: "globalData",
+      id: "upload-image",
+      title: "آپلود عکس",
+      subtitle: "آپلود عکس دوره",
+      content: <UploadImage stepper={stepper} />,
+    },
+    {
+      id: "global-data",
       title: "اطلاعات عمومی",
-      subtitle: "در این بخش باید اطلاعات عمومی دوره را وارد کنید.",
+      subtitle: "اطلاعات عمومی دوره",
       content: <GlobalData stepper={stepper} />,
     },
-    // {
-    //   id: "personal-info",
-    //   title: "Personal Info",
-    //   subtitle: "Add Personal Info",
-    //   content: <PersonalInfo stepper={stepper} />,
-    // },
     // {
     //   id: "step-address",
     //   title: "Address",

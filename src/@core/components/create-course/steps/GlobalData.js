@@ -1,6 +1,7 @@
 // ** React Imports
 import { Fragment } from "react";
 // Package Imports
+import DatePicker from "react-multi-date-picker";
 import persian from "react-date-object/calendars/persian";
 import persian_fa from "react-date-object/locales/persian_fa";
 
@@ -17,7 +18,6 @@ import { Form, Label, Input, Row, Col, Button, FormFeedback } from "reactstrap";
 
 // Validation Import
 import { createCourseStepOneFormSchema } from "../../../../core/validations/create-course/create-course-step-one-form.validation";
-import DatePicker from "react-multi-date-picker";
 
 const defaultValues = {
   title: "",
@@ -197,8 +197,14 @@ const GlobalData = ({ stepper }) => {
             {errors.date && <FormFeedback>{errors.date.message}</FormFeedback>}
           </Col>
         </Row>
+
         <div className="d-flex justify-content-between">
-          <Button color="secondary" className="btn-prev" outline disabled>
+          <Button
+            type="button"
+            color="primary"
+            className="btn-prev"
+            onClick={() => stepper.previous()}
+          >
             <ArrowLeft
               size={14}
               className="align-middle me-sm-25 me-0"

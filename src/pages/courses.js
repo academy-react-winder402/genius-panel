@@ -37,7 +37,7 @@ const CustomHeader = ({ handleFilter, handlePerPage }) => {
               type="select"
               id="rows-per-page"
               onChange={handlePerPage}
-              className="form-control ms-50 pe-3"
+              className="form-control ms-50 pe-3 coursesRowsPerPageSelectBox"
             >
               <option value="5">5</option>
               <option value="10">10</option>
@@ -176,7 +176,7 @@ const CoursesPage = () => {
         title="لیست دوره ها"
         data={[{ title: "دوره ها" }, { title: "لیست دوره ها" }]}
       />
-      <Card className="rounded overflow-hidden">
+      <Card className="rounded">
         <div className="invoice-list-dataTable react-dataTable">
           <DataTable
             noHeader

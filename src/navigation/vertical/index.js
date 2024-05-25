@@ -1,4 +1,6 @@
-import { Mail, Home, Airplay, Circle } from "react-feather";
+import { Home, Circle, Code } from "react-feather";
+
+import CoursesPage from "../../pages/courses";
 
 export default [
   {
@@ -8,17 +10,31 @@ export default [
     navLink: "/home",
   },
   {
-    id: "smaplePage",
-    title: "Sample Page",
-    icon: <Airplay size={20} />,
-    // navLink: "/sample",
+    id: "courses",
+    title: "مدیریت دوره ها",
+    icon: <Code size={20} />,
     children: [
       {
-        id: "invoiceList",
-        title: "List",
-        icon: <Circle size={12} />,
-        navLink: "/apps/invoice/list",
+        title: "لیست دوره ها",
+        navLink: "/courses",
+        element: <CoursesPage />,
+        icon: <Circle />,
       },
     ],
   },
+
+  // {
+  //   id: "smaplePage",
+  //   title: "Sample Page",
+  //   icon: <Airplay size={20} />,
+  //   // navLink: "/sample",
+  //   children: [
+  //     {
+  //       id: "invoiceList",
+  //       title: "List",
+  //       icon: <Circle size={12} />,
+  //       navLink: "/apps/invoice/list",
+  //     },
+  //   ],
+  // },
 ];

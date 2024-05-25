@@ -44,7 +44,7 @@ const CustomHeader = ({ handleFilter, handlePerPage }) => {
               <option value="20">20</option>
             </Input>
           </div>
-          <Button tag={Link} to="/apps/invoice/add" color="primary">
+          <Button tag={Link} to="/create-course" color="primary">
             افزودن دوره
           </Button>
         </Col>
@@ -174,7 +174,7 @@ const CoursesPage = () => {
     <div className="invoice-list-wrapper">
       <BreadCrumbs
         title="لیست دوره ها"
-        data={[{ title: "دوره ها" }, { title: "لیست دوره ها" }]}
+        data={[{ title: "مدیریت دوره ها" }, { title: "لیست دوره ها" }]}
       />
       <Card className="rounded">
         <div className="invoice-list-dataTable react-dataTable">

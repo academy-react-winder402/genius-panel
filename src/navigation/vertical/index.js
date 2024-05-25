@@ -1,6 +1,7 @@
 import { Home, Circle, Code } from "react-feather";
 
-import CoursesPage from "../../pages/courses";
+import CoursesPage from "../../pages/Courses";
+import CreateCoursePage from "../../pages/CreateCourse";
 
 export default [
   {
@@ -18,6 +19,12 @@ export default [
         title: "لیست دوره ها",
         navLink: "/courses",
         element: <CoursesPage />,
+        icon: <Circle />,
+      },
+      {
+        title: "افزودن دوره",
+        navLink: "/create-course",
+        element: <CreateCoursePage />,
         icon: <Circle />,
       },
     ],

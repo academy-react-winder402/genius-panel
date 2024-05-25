@@ -1,3 +1,9 @@
 .coursesRowsPerPageSelectBox {
   line-height: 1.5rem;
 }
+.coursesDatePickerWrapper {
+  width: 100%;
+}
+.coursesDatePickerWrapper > .rmdp-container {
+  width: 100%;
+}

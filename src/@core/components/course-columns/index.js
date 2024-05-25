@@ -104,8 +104,8 @@ export const columns = [
             row.levelName === "فوق پیشرفته"
               ? "light-success"
               : row.levelName === "پیشرقته"
-              ? "primary"
-              : "danger"
+              ? "light-primary"
+              : "light-warning"
           }
           pill
         >
@@ -148,7 +148,7 @@ export const columns = [
               tag="a"
               href="/"
               className="w-100"
-              onClick={(e) => e.preventDefault() }
+              onClick={(e) => e.preventDefault()}
             >
               <Trash size={14} className="me-50" />
               <span className="align-middle">حذف</span>

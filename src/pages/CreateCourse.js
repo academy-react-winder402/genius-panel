@@ -3,17 +3,17 @@ import { useRef, useState } from "react";
 
 // ** Custom Components
 import Wizard from "@components/wizard";
+import BreadCrumbs from "../@core/components/breadcrumbs";
 
 // ** Steps
 import GlobalData from "../@core/components/create-course/steps/GlobalData";
+import UploadImage from "../@core/components/create-course/steps/UploadImage";
+import AdvanceData from "../@core/components/create-course/steps/AdvanceData";
 
 // ** Icons Imports
 import { FileText, User, MapPin, Link } from "react-feather";
-import BreadCrumbs from "../@core/components/breadcrumbs";
-import UploadImage from "../@core/components/create-course/steps/UploadImage";
 
 const CreateCoursePage = () => {
-  
   // ** Ref
   const ref = useRef(null);
 
@@ -32,6 +32,12 @@ const CreateCoursePage = () => {
       title: "اطلاعات عمومی",
       subtitle: "اطلاعات عمومی دوره",
       content: <GlobalData stepper={stepper} />,
+    },
+    {
+      id: "advance-data",
+      title: "اطلاعات پیشرفته",
+      subtitle: "اطلاعات پیشرفته دوره",
+      content: <AdvanceData stepper={stepper} />,
     },
     // {
     //   id: "step-address",

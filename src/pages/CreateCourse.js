@@ -13,6 +13,7 @@ import BreadCrumbs from "../@core/components/breadcrumbs";
 import UploadImage from "../@core/components/create-course/steps/UploadImage";
 
 const CreateCoursePage = () => {
+  
   // ** Ref
   const ref = useRef(null);
 

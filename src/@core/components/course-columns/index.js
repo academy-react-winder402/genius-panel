@@ -30,48 +30,10 @@ import {
   MoreVertical,
   ArrowDownCircle,
 } from "react-feather";
-import { convertDateToPersian } from "../../../core/utils/date-helper.utils";
 import { numberWithCommas } from "../../../core/utils/number-helper.utils";
-
-// ** Vars
-const invoiceStatusObj = {
-  Sent: { color: "light-secondary", icon: Send },
-  Paid: { color: "light-success", icon: CheckCircle },
-  Draft: { color: "light-primary", icon: Save },
-  Downloaded: { color: "light-info", icon: ArrowDownCircle },
-  "Past Due": { color: "light-danger", icon: Info },
-  "Partial Payment": { color: "light-warning", icon: PieChart },
-};
 
 // ** Table columns
 export const columns = [
-  {
-    sortable: true,
-    minWidth: "102px",
-    sortField: "lastUpdate",
-    name: <TrendingUp size={14} />,
-    // selector: row => row.invoiceStatus,
-    cell: (row) => {
-      const color = invoiceStatusObj[row.invoiceStatus]
-          ? invoiceStatusObj[row.invoiceStatus].color
-          : "primary",
-        Icon = invoiceStatusObj[row.invoiceStatus]
-          ? invoiceStatusObj[row.invoiceStatus].icon
-          : Edit;
-      return (
-        <Fragment>
-          <Avatar
-            color={color}
-            icon={<Icon size={14} />}
-            id={`av-tooltip-${row.id}`}
-          />
-          <UncontrolledTooltip placement="top" target={`av-tooltip-${row.id}`}>
-            {convertDateToPersian(row.lastUpdate)}
-          </UncontrolledTooltip>
-        </Fragment>
-      );
-    },
-  },
   {
     name: "نام دوره",
     sortable: true,
@@ -79,7 +41,7 @@ export const columns = [
     sortField: "250px",
     // selector: (row) => row?.title,
     cell: (row) => (
-      <div>
+      <div className="mr-5">
         <span className="text-sm text-primary">{row?.title}</span>
       </div>
     ),
@@ -110,6 +72,29 @@ export const columns = [
           pill
         >
           {row.levelName}
+        </Badge>
+      );
+    },
+  },
+  {
+    sortable: true,
+    name: "وضعیت دوره",
+    minWidth: "164px",
+    sortField: "statusName",
+    // selector: row => row.statusName,
+    cell: (row) => {
+      return (
+        <Badge
+          color={
+            row.statusName === "در حال برگزاری"
+              ? "light-success"
+              : row.statusName === "شروع ثبت نام"
+              ? "light-primary"
+              : "light-warning"
+          }
+          pill
+        >
+          {row.statusName}
         </Badge>
       );
     },

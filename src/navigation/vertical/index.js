@@ -2,6 +2,7 @@ import { Home, Circle, Code } from "react-feather";
 
 import CoursesPage from "../../pages/Courses";
 import CreateCoursePage from "../../pages/CreateCourse";
+import CourseReservedPage from "../../pages/CourseReserved";
 
 export default [
   {
@@ -25,6 +26,12 @@ export default [
         title: "افزودن دوره",
         navLink: "/create-course",
         element: <CreateCoursePage />,
+        icon: <Circle />,
+      },
+      {
+        title: "دوره های رزرو شده",
+        navLink: "/course-reserved",
+        element: <CourseReservedPage />,
         icon: <Circle />,
       },
     ],

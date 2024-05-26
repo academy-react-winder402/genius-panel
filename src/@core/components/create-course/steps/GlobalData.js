@@ -25,8 +25,8 @@ const defaultValues = {
   capacity: "",
   sessionNumber: "",
   miniDescribe: "",
-  startDate: "",
-  endDate: "",
+  startTime: "",
+  endTime: "",
 };
 
 const GlobalData = ({
@@ -36,8 +36,8 @@ const GlobalData = ({
   setCapacity,
   setSessionNumber,
   setMiniDescribe,
-  setStartDate,
-  setEndDate,
+  setStartTime,
+  setEndTime,
 }) => {
   // ** Hooks
   const {
@@ -52,17 +52,18 @@ const GlobalData = ({
   const onSubmit = (e) => {
     if (isObjEmpty(errors)) {
       const { title, cost, capacity, sessionNumber, miniDescribe, date } = e;
-      const startDate = date[0].year + "-" + date[0].month + "-" + date[0].day;
-      const endDate = date[1]
-        ? date[1].year + "-" + date[1].month + "-" + date[1].day
+      console.log(date);
+      const startTime = date[0].year + "/" + date[0].month + "/" + date[0].day;
+      const endTime = date[1]
+        ? date[1].year + "/" + date[1].month + "/" + date[1].day
         : undefined;
       setTitle(title);
       setCost(cost);
       setCapacity(capacity);
       setSessionNumber(sessionNumber);
       setMiniDescribe(miniDescribe);
-      setStartDate(startDate);
-      setEndDate(endDate);
+      setStartTime(startTime);
+      setEndTime(endTime);
       stepper.next();
     }
   };
@@ -199,11 +200,13 @@ const GlobalData = ({
                     name="date"
                     id="date"
                     format="YYYY/MM/DD"
-                    calender={persian}
+                    calendar={persian}
                     locale={persian_fa}
-                    calenderPosition="bottom_right"
-                    inputClass="form-control coursesDatePickerInput"
+                    calendarPosition="bottom-right"
                     multiple
+                    inputClass="form-control coursesDatePickerInput"
+                    range
+                    dateSeparator=" تا "
                     {...field}
                   />
                 )}

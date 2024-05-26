@@ -11,9 +11,11 @@ import { Facebook, GitHub, Mail, Twitter } from "react-feather";
 // Core Imports
 import { loginAPI } from "../core/services/api/auth/login.api";
 import { loginFormSchema } from "../core/validations/login-form.validation";
+import { setItem } from "../core/services/common/storage.services";
 
 // ** Custom Components
 import InputPasswordToggle from "@components/input-password-toggle";
+import ErrorMessage from "../@core/components/error-message";
 
 // ** Reactstrap Imports
 import {
@@ -33,7 +35,6 @@ import illustrationsLight from "@src/assets/images/pages/login-v2.svg";
 
 // ** Styles
 import "@styles/react/pages/page-authentication.scss";
-import ErrorMessage from "../@core/components/error-message";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -57,6 +58,7 @@ const Login = () => {
 
       if (loginUser.success === true) {
         toast.success("با موفقیت وارد شدید !");
+        setItem("token", loginUser.token);
         navigate("/");
       } else {
         toast.error("کاربری با اطلاعات شما وجود ندارد !");

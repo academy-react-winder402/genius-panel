@@ -95,7 +95,7 @@ const CourseReservedPage = () => {
   };
 
   const CustomPagination = () => {
-    const count = Number((reservedCourses.totalCount / rowsPerPage).toFixed(0));
+    const count = Number((reservedCourses.length / rowsPerPage).toFixed(0));
 
     return (
       <ReactPaginate
@@ -120,12 +120,12 @@ const CourseReservedPage = () => {
   };
 
   const dataToRender = () => {
-    if (reservedCourses?.courseFilterDtos?.length > 0) {
-      return reservedCourses.courseFilterDtos;
-    } else if (reservedCourses?.totalCount === 0) {
+    if (reservedCourses?.length > 0) {
+      return reservedCourses.length;
+    } else if (reservedCourses?.length === 0) {
       return [];
     } else {
-      return reservedCourses?.courseFilterDtos?.slice(0, rowsPerPage);
+      return reservedCourses?.slice(0, rowsPerPage);
     }
   };
 

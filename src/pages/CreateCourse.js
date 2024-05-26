@@ -13,6 +13,8 @@ import CourseFeatures from "../@core/components/create-course/steps/CourseFeatur
 
 // ** Icons Imports
 import { FileText, User, MapPin, Link } from "react-feather";
+import { onFormData } from "../core/utils/form-data-helper.utils";
+import { createCourseAPI } from "../core/services/api/course/create-course.api";
 
 const CreateCoursePage = () => {
   // ** Ref
@@ -26,13 +28,15 @@ const CreateCoursePage = () => {
   const [capacity, setCapacity] = useState();
   const [sessionNumber, setSessionNumber] = useState();
   const [miniDescribe, setMiniDescribe] = useState();
-  const [startDate, setStartDate] = useState();
-  const [endDate, setEndDate] = useState();
-  const [courseLevelValue, setCourseLevelValue] = useState();
-  const [courseTypeValue, setCourseTypeValue] = useState();
-  const [courseTeacherIdValue, setCourseTeacherIdValue] = useState();
+  const [startTime, setStartTime] = useState();
+  const [endTime, setEndTime] = useState();
+  const [courseLvlId, setCourseLvlId] = useState();
+  const [courseTypeIdState, setCourseTypeIdState] = useState();
+  const [teacherIdState, setTeacherIdState] = useState();
+  const [classIdState, setClassIdState] = useState();
+  const [termIdState, setTermIdState] = useState();
 
-  const onSubmit = () => {
+  const onSubmit = async () => {
     const courseData = {
       image: files[0],
       tumbImage: files[0],
@@ -41,14 +45,18 @@ const CreateCoursePage = () => {
       capacity,
       sessionNumber,
       miniDescribe,
-      startDate,
-      endDate,
-      courseLevelValue,
-      courseTypeValue,
-      courseTeacherIdValue,
+      startTime,
+      endTime,
+      courseLvlId,
+      courseTypeId: courseTypeIdState,
+      classId: classIdState,
+      tremId: termIdState,
+      teacherId: teacherIdState,
     };
 
-    console.log(courseData);
+    const formData = onFormData(courseData);
+
+    const createCourse = await createCourseAPI(formData);
   };
 
   const steps = [
@@ -72,8 +80,8 @@ const CreateCoursePage = () => {
           setCapacity={setCapacity}
           setSessionNumber={setSessionNumber}
           setMiniDescribe={setMiniDescribe}
-          setStartDate={setStartDate}
-          setEndDate={setEndDate}
+          setStartTime={setStartTime}
+          setEndTime={setEndTime}
         />
       ),
     },
@@ -91,12 +99,16 @@ const CreateCoursePage = () => {
         <CourseFeatures
           stepper={stepper}
           handleSubmitFn={onSubmit}
-          courseLevelState={courseLevelValue}
-          courseTypeState={courseTypeValue}
-          courseTeacherIdState={courseTeacherIdValue}
-          setCourseLevelState={setCourseLevelValue}
-          setCourseTypeState={setCourseTypeValue}
-          setCourseTeacherIdState={setCourseTeacherIdValue}
+          courseLvlId={courseLvlId}
+          courseTypeIdState={courseTypeIdState}
+          teacherIdState={teacherIdState}
+          classIdState={classIdState}
+          termIdState={termIdState}
+          setCourseLvlId={setCourseLvlId}
+          setCourseTypeIdState={setCourseTypeIdState}
+          setTeacherIdState={setTeacherIdState}
+          setClassIdState={setClassIdState}
+          setTermIdState={setTermIdState}
         />
       ),
     },

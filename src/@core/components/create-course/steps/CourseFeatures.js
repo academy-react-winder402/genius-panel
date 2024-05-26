@@ -1,52 +1,58 @@
 // ** React Imports
 import { Fragment, useEffect, useState } from "react";
-// Package Imports
-import DatePicker from "react-multi-date-picker";
 
 // ** Utils
 import { isObjEmpty } from "@utils";
 
 // ** Third Party Components
-import { useForm, Controller } from "react-hook-form";
-import { ArrowLeft, ArrowRight } from "react-feather";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { ArrowLeft, ArrowRight } from "react-feather";
+import { Controller, useForm } from "react-hook-form";
+import toast from "react-hot-toast";
 import Select from "react-select";
 import makeAnimated from "react-select/animated";
-import toast from "react-hot-toast";
 
 // ** Reactstrap Imports
-import { Form, Label, Input, Row, Col, Button, FormFeedback } from "reactstrap";
+import { Button, Col, Form, FormFeedback, Label, Row } from "reactstrap";
 
 // ** API Imports
-import { getCourseTypesAPI } from "../../../../core/services/api/course/get-course-types.api";
-import { getAllCourseLevelAPI } from "../../../../core/services/api/course/get-all-course-level.api";
+import { getCreateCourseAPI } from "../../../../core/services/api/course/get-create-course.api";
 
 // ** Validation Import
 import { createCourseStepThreeFormSchema } from "../../../../core/validations/create-course/create-course-step-three-form.validation";
 
 // ** Util Imports
 import { selectThemeColors } from "../../../../utility/Utils";
-import { getTeachersAPI } from "../../../../core/services/api/teacher/get-teachers.api";
 
 const defaultValues = {
-  courseType: "",
-  courseLevel: "",
-  courseTeacherId: "",
+  courseType: undefined,
+  courseLevel: undefined,
+  courseLvlId: undefined,
+  courseTypeIdState: undefined,
+  teacherIdState: undefined,
+  classIdState: undefined,
+  termIdState: undefined,
 };
 
 const CourseFeatures = ({
   stepper,
   handleSubmitFn,
-  courseLevelState,
-  courseTypeState,
-  courseTeacherIdState,
-  setCourseLevelState,
-  setCourseTypeState,
-  setCourseTeacherIdState,
+  courseLvlId,
+  courseTypeIdState,
+  teacherIdState,
+  classIdState,
+  termIdState,
+  setCourseLvlId,
+  setCourseTypeIdState,
+  setTeacherIdState,
+  setClassIdState,
+  setTermIdState,
 }) => {
   // ** Hooks
   const [courseTypes, setCourseTypes] = useState();
   const [courseLevels, setCourseLevels] = useState();
+  const [classRoom, setClassRoom] = useState();
+  const [term, setTerm] = useState();
   const [teachers, setTeachers] = useState();
 
   const {
@@ -60,14 +66,17 @@ const CourseFeatures = ({
 
   const onSubmit = (e) => {
     if (isObjEmpty(errors)) {
-      setCourseTypeState(e.courseType.value);
-      setCourseLevelState(e.courseLevel.value);
-      setCourseTeacherIdState(e.teacherId.value);
-
+      setCourseTypeIdState(e.courseType.id);
+      setCourseLvlId(e.courseLevel?.id);
+      setTeacherIdState(e.teacherId?.teacherId);
+      setClassIdState(e.classId?.id);
+      setTermIdState(+e.termId?.id);
       if (
-        courseLevelState !== undefined &&
-        courseTypeState !== undefined &&
-        courseTeacherIdState !== undefined
+        courseLvlId !== undefined &&
+        courseTypeIdState !== undefined &&
+        teacherIdState !== undefined &&
+        classIdState !== undefined &&
+        termIdState !== undefined
       ) {
         handleSubmitFn();
       }
@@ -77,52 +86,21 @@ const CourseFeatures = ({
   const animatedComponents = makeAnimated();
 
   useEffect(() => {
-    const fetchCourseTypes = async () => {
+    const getCreateCourse = async () => {
       try {
-        const getCourseTypes = await getCourseTypesAPI();
+        const response = await getCreateCourseAPI();
 
-        const convertCourseTypesToObj = getCourseTypes.map((type) => ({
-          value: type.id,
-          label: type.typeName,
-        }));
-
-        setCourseTypes(convertCourseTypesToObj);
+        setCourseTypes(response.courseTypeDtos);
+        setCourseLevels(response.courseLevelDtos);
+        setTeachers(response.teachers);
+        setClassRoom(response.classRoomDtos);
+        setTerm(response.termDtos);
       } catch (error) {
-        toast.error("مشکلی در دریافت تایپ دوره ها به وجود آمد !");
-      }
-    };
-    const fetchCourseLevels = async () => {
-      try {
-        const getCourseLevels = await getAllCourseLevelAPI();
-
-        const convertCourseLevelsToObj = getCourseLevels.map((type) => ({
-          value: type.id,
-          label: type.levelName,
-        }));
-
-        setCourseLevels(convertCourseLevelsToObj);
-      } catch (error) {
-        toast.error("مشکلی در دریافت سطح دوره ها به وجود آمد !");
-      }
-    };
-    const fetchTeachers = async () => {
-      try {
-        const getTeachers = await getTeachersAPI();
-
-        const convertTeachersToObj = getTeachers.map((type) => ({
-          value: type.teacherId,
-          label: type.fullName,
-        }));
-
-        setTeachers(convertTeachersToObj);
-      } catch (error) {
-        toast.error("مشکلی در دریافت اساتید به وجود آمد !");
+        toast.error("مکشلی در دریافت داده ها به وجود آمد !");
       }
     };
 
-    fetchCourseTypes();
-    fetchCourseLevels();
-    fetchTeachers();
+    getCreateCourse();
   }, []);
 
   return (
@@ -150,6 +128,8 @@ const CourseFeatures = ({
                   classNamePrefix="select"
                   name="courseType"
                   options={courseTypes}
+                  getOptionValue={(type) => type.id}
+                  getOptionLabel={(type) => type.typeName}
                   isClearable
                   components={animatedComponents}
                   {...field}
@@ -175,6 +155,8 @@ const CourseFeatures = ({
                   classNamePrefix="select"
                   name="courseLevel"
                   options={courseLevels}
+                  getOptionValue={(level) => level.id}
+                  getOptionLabel={(level) => level.levelName}
                   isClearable
                   components={animatedComponents}
                   {...field}
@@ -202,6 +184,8 @@ const CourseFeatures = ({
                   classNamePrefix="select"
                   name="teacherId"
                   options={teachers}
+                  getOptionValue={(teacher) => teacher.teacherId}
+                  getOptionLabel={(teacher) => teacher.fullName}
                   isClearable
                   components={animatedComponents}
                   {...field}
@@ -210,6 +194,62 @@ const CourseFeatures = ({
             />
             {errors.teacherId && (
               <FormFeedback>{errors.teacherId.message}</FormFeedback>
+            )}
+          </Col>
+          <Col md="6" className="mb-1">
+            <Label className="form-label" for="classId">
+              انتخاب کلاس
+            </Label>
+            <Controller
+              id="classId"
+              name="classId"
+              control={control}
+              render={({ field }) => (
+                <Select
+                  theme={selectThemeColors}
+                  className="react-select"
+                  classNamePrefix="select"
+                  name="classId"
+                  options={classRoom}
+                  getOptionValue={(classRoom) => classRoom.id}
+                  getOptionLabel={(classRoom) => classRoom.classRoomName}
+                  isClearable
+                  components={animatedComponents}
+                  {...field}
+                />
+              )}
+            />
+            {errors.classId && (
+              <FormFeedback>{errors.classId.message}</FormFeedback>
+            )}
+          </Col>
+        </Row>
+        <Row>
+          <Col md="6" className="mb-1">
+            <Label className="form-label" for="termId">
+              وضعیت دوره
+            </Label>
+            <Controller
+              id="termId"
+              name="termId"
+              control={control}
+              render={({ field }) => (
+                <Select
+                  theme={selectThemeColors}
+                  className="react-select"
+                  classNamePrefix="select"
+                  name="termId"
+                  options={term}
+                  getOptionValue={(term) => term.id}
+                  getOptionLabel={(term) => term.termName}
+                  isClearable
+                  components={animatedComponents}
+                  {...field}
+                />
+              )}
+            />
+            {errors.termId && (
+              <FormFeedback>{errors.termId.message}</FormFeedback>
             )}
           </Col>
         </Row>

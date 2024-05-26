@@ -25,9 +25,20 @@ const defaultValues = {
   capacity: "",
   sessionNumber: "",
   miniDescribe: "",
+  startDate: "",
+  endDate: "",
 };
 
-const GlobalData = ({ stepper }) => {
+const GlobalData = ({
+  stepper,
+  setTitle,
+  setCost,
+  setCapacity,
+  setSessionNumber,
+  setMiniDescribe,
+  setStartDate,
+  setEndDate,
+}) => {
   // ** Hooks
   const {
     control,
@@ -39,15 +50,19 @@ const GlobalData = ({ stepper }) => {
   });
 
   const onSubmit = (e) => {
-    const startDate =
-      e.date[0].year + "-" + e.date[0].month + "-" + e.date[0].day;
-    const endDate = e.date[1]
-      ? e.date[1].year + "-" + e.date[1].month + "-" + e.date[1].day
-      : undefined;
-
-    console.log(startDate, endDate);
-
     if (isObjEmpty(errors)) {
+      const { title, cost, capacity, sessionNumber, miniDescribe, date } = e;
+      const startDate = date[0].year + "-" + date[0].month + "-" + date[0].day;
+      const endDate = date[1]
+        ? date[1].year + "-" + date[1].month + "-" + date[1].day
+        : undefined;
+      setTitle(title);
+      setCost(cost);
+      setCapacity(capacity);
+      setSessionNumber(sessionNumber);
+      setMiniDescribe(miniDescribe);
+      setStartDate(startDate);
+      setEndDate(endDate);
       stepper.next();
     }
   };

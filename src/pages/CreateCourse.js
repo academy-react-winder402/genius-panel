@@ -1,21 +1,22 @@
 // ** React Imports
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import toast from "react-hot-toast";
 
 // ** Custom Components
-import Wizard from "@components/wizard";
 import BreadCrumbs from "@components/breadcrumbs";
+import Wizard from "@components/wizard";
+import SelectTechnologies from "../@core/components/create-course/steps/selectTechnologies";
 
 // ** Steps
-import GlobalData from "../@core/components/create-course/steps/GlobalData";
-import UploadImage from "../@core/components/create-course/steps/UploadImage";
 import AdvanceData from "../@core/components/create-course/steps/AdvanceData";
 import CourseFeatures from "../@core/components/create-course/steps/CourseFeatures";
+import GlobalData from "../@core/components/create-course/steps/GlobalData";
+import UploadImage from "../@core/components/create-course/steps/UploadImage";
 
-// ** Icons Imports
-import { FileText, User, MapPin, Link } from "react-feather";
-import { onFormData } from "../core/utils/form-data-helper.utils";
+// ** Core Imports
 import { createCourseAPI } from "../core/services/api/course/create-course.api";
-import toast from "react-hot-toast";
+import { getCreateCourseAPI } from "../core/services/api/course/get-create-course.api";
+import { onFormData } from "../core/utils/form-data-helper.utils";
 
 const CreateCoursePage = () => {
   // ** Ref
@@ -40,6 +41,8 @@ const CreateCoursePage = () => {
   const [googleSchema, setGoogleSchema] = useState();
   const [uniqueUrlString, setUniqueUrlString] = useState();
   const [shortLink, setShortLink] = useState();
+  const [courseId, setCourseId] = useState();
+  const [createCourseOptions, setCreateCourseOptions] = useState();
 
   const onSubmit = async () => {
     const courseData = {
@@ -70,8 +73,11 @@ const CreateCoursePage = () => {
       const formData = onFormData(courseData);
       const createCourse = await createCourseAPI(formData);
 
-      if (createCourse.success) toast.success("دوره با موفقیت ثبت شد !");
-      else toast.error(createCourse.message)
+      if (createCourse.success) {
+        toast.success("دوره با موفقیت ثبت شد !");
+        setCourseId(createCourse.id);
+        stepper.next();
+      } else toast.error(createCourse.message);
     } catch (error) {
       toast.error("مشکلی در ارسال دوره به وجود آمد !");
     }
@@ -125,6 +131,7 @@ const CreateCoursePage = () => {
         <CourseFeatures
           stepper={stepper}
           handleSubmitFn={onSubmit}
+          createCourseOptions={createCourseOptions}
           courseLvlId={courseLvlId}
           courseTypeIdState={courseTypeIdState}
           teacherIdState={teacherIdState}
@@ -138,7 +145,34 @@ const CreateCoursePage = () => {
         />
       ),
     },
+    {
+      id: "select-technologies",
+      title: "انحخاب تکنولوژی ها",
+      subtitle: "تکنولوژی های دوره",
+      content: (
+        <SelectTechnologies
+          stepper={stepper}
+          handleSubmitFn={onSubmit}
+          courseId={courseId}
+          createCourseOptions={createCourseOptions}
+        />
+      ),
+    },
   ];
+
+  useEffect(() => {
+    const getCreateCourse = async () => {
+      try {
+        const response = await getCreateCourseAPI();
+
+        setCreateCourseOptions(response);
+      } catch (error) {
+        toast.error("مکشلی در دریافت داده ها به وجود آمد !");
+      }
+    };
+
+    getCreateCourse();
+  }, []);
 
   return (
     <div className="horizontal-wizard">

@@ -15,6 +15,7 @@ import CourseFeatures from "../@core/components/create-course/steps/CourseFeatur
 import { FileText, User, MapPin, Link } from "react-feather";
 import { onFormData } from "../core/utils/form-data-helper.utils";
 import { createCourseAPI } from "../core/services/api/course/create-course.api";
+import toast from "react-hot-toast";
 
 const CreateCoursePage = () => {
   // ** Ref
@@ -35,11 +36,17 @@ const CreateCoursePage = () => {
   const [teacherIdState, setTeacherIdState] = useState();
   const [classIdState, setClassIdState] = useState();
   const [termIdState, setTermIdState] = useState();
+  const [googleTitle, setGoogleTitle] = useState();
+  const [googleSchema, setGoogleSchema] = useState();
+  const [uniqueUrlString, setUniqueUrlString] = useState();
+  const [shortLink, setShortLink] = useState();
 
   const onSubmit = async () => {
     const courseData = {
       image: files[0],
       tumbImage: files[0],
+      imageAddress: files[0],
+      tumbImageAddress: files[0],
       title,
       cost,
       capacity,
@@ -52,11 +59,22 @@ const CreateCoursePage = () => {
       classId: classIdState,
       tremId: termIdState,
       teacherId: teacherIdState,
+      googleTitle,
+      googleSchema,
+      uniqeUrlString: uniqueUrlString,
+      shortLink,
+      describe: miniDescribe,
     };
 
-    const formData = onFormData(courseData);
+    try {
+      const formData = onFormData(courseData);
+      const createCourse = await createCourseAPI(formData);
 
-    const createCourse = await createCourseAPI(formData);
+      if (createCourse.success) toast.success("دوره با موفقیت ثبت شد !");
+      else toast.error(createCourse.message)
+    } catch (error) {
+      toast.error("مشکلی در ارسال دوره به وجود آمد !");
+    }
   };
 
   const steps = [
@@ -89,7 +107,15 @@ const CreateCoursePage = () => {
       id: "advance-data",
       title: "اطلاعات پیشرفته",
       subtitle: "اطلاعات پیشرفته دوره",
-      content: <AdvanceData stepper={stepper} />,
+      content: (
+        <AdvanceData
+          stepper={stepper}
+          setGoogleTitle={setGoogleTitle}
+          setGoogleSchema={setGoogleSchema}
+          setUniqueUrlString={setUniqueUrlString}
+          setShortLink={setShortLink}
+        />
+      ),
     },
     {
       id: "course-features",

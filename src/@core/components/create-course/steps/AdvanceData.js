@@ -22,7 +22,13 @@ const defaultValues = {
   shortLink: "",
 };
 
-const AdvanceData = ({ stepper }) => {
+const AdvanceData = ({
+  stepper,
+  setGoogleTitle,
+  setGoogleSchema,
+  setUniqueUrlString,
+  setShortLink,
+}) => {
   // ** Hooks
   const {
     control,
@@ -33,8 +39,13 @@ const AdvanceData = ({ stepper }) => {
     resolver: yupResolver(createCourseStepTwoFormSchema),
   });
 
-  const onSubmit = () => {
+  const onSubmit = (e) => {
     if (isObjEmpty(errors)) {
+      const { googleTitle, googleSchema, uniqueUrlString, shortLink } = e;
+      setGoogleTitle(googleTitle);
+      setGoogleSchema(googleSchema);
+      setUniqueUrlString(uniqueUrlString);
+      setShortLink(shortLink);
       stepper.next();
     }
   };

@@ -54,7 +54,7 @@ module.exports = {
     "no-tabs": "error",
     "no-unneeded-ternary": "error",
     "no-whitespace-before-property": "error",
-    "nonblock-statement-body-position": "error",
+    // "nonblock-statement-body-position": "error",
     "object-property-newline": [
       "error",
       { allowAllPropertiesOnSameLine: true },

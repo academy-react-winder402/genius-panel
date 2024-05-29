@@ -1,22 +1,18 @@
 // ** React Imports
-import { Fragment, useEffect, useState } from "react";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { Fragment } from "react";
+import { Controller, useForm } from "react-hook-form";
+import Select from "react-select";
+import makeAnimated from "react-select/animated";
 
 // ** Utils
 import { isObjEmpty } from "@utils";
 
-// ** Third Party Components
-import { yupResolver } from "@hookform/resolvers/yup";
+// ** Icons Components
 import { ArrowLeft, ArrowRight } from "react-feather";
-import { Controller, useForm } from "react-hook-form";
-import toast from "react-hot-toast";
-import Select from "react-select";
-import makeAnimated from "react-select/animated";
 
 // ** Reactstrap Imports
 import { Button, Col, Form, FormFeedback, Label, Row } from "reactstrap";
-
-// ** API Imports
-import { getCreateCourseAPI } from "../../../../core/services/api/course/get-create-course.api";
 
 // ** Validation Import
 import { createCourseStepThreeFormSchema } from "../../../../core/validations/create-course/create-course-step-three-form.validation";
@@ -37,6 +33,7 @@ const defaultValues = {
 const CourseFeatures = ({
   stepper,
   handleSubmitFn,
+  createCourseOptions,
   courseLvlId,
   courseTypeIdState,
   teacherIdState,
@@ -49,12 +46,6 @@ const CourseFeatures = ({
   setTermIdState,
 }) => {
   // ** Hooks
-  const [courseTypes, setCourseTypes] = useState();
-  const [courseLevels, setCourseLevels] = useState();
-  const [classRoom, setClassRoom] = useState();
-  const [term, setTerm] = useState();
-  const [teachers, setTeachers] = useState();
-
   const {
     control,
     handleSubmit,
@@ -85,24 +76,6 @@ const CourseFeatures = ({
 
   const animatedComponents = makeAnimated();
 
-  useEffect(() => {
-    const getCreateCourse = async () => {
-      try {
-        const response = await getCreateCourseAPI();
-
-        setCourseTypes(response.courseTypeDtos);
-        setCourseLevels(response.courseLevelDtos);
-        setTeachers(response.teachers);
-        setClassRoom(response.classRoomDtos);
-        setTerm(response.termDtos);
-      } catch (error) {
-        toast.error("مکشلی در دریافت داده ها به وجود آمد !");
-      }
-    };
-
-    getCreateCourse();
-  }, []);
-
   return (
     <Fragment>
       <div className="content-header">
@@ -127,7 +100,7 @@ const CourseFeatures = ({
                   className="react-select"
                   classNamePrefix="select"
                   name="courseType"
-                  options={courseTypes}
+                  options={createCourseOptions?.courseTypeDtos}
                   getOptionValue={(type) => type.id}
                   getOptionLabel={(type) => type.typeName}
                   isClearable
@@ -154,7 +127,7 @@ const CourseFeatures = ({
                   className="react-select"
                   classNamePrefix="select"
                   name="courseLevel"
-                  options={courseLevels}
+                  options={createCourseOptions?.courseLevelDtos}
                   getOptionValue={(level) => level.id}
                   getOptionLabel={(level) => level.levelName}
                   isClearable
@@ -183,7 +156,7 @@ const CourseFeatures = ({
                   className="react-select"
                   classNamePrefix="select"
                   name="teacherId"
-                  options={teachers}
+                  options={createCourseOptions?.teachers}
                   getOptionValue={(teacher) => teacher.teacherId}
                   getOptionLabel={(teacher) => teacher.fullName}
                   isClearable
@@ -210,7 +183,7 @@ const CourseFeatures = ({
                   className="react-select"
                   classNamePrefix="select"
                   name="classId"
-                  options={classRoom}
+                  options={createCourseOptions?.classRoomDtos}
                   getOptionValue={(classRoom) => classRoom.id}
                   getOptionLabel={(classRoom) => classRoom.classRoomName}
                   isClearable
@@ -239,7 +212,7 @@ const CourseFeatures = ({
                   className="react-select"
                   classNamePrefix="select"
                   name="termId"
-                  options={term}
+                  options={createCourseOptions?.termDtos}
                   getOptionValue={(term) => term.id}
                   getOptionLabel={(term) => term.termName}
                   isClearable

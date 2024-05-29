@@ -52,11 +52,16 @@ const GlobalData = ({
   const onSubmit = (e) => {
     if (isObjEmpty(errors)) {
       const { title, cost, capacity, sessionNumber, miniDescribe, date } = e;
-      console.log(date);
-      const startTime = date[0].year + "/" + date[0].month + "/" + date[0].day;
-      const endTime = date[1]
-        ? date[1].year + "/" + date[1].month + "/" + date[1].day
-        : undefined;
+
+      const dateFormatter = new Intl.DateTimeFormat("en", {
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit",
+      });
+
+      const startTime = dateFormatter.format(date[0][0]);
+      const endTime = dateFormatter.format(date[0][1]);
+
       setTitle(title);
       setCost(cost);
       setCapacity(capacity);

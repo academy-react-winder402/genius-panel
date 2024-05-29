@@ -102,7 +102,6 @@ export const columns = [
   {
     sortable: true,
     name: "مدرس",
-    sortable: true,
     minWidth: "150px",
     sortField: "teacherName",
     sortName: "teacherName",

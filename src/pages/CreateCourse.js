@@ -17,6 +17,7 @@ import UploadImage from "../@core/components/create-course/steps/UploadImage";
 import { createCourseAPI } from "../core/services/api/course/create-course.api";
 import { getCreateCourseAPI } from "../core/services/api/course/get-create-course.api";
 import { onFormData } from "../core/utils/form-data-helper.utils";
+import Describe from "../@core/components/create-course/steps/Describe";
 
 const CreateCoursePage = () => {
   // ** Ref
@@ -84,6 +85,14 @@ const CreateCoursePage = () => {
   };
 
   const steps = [
+    {
+      id: "describe",
+      title: "توضیحات",
+      subtitle: "توضیحات دوره",
+      content: (
+        <Describe />
+      ),
+    },
     {
       id: "upload-image",
       title: "آپلود عکس",

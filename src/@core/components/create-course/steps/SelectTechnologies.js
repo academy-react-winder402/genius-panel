@@ -2,18 +2,20 @@
 import { Fragment } from "react";
 
 // ** Third Party Components
-import { yupResolver } from "@hookform/resolvers/yup";
 import { ArrowLeft, ArrowRight } from "react-feather";
 import { Controller, useForm } from "react-hook-form";
 import Select from "react-select";
 import makeAnimated from "react-select/animated";
+import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 
 // ** Reactstrap Imports
 import { Button, Col, Form, FormFeedback, Label, Row } from "reactstrap";
 
-// ** Util Imports
-import toast from "react-hot-toast";
+// ** Core Imports
 import { addCourseTechnologyAPI } from "../../../../core/services/api/course/add-course-technology.api";
+
+// ** Util Imports
 import { selectThemeColors } from "../../../../utility/Utils";
 
 const defaultValues = {
@@ -22,22 +24,31 @@ const defaultValues = {
 
 const SelectTechnologies = ({ stepper, createCourseOptions, courseId }) => {
   // ** Hooks
+  const navigate = useNavigate();
+
   const {
     control,
     handleSubmit,
     formState: { errors },
   } = useForm({
     defaultValues,
-    resolver: yupResolver(),
   });
 
-  const onSubmit = async () => {
-    try {
-      const addTechnology = await addCourseTechnologyAPI(courseId);
+  const onSubmit = async (e) => {
+    const convertTechnologies = e.technologies.map((technology) => ({
+      techId: technology.id,
+    }));
 
-      if (addTechnology.success)
+    try {
+      const addTechnology = await addCourseTechnologyAPI(
+        courseId,
+        convertTechnologies
+      );
+
+      if (addTechnology.success) {
         toast.success("تکنولوژی های این دوره با موفقیت اضافه شد !");
-      else toast.error("مکشلی در افزودن تکنولوژی ها به وجود آمد !");
+        navigate("/courses");
+      } else toast.error("مکشلی در افزودن تکنولوژی ها به وجود آمد !");
     } catch (error) {
       toast.error("مکشلی در افزودن تکنولوژی ها به وجود آمد !");
     }
@@ -57,7 +68,7 @@ const SelectTechnologies = ({ stepper, createCourseOptions, courseId }) => {
         <Row>
           <Col md="6" className="mb-1">
             <Label className="form-label" for="technologies">
-              تکنولوژی های دوره
+              تکنولوژی های دورهdhsjkdhs
             </Label>
             <Controller
               id="technologies"
@@ -72,6 +83,7 @@ const SelectTechnologies = ({ stepper, createCourseOptions, courseId }) => {
                   options={createCourseOptions?.technologyDtos}
                   getOptionValue={(technology) => technology.id}
                   getOptionLabel={(technology) => technology.techName}
+                  onChange={(e) => console.log(e)}
                   isClearable
                   isMulti
                   components={animatedComponents}

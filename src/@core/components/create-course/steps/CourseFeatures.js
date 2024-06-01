@@ -259,7 +259,7 @@ const CourseFeatures = ({
             <span className="align-middle d-sm-inline-block d-none">قبلی</span>
           </Button>
           <Button type="submit" color="primary" className="btn-next">
-            <span className="align-middle d-sm-inline-block d-none">بعدی</span>
+            <span className="align-middle d-sm-inline-block d-none">ایجاد دوره</span>
             <ArrowRight
               size={14}
               className="align-middle ms-sm-25 ms-0"

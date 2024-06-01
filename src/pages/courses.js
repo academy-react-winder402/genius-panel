@@ -1,30 +1,34 @@
 // ** React Imports
-import { Link } from "react-router-dom";
-import { useState, useEffect } from "react";
-
-// Toast Import
+import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
+import { Link } from "react-router-dom";
 
 // ** Table Columns
 import { columns } from "../@core/components/course-columns";
 
-import { getCourseWithPaginationAPI } from "../core/services/api/course/get-course-with-pagination.api";
+// ** Core Imports
+import { getCourseListAPI } from "../core/services/api/course/get-course-list.api";
 
 // ** Third Party Components
-import ReactPaginate from "react-paginate";
-import { ChevronDown } from "react-feather";
 import DataTable from "react-data-table-component";
+import ReactPaginate from "react-paginate";
 
-// Hooks import
+// ** Hooks import
 import { useTimeOut } from "../utility/hooks/useTimeOut";
 
 // ** Reactstrap Imports
-import { Button, Input, Row, Col, Card } from "reactstrap";
+import { Button, Card, Col, Input, Row } from "reactstrap";
+
+// ** Icon Imports
+import { Book, BookOpen, CheckCircle, ChevronDown, UserCheck } from "react-feather";
+
+// ** Custom Components
+import BreadCrumbs from "../@core/components/breadcrumbs";
+import StatsHorizontal from "../@core/components/StatsHorizontal";
 
 // ** Styles
 import "@styles/react/apps/app-invoice.scss";
 import "@styles/react/libs/tables/react-dataTable-component.scss";
-import BreadCrumbs from "../@core/components/breadcrumbs";
 
 const CustomHeader = ({ handleFilter, handlePerPage }) => {
   return (
@@ -42,6 +46,8 @@ const CustomHeader = ({ handleFilter, handlePerPage }) => {
               <option value="5">5</option>
               <option value="10">10</option>
               <option value="20">20</option>
+              <option value="50">50</option>
+              <option value="100">100</option>
             </Input>
           </div>
           <Button tag={Link} to="/create-course" color="primary">
@@ -81,14 +87,11 @@ const CoursesPage = () => {
   useEffect(() => {
     const fetchCourses = async () => {
       try {
-        const getData = await getCourseWithPaginationAPI(
-          currentPage,
-          rowsPerPage
-        );
+        const getData = await getCourseListAPI(currentPage, rowsPerPage);
 
         setCourses(getData);
       } catch (error) {
-        toast.error("e");
+        toast.error("مشکلی در دریافت دوره ها به وجود آمد !");
       }
     };
 
@@ -98,17 +101,17 @@ const CoursesPage = () => {
   useEffect(() => {
     const fetchCourses = async () => {
       try {
-        const getCourses = await getCourseWithPaginationAPI(
+        const getCourses = await getCourseListAPI(
           currentPage ? currentPage : undefined,
           rowsPerPage ? rowsPerPage : undefined,
-          sortColumn ? sortColumn : undefined,
           sort ? sort : undefined,
+          sortColumn ? sortColumn : undefined,
           searchText ? searchText : undefined
         );
 
         setCourses(getCourses);
       } catch (error) {
-        toast.error("ارور");
+        toast.error("مشکلی در دریافت دوره ها به وجود آمد !");
       }
     };
 
@@ -155,12 +158,12 @@ const CoursesPage = () => {
   };
 
   const dataToRender = () => {
-    if (courses?.courseFilterDtos?.length > 0) {
-      return courses.courseFilterDtos;
-    } else if (courses?.totalCount === 0) {
+    if (courses?.totalCount > 0) {
+      return courses.courseDtos;
+    } else if (courses?.courseDtos?.length === 0) {
       return [];
     } else {
-      return courses?.courseFilterDtos?.slice(0, rowsPerPage);
+      return courses?.courseDtos?.slice(0, rowsPerPage);
     }
   };
 
@@ -178,6 +181,44 @@ const CoursesPage = () => {
           { title: "لیست دوره ها" },
         ]}
       />
+      <div className="app-user-list w-100">
+        <Row>
+          <Col lg="3" sm="6">
+            <StatsHorizontal
+              color="primary"
+              statTitle="همه دوره ها"
+              icon={<Book />}
+              renderStats={
+                <h3 className="fw-bolder mb-75">{courses?.totalCount}</h3>
+              }
+            />
+          </Col>
+          <Col lg="3" sm="6">
+            <StatsHorizontal
+              color="success"
+              statTitle="دوره های فعال"
+              icon={<CheckCircle />}
+              renderStats={<h3 className="fw-bolder mb-75">4,567</h3>}
+            />
+          </Col>
+          <Col lg="3" sm="6">
+            <StatsHorizontal
+              color="danger"
+              statTitle="دوره های حذف شده"
+              icon={<UserCheck size={20} />}
+              renderStats={<h3 className="fw-bolder mb-75">19,860</h3>}
+            />
+          </Col>
+          <Col lg="3" sm="6">
+            <StatsHorizontal
+              color="warning"
+              statTitle="دوره های در حال برگزاری"
+              icon={<BookOpen size={20} />}
+              renderStats={<h3 className="fw-bolder mb-75">237</h3>}
+            />
+          </Col>
+        </Row>
+      </div>
       <Card className="rounded">
         <div className="invoice-list-dataTable react-dataTable">
           <DataTable

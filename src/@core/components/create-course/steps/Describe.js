@@ -9,7 +9,6 @@ import LinkTool from "@editorjs/link";
 import List from "@editorjs/list";
 import Quote from "@editorjs/quote";
 import RawTool from "@editorjs/raw";
-import SimpleImage from "@editorjs/simple-image";
 import Warning from "@editorjs/warning";
 import Table from "editorjs-table";
 import { Fragment, useEffect, useRef } from "react";
@@ -50,7 +49,6 @@ const Describe = ({ stepper, describe, setDescribe }) => {
           },
         },
         raw: RawTool,
-        image: SimpleImage,
         image: {
           class: ImageTool,
           config: {

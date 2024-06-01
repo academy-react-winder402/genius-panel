@@ -266,7 +266,7 @@ const GlobalData = ({
             type="button"
             color="primary"
             className="btn-prev"
-            onClick={() => stepper.previous()}
+            disabled
           >
             <ArrowLeft
               size={14}

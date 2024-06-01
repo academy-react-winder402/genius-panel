@@ -1,88 +1,37 @@
 // ** React Imports
+import Checklist from "@editorjs/checklist";
+import Delimiter from "@editorjs/delimiter";
 import EditorJS from "@editorjs/editorjs";
+import Embed from "@editorjs/embed";
 import Header from "@editorjs/header";
 import ImageTool from "@editorjs/image";
 import LinkTool from "@editorjs/link";
+import List from "@editorjs/list";
+import Quote from "@editorjs/quote";
 import RawTool from "@editorjs/raw";
-import SimpleImage from "@editorjs/simple-image";
-import { yupResolver } from "@hookform/resolvers/yup";
+import Warning from "@editorjs/warning";
+import Table from "editorjs-table";
 import { Fragment, useEffect, useRef } from "react";
-import { Controller, useForm } from "react-hook-form";
-import Select from "react-select";
-import makeAnimated from "react-select/animated";
+import toast from "react-hot-toast";
+import { Button } from "reactstrap";
 
 // ** Utils
-import { isObjEmpty } from "@utils";
+import Headline from "../../../../core/utils/headline-class-helper.utils";
 
-// ** Icons Components
+// ** Icon Imports
 import { ArrowLeft, ArrowRight } from "react-feather";
 
-// ** Reactstrap Imports
-import { Button, Col, Form, FormFeedback, Label, Row } from "reactstrap";
-
-// ** Validation Import
-import { createCourseStepThreeFormSchema } from "../../../../core/validations/create-course/create-course-step-three-form.validation";
-
-// ** Util Imports
-import { selectThemeColors } from "../../../../utility/Utils";
-
-const defaultValues = {
-  courseType: undefined,
-  courseLevel: undefined,
-  courseLvlId: undefined,
-  courseTypeIdState: undefined,
-  teacherIdState: undefined,
-  classIdState: undefined,
-  termIdState: undefined,
-};
-
-const Describe = ({
-  stepper,
-  handleSubmitFn,
-  createCourseOptions,
-  courseLvlId,
-  courseTypeIdState,
-  teacherIdState,
-  classIdState,
-  termIdState,
-  setCourseLvlId,
-  setCourseTypeIdState,
-  setTeacherIdState,
-  setClassIdState,
-  setTermIdState,
-}) => {
+const Describe = ({ stepper, describe, setDescribe }) => {
   // ** Hooks
-  const {
-    control,
-    handleSubmit,
-    formState: { errors },
-  } = useForm({
-    defaultValues,
-    resolver: yupResolver(createCourseStepThreeFormSchema),
-  });
-
-  const animatedComponents = makeAnimated();
-
   const editorJsInstance = useRef(null);
   const editorRef = useRef(null);
 
-  const onSubmit = (e) => {
-    if (isObjEmpty(errors)) {
-      setCourseTypeIdState(e.courseType.id);
-      setCourseLvlId(e.courseLevel?.id);
-      setTeacherIdState(e.teacherId?.teacherId);
-      setClassIdState(e.classId?.id);
-      setTermIdState(+e.termId?.id);
-      if (
-        courseLvlId !== undefined &&
-        courseTypeIdState !== undefined &&
-        teacherIdState !== undefined &&
-        classIdState !== undefined &&
-        termIdState !== undefined
-      ) {
-        handleSubmitFn();
-      }
-    }
+  const handleSaveData = async () => {
+    if (editorJsInstance.current) {
+      const savedData = await editorJsInstance.current.save();
+
+      setDescribe(savedData);
+    } else toast.error("لطفا توضیحات را وارد کنید !");
   };
 
   useEffect(() => {
@@ -90,7 +39,6 @@ const Describe = ({
 
     editorJsInstance.current = new EditorJS({
       holder: editorRef.current,
-      data: listObj,
       autofocus: true,
       tools: {
         header: Header,
@@ -99,17 +47,61 @@ const Describe = ({
           config: {
             endpoint: "http://localhost:3000/fetchUrl", // Your backend endpoint for url data fetching
           },
-          raw: RawTool,
-          image: SimpleImage,
-          image: {
-            class: ImageTool,
-            config: {
-              endpoints: {
-                byFile: "http://localhost:8008/uploadFile", // Your backend file uploader endpoint
-                byUrl: "http://localhost:8008/fetchUrl", // Your endpoint that provides uploading by Url
-              },
+        },
+        raw: RawTool,
+        image: {
+          class: ImageTool,
+          config: {
+            endpoints: {
+              byFile: "http://localhost:8008/uploadFile", // Your backend file uploader endpoint
+              byUrl: "http://localhost:8008/fetchUrl", // Your endpoint that provides uploading by Url
             },
           },
+        },
+        checklist: {
+          class: Checklist,
+          inlineToolbar: true,
+        },
+        list: {
+          class: List,
+          inlineToolbar: true,
+          config: {
+            defaultStyle: "unordered",
+          },
+        },
+        embed: {
+          class: Embed,
+          config: {
+            services: {
+              youtube: true,
+              coub: true,
+            },
+          },
+        },
+        quote: {
+          class: Quote,
+          inlineToolbar: true,
+          shortcut: "CMD+SHIFT+O",
+          config: {
+            quotePlaceholder: "Enter a quote",
+            captionPlaceholder: "Quote's author",
+          },
+        },
+        delimiter: Delimiter,
+        warning: {
+          class: Warning,
+          inlineToolbar: true,
+          shortcut: "CMD+SHIFT+W",
+          config: {
+            titlePlaceholder: "عنوان",
+            messagePlaceholder: "پیام",
+          },
+        },
+        table: {
+          class: Table,
+        },
+        headline: {
+          class: Headline,
         },
       },
     });
@@ -122,6 +114,10 @@ const Describe = ({
     };
   }, []);
 
+  useEffect(() => {
+    if (describe) stepper.next();
+  }, [describe]);
+
   return (
     <Fragment>
       <div className="content-header">
@@ -130,59 +126,28 @@ const Describe = ({
           در این بخش باید توضیحات دوره را وارد کنید.
         </small>
       </div>
-      <Form onSubmit={handleSubmit(onSubmit)}>
-        <Row>
-          <Col md="12" className="mb-1">
-            <Label className="form-label" for="courseType">
-              نوع دوره
-            </Label>
-            <Controller
-              id="courseType"
-              name="courseType"
-              control={control}
-              render={({ field }) => (
-                <Select
-                  theme={selectThemeColors}
-                  className="react-select"
-                  classNamePrefix="select"
-                  name="courseType"
-                  options={createCourseOptions?.courseTypeDtos}
-                  getOptionValue={(type) => type.id}
-                  getOptionLabel={(type) => type.typeName}
-                  isClearable
-                  components={animatedComponents}
-                  {...field}
-                />
-              )}
-            />
-            {errors.courseType && (
-              <FormFeedback>{errors.courseType.message}</FormFeedback>
-            )}
-          </Col>
-        </Row>
-        <div ref={editorRef}></div>
-        <div className="d-flex justify-content-between">
-          <Button
-            type="button"
-            color="primary"
-            className="btn-prev"
-            onClick={() => stepper.previous()}
-          >
-            <ArrowLeft
-              size={14}
-              className="align-middle me-sm-25 me-0"
-            ></ArrowLeft>
-            <span className="align-middle d-sm-inline-block d-none">قبلی</span>
-          </Button>
-          <Button type="submit" color="primary" className="btn-next">
-            <span className="align-middle d-sm-inline-block d-none">بعدی</span>
-            <ArrowRight
-              size={14}
-              className="align-middle ms-sm-25 ms-0"
-            ></ArrowRight>
-          </Button>
-        </div>
-      </Form>
+      <div ref={editorRef}></div>
+      <div className="d-flex justify-content-between">
+        <Button
+          type="button"
+          color="primary"
+          className="btn-prev"
+          onClick={() => stepper.previous()}
+        >
+          <ArrowLeft
+            size={14}
+            className="align-middle me-sm-25 me-0"
+          ></ArrowLeft>
+          <span className="align-middle d-sm-inline-block d-none">قبلی</span>
+        </Button>
+        <Button color="primary" className="btn-next" onClick={handleSaveData}>
+          <span className="align-middle d-sm-inline-block d-none">بعدی</span>
+          <ArrowRight
+            size={14}
+            className="align-middle ms-sm-25 ms-0"
+          ></ArrowRight>
+        </Button>
+      </div>
     </Fragment>
   );
 };

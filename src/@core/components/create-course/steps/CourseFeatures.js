@@ -1,6 +1,6 @@
 // ** React Imports
 import { yupResolver } from "@hookform/resolvers/yup";
-import { Fragment } from "react";
+import { Fragment, useEffect } from "react";
 import { Controller, useForm } from "react-hook-form";
 import Select from "react-select";
 import makeAnimated from "react-select/animated";
@@ -62,17 +62,36 @@ const CourseFeatures = ({
       setTeacherIdState(e.teacherId?.teacherId);
       setClassIdState(e.classId?.id);
       setTermIdState(+e.termId?.id);
+
       if (
-        courseLvlId !== undefined &&
-        courseTypeIdState !== undefined &&
-        teacherIdState !== undefined &&
-        classIdState !== undefined &&
-        termIdState !== undefined
+        courseLvlId &&
+        courseTypeIdState &&
+        teacherIdState &&
+        classIdState &&
+        termIdState
       ) {
         handleSubmitFn();
       }
     }
   };
+
+  useEffect(() => {
+    if (
+      courseLvlId &&
+      courseTypeIdState &&
+      teacherIdState &&
+      classIdState &&
+      termIdState
+    ) {
+      handleSubmitFn();
+    }
+  }, [
+    courseLvlId,
+    courseTypeIdState,
+    teacherIdState,
+    classIdState,
+    termIdState,
+  ]);
 
   const animatedComponents = makeAnimated();
 
@@ -240,7 +259,7 @@ const CourseFeatures = ({
             <span className="align-middle d-sm-inline-block d-none">قبلی</span>
           </Button>
           <Button type="submit" color="primary" className="btn-next">
-            <span className="align-middle d-sm-inline-block d-none">بعدی</span>
+            <span className="align-middle d-sm-inline-block d-none">ایجاد دوره</span>
             <ArrowRight
               size={14}
               className="align-middle ms-sm-25 ms-0"

@@ -1,5 +1,5 @@
 // ** React Imports
-import { Fragment } from "react";
+import { Fragment, useEffect } from "react";
 // Package Imports
 import DatePicker from "react-multi-date-picker";
 import persian from "react-date-object/calendars/persian";
@@ -16,8 +16,11 @@ import { yupResolver } from "@hookform/resolvers/yup";
 // ** Reactstrap Imports
 import { Form, Label, Input, Row, Col, Button, FormFeedback } from "reactstrap";
 
-// Validation Import
+// ** Core Import
 import { createCourseStepOneFormSchema } from "../../../../core/validations/create-course/create-course-step-one-form.validation";
+
+// ** Custom Components
+import FileUploaderSingle from "../../FileUploaderSingle";
 
 const defaultValues = {
   title: "",
@@ -31,6 +34,13 @@ const defaultValues = {
 
 const GlobalData = ({
   stepper,
+  title,
+  cost,
+  capacity,
+  sessionNumber,
+  miniDescribe,
+  startTime,
+  endTime,
   setTitle,
   setCost,
   setCapacity,
@@ -38,6 +48,8 @@ const GlobalData = ({
   setMiniDescribe,
   setStartTime,
   setEndTime,
+  files,
+  setFiles,
 }) => {
   // ** Hooks
   const {
@@ -69,9 +81,34 @@ const GlobalData = ({
       setMiniDescribe(miniDescribe);
       setStartTime(startTime);
       setEndTime(endTime);
-      stepper.next();
+
+      if (
+        title &&
+        cost &&
+        capacity &&
+        sessionNumber &&
+        miniDescribe &&
+        startTime &&
+        endTime
+      ) {
+        stepper.next();
+      }
     }
   };
+
+  useEffect(() => {
+    if (
+      title &&
+      cost &&
+      capacity &&
+      sessionNumber &&
+      miniDescribe &&
+      startTime &&
+      endTime
+    ) {
+      stepper.next();
+    }
+  }, [title, cost, capacity, sessionNumber, miniDescribe, startTime, endTime]);
 
   return (
     <Fragment>
@@ -220,13 +257,16 @@ const GlobalData = ({
             {errors.date && <FormFeedback>{errors.date.message}</FormFeedback>}
           </Col>
         </Row>
-
+        <div className="mt-4">
+          <h5>آپلود عکس دوره</h5>
+          <FileUploaderSingle files={files} setFiles={setFiles} />
+        </div>
         <div className="d-flex justify-content-between">
           <Button
             type="button"
             color="primary"
             className="btn-prev"
-            onClick={() => stepper.previous()}
+            disabled
           >
             <ArrowLeft
               size={14}

@@ -68,7 +68,7 @@ const SelectTechnologies = ({ stepper, createCourseOptions, courseId }) => {
         <Row>
           <Col md="6" className="mb-1">
             <Label className="form-label" for="technologies">
-              تکنولوژی های دورهdhsjkdhs
+              تکنولوژی های دوره
             </Label>
             <Controller
               id="technologies"

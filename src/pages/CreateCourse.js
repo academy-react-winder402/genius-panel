@@ -11,7 +11,6 @@ import SelectTechnologies from "../@core/components/create-course/steps/selectTe
 import AdvanceData from "../@core/components/create-course/steps/AdvanceData";
 import CourseFeatures from "../@core/components/create-course/steps/CourseFeatures";
 import GlobalData from "../@core/components/create-course/steps/GlobalData";
-import UploadImage from "../@core/components/create-course/steps/UploadImage";
 
 // ** Core Imports
 import { createCourseAPI } from "../core/services/api/course/create-course.api";
@@ -31,6 +30,7 @@ const CreateCoursePage = () => {
   const [capacity, setCapacity] = useState();
   const [sessionNumber, setSessionNumber] = useState();
   const [miniDescribe, setMiniDescribe] = useState();
+  const [describe, setDescribe] = useState();
   const [startTime, setStartTime] = useState();
   const [endTime, setEndTime] = useState();
   const [courseLvlId, setCourseLvlId] = useState();
@@ -50,12 +50,12 @@ const CreateCoursePage = () => {
       image: files[0],
       tumbImage: files[0],
       imageAddress: files[0],
-      tumbImageAddress: files[0],
       title,
       cost,
       capacity,
       sessionNumber,
       miniDescribe,
+      describe,
       startTime,
       endTime,
       courseLvlId,
@@ -67,7 +67,6 @@ const CreateCoursePage = () => {
       googleSchema,
       uniqeUrlString: uniqueUrlString,
       shortLink,
-      describe: miniDescribe,
     };
 
     try {
@@ -86,28 +85,19 @@ const CreateCoursePage = () => {
 
   const steps = [
     {
-      id: "describe",
-      title: "توضیحات",
-      subtitle: "توضیحات دوره",
-      content: (
-        <Describe />
-      ),
-    },
-    {
-      id: "upload-image",
-      title: "آپلود عکس",
-      subtitle: "آپلود عکس دوره",
-      content: (
-        <UploadImage stepper={stepper} files={files} setFiles={setFiles} />
-      ),
-    },
-    {
       id: "global-data",
       title: "اطلاعات عمومی",
       subtitle: "اطلاعات عمومی دوره",
       content: (
         <GlobalData
           stepper={stepper}
+          title={title}
+          cost={cost}
+          capacity={capacity}
+          sessionNumber={sessionNumber}
+          miniDescribe={miniDescribe}
+          startTime={startTime}
+          endTime={endTime}
           setTitle={setTitle}
           setCost={setCost}
           setCapacity={setCapacity}
@@ -115,8 +105,16 @@ const CreateCoursePage = () => {
           setMiniDescribe={setMiniDescribe}
           setStartTime={setStartTime}
           setEndTime={setEndTime}
+          files={files}
+          setFiles={setFiles}
         />
       ),
+    },
+    {
+      id: "describe",
+      title: "توضیحات",
+      subtitle: "توضیحات دوره",
+      content: <Describe stepper={stepper} setDescribe={setDescribe} describe={describe} />,
     },
     {
       id: "advance-data",

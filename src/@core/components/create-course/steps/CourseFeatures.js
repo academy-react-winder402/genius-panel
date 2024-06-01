@@ -1,6 +1,6 @@
 // ** React Imports
 import { yupResolver } from "@hookform/resolvers/yup";
-import { Fragment } from "react";
+import { Fragment, useEffect } from "react";
 import { Controller, useForm } from "react-hook-form";
 import Select from "react-select";
 import makeAnimated from "react-select/animated";
@@ -62,17 +62,36 @@ const CourseFeatures = ({
       setTeacherIdState(e.teacherId?.teacherId);
       setClassIdState(e.classId?.id);
       setTermIdState(+e.termId?.id);
+
       if (
-        courseLvlId !== undefined &&
-        courseTypeIdState !== undefined &&
-        teacherIdState !== undefined &&
-        classIdState !== undefined &&
-        termIdState !== undefined
+        courseLvlId &&
+        courseTypeIdState &&
+        teacherIdState &&
+        classIdState &&
+        termIdState
       ) {
         handleSubmitFn();
       }
     }
   };
+
+  useEffect(() => {
+    if (
+      courseLvlId &&
+      courseTypeIdState &&
+      teacherIdState &&
+      classIdState &&
+      termIdState
+    ) {
+      handleSubmitFn();
+    }
+  }, [
+    courseLvlId,
+    courseTypeIdState,
+    teacherIdState,
+    classIdState,
+    termIdState,
+  ]);
 
   const animatedComponents = makeAnimated();
 

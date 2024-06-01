@@ -12,6 +12,11 @@
 .ce-block__content {
   max-width: 800px;
 }
+
+.codex-editor__redactor {
+  padding-bottom: 20px !important;
+}
+
 .headline-item-container {
   padding-left: 20px !important;
 }
@@ -27,9 +32,17 @@
 }
 
 .headline-lesson-container:not(.headline-lesson-container:last-of-type) {
-  border-bottom: 1px solid #CCCCCC;
+  border-bottom: 1px solid #cccccc;
   padding-bottom: 40px;
 }
-body.dark-layout .headline-lesson-container:not(.headline-lesson-container:last-of-type)  {
+
+@media (min-width: 1000px) {
+  .save-editor-js-data {
+    margin-left: 120px !important;
+  }
+}
+
+body.dark-layout
+  .headline-lesson-container:not(.headline-lesson-container:last-of-type) {
   border-color: #1111115d;
 }

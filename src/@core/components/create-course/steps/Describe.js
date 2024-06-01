@@ -1,88 +1,38 @@
 // ** React Imports
+import Checklist from "@editorjs/checklist";
+import Delimiter from "@editorjs/delimiter";
 import EditorJS from "@editorjs/editorjs";
+import Embed from "@editorjs/embed";
 import Header from "@editorjs/header";
 import ImageTool from "@editorjs/image";
 import LinkTool from "@editorjs/link";
+import List from "@editorjs/list";
+import Quote from "@editorjs/quote";
 import RawTool from "@editorjs/raw";
 import SimpleImage from "@editorjs/simple-image";
-import Checklist from "@editorjs/checklist";
-import List from "@editorjs/list";
-import Embed from "@editorjs/embed";
-import Quote from "@editorjs/quote";
-import Table from "editorjs-table";
 import Warning from "@editorjs/warning";
-import Delimiter from "@editorjs/delimiter";
-
-import { yupResolver } from "@hookform/resolvers/yup";
+import Table from "editorjs-table";
 import { Fragment, useEffect, useRef } from "react";
-import { useForm } from "react-hook-form";
+import toast from "react-hot-toast";
+import { Button } from "reactstrap";
 
 // ** Utils
-import { isObjEmpty } from "@utils";
-
-// ** Icons Components
-import { ArrowLeft, ArrowRight } from "react-feather";
-
-// ** Reactstrap Imports
-import { Button, Col, Form, Row } from "reactstrap";
-
-// ** Validation Import
-import { createCourseStepThreeFormSchema } from "../../../../core/validations/create-course/create-course-step-three-form.validation";
 import Headline from "../../../../core/utils/headline-class-helper.utils";
 
-const defaultValues = {
-  courseType: undefined,
-  courseLevel: undefined,
-  courseLvlId: undefined,
-  courseTypeIdState: undefined,
-  teacherIdState: undefined,
-  classIdState: undefined,
-  termIdState: undefined,
-};
+// ** Icon Imports
+import { ArrowLeft, ArrowRight } from "react-feather";
 
-const Describe = ({
-  stepper,
-  handleSubmitFn,
-  courseLvlId,
-  courseTypeIdState,
-  teacherIdState,
-  classIdState,
-  termIdState,
-  setCourseLvlId,
-  setCourseTypeIdState,
-  setTeacherIdState,
-  setClassIdState,
-  setTermIdState,
-}) => {
+const Describe = ({ stepper, describe, setDescribe }) => {
   // ** Hooks
-  const {
-    handleSubmit,
-    formState: { errors },
-  } = useForm({
-    defaultValues,
-    resolver: yupResolver(createCourseStepThreeFormSchema),
-  });
-
   const editorJsInstance = useRef(null);
   const editorRef = useRef(null);
 
-  const onSubmit = (e) => {
-    if (isObjEmpty(errors)) {
-      setCourseTypeIdState(e.courseType.id);
-      setCourseLvlId(e.courseLevel?.id);
-      setTeacherIdState(e.teacherId?.teacherId);
-      setClassIdState(e.classId?.id);
-      setTermIdState(+e.termId?.id);
-      if (
-        courseLvlId !== undefined &&
-        courseTypeIdState !== undefined &&
-        teacherIdState !== undefined &&
-        classIdState !== undefined &&
-        termIdState !== undefined
-      ) {
-        handleSubmitFn();
-      }
-    }
+  const handleSaveData = async () => {
+    if (editorJsInstance.current) {
+      const savedData = await editorJsInstance.current.save();
+
+      setDescribe(savedData);
+    } else toast.error("لطفا توضیحات را وارد کنید !");
   };
 
   useEffect(() => {
@@ -145,8 +95,8 @@ const Describe = ({
           inlineToolbar: true,
           shortcut: "CMD+SHIFT+W",
           config: {
-            titlePlaceholder: "Title",
-            messagePlaceholder: "Message",
+            titlePlaceholder: "عنوان",
+            messagePlaceholder: "پیام",
           },
         },
         table: {
@@ -166,6 +116,10 @@ const Describe = ({
     };
   }, []);
 
+  useEffect(() => {
+    if (describe) stepper.next();
+  }, [describe]);
+
   return (
     <Fragment>
       <div className="content-header">
@@ -174,33 +128,28 @@ const Describe = ({
           در این بخش باید توضیحات دوره را وارد کنید.
         </small>
       </div>
-      <Form onSubmit={handleSubmit(onSubmit)}>
-        <Row>
-          <Col md="12" className="mb-1"></Col>
-        </Row>
-        <div ref={editorRef}></div>
-        <div className="d-flex justify-content-between">
-          <Button
-            type="button"
-            color="primary"
-            className="btn-prev"
-            onClick={() => stepper.previous()}
-          >
-            <ArrowLeft
-              size={14}
-              className="align-middle me-sm-25 me-0"
-            ></ArrowLeft>
-            <span className="align-middle d-sm-inline-block d-none">قبلی</span>
-          </Button>
-          <Button type="submit" color="primary" className="btn-next">
-            <span className="align-middle d-sm-inline-block d-none">بعدی</span>
-            <ArrowRight
-              size={14}
-              className="align-middle ms-sm-25 ms-0"
-            ></ArrowRight>
-          </Button>
-        </div>
-      </Form>
+      <div ref={editorRef}></div>
+      <div className="d-flex justify-content-between">
+        <Button
+          type="button"
+          color="primary"
+          className="btn-prev"
+          onClick={() => stepper.previous()}
+        >
+          <ArrowLeft
+            size={14}
+            className="align-middle me-sm-25 me-0"
+          ></ArrowLeft>
+          <span className="align-middle d-sm-inline-block d-none">قبلی</span>
+        </Button>
+        <Button color="primary" className="btn-next" onClick={handleSaveData}>
+          <span className="align-middle d-sm-inline-block d-none">بعدی</span>
+          <ArrowRight
+            size={14}
+            className="align-middle ms-sm-25 ms-0"
+          ></ArrowRight>
+        </Button>
+      </div>
     </Fragment>
   );
 };

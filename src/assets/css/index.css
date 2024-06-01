@@ -7,3 +7,29 @@
 .coursesDatePickerWrapper > .rmdp-container {
   width: 100%;
 }
+
+/* Editor JS */
+.ce-block__content {
+  max-width: 800px;
+}
+.headline-item-container {
+  padding-left: 20px !important;
+}
+
+.headline-fields-container {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.headline-lesson-container:not(:first-child) {
+  margin-top: 60px !important;
+}
+
+.headline-lesson-container:not(.headline-lesson-container:last-of-type) {
+  border-bottom: 1px solid #CCCCCC;
+  padding-bottom: 40px;
+}
+body.dark-layout .headline-lesson-container:not(.headline-lesson-container:last-of-type)  {
+  border-color: #1111115d;
+}

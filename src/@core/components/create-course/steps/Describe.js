@@ -5,11 +5,17 @@ import ImageTool from "@editorjs/image";
 import LinkTool from "@editorjs/link";
 import RawTool from "@editorjs/raw";
 import SimpleImage from "@editorjs/simple-image";
+import Checklist from "@editorjs/checklist";
+import List from "@editorjs/list";
+import Embed from "@editorjs/embed";
+import Quote from "@editorjs/quote";
+import Table from "editorjs-table";
+import Warning from "@editorjs/warning";
+import Delimiter from "@editorjs/delimiter";
+
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Fragment, useEffect, useRef } from "react";
-import { Controller, useForm } from "react-hook-form";
-import Select from "react-select";
-import makeAnimated from "react-select/animated";
+import { useForm } from "react-hook-form";
 
 // ** Utils
 import { isObjEmpty } from "@utils";
@@ -18,13 +24,11 @@ import { isObjEmpty } from "@utils";
 import { ArrowLeft, ArrowRight } from "react-feather";
 
 // ** Reactstrap Imports
-import { Button, Col, Form, FormFeedback, Label, Row } from "reactstrap";
+import { Button, Col, Form, Row } from "reactstrap";
 
 // ** Validation Import
 import { createCourseStepThreeFormSchema } from "../../../../core/validations/create-course/create-course-step-three-form.validation";
-
-// ** Util Imports
-import { selectThemeColors } from "../../../../utility/Utils";
+import Headline from "../../../../core/utils/headline-class-helper.utils";
 
 const defaultValues = {
   courseType: undefined,
@@ -39,7 +43,6 @@ const defaultValues = {
 const Describe = ({
   stepper,
   handleSubmitFn,
-  createCourseOptions,
   courseLvlId,
   courseTypeIdState,
   teacherIdState,
@@ -53,15 +56,12 @@ const Describe = ({
 }) => {
   // ** Hooks
   const {
-    control,
     handleSubmit,
     formState: { errors },
   } = useForm({
     defaultValues,
     resolver: yupResolver(createCourseStepThreeFormSchema),
   });
-
-  const animatedComponents = makeAnimated();
 
   const editorJsInstance = useRef(null);
   const editorRef = useRef(null);
@@ -90,7 +90,6 @@ const Describe = ({
 
     editorJsInstance.current = new EditorJS({
       holder: editorRef.current,
-      data: listObj,
       autofocus: true,
       tools: {
         header: Header,
@@ -99,17 +98,62 @@ const Describe = ({
           config: {
             endpoint: "http://localhost:3000/fetchUrl", // Your backend endpoint for url data fetching
           },
-          raw: RawTool,
-          image: SimpleImage,
-          image: {
-            class: ImageTool,
-            config: {
-              endpoints: {
-                byFile: "http://localhost:8008/uploadFile", // Your backend file uploader endpoint
-                byUrl: "http://localhost:8008/fetchUrl", // Your endpoint that provides uploading by Url
-              },
+        },
+        raw: RawTool,
+        image: SimpleImage,
+        image: {
+          class: ImageTool,
+          config: {
+            endpoints: {
+              byFile: "http://localhost:8008/uploadFile", // Your backend file uploader endpoint
+              byUrl: "http://localhost:8008/fetchUrl", // Your endpoint that provides uploading by Url
             },
           },
+        },
+        checklist: {
+          class: Checklist,
+          inlineToolbar: true,
+        },
+        list: {
+          class: List,
+          inlineToolbar: true,
+          config: {
+            defaultStyle: "unordered",
+          },
+        },
+        embed: {
+          class: Embed,
+          config: {
+            services: {
+              youtube: true,
+              coub: true,
+            },
+          },
+        },
+        quote: {
+          class: Quote,
+          inlineToolbar: true,
+          shortcut: "CMD+SHIFT+O",
+          config: {
+            quotePlaceholder: "Enter a quote",
+            captionPlaceholder: "Quote's author",
+          },
+        },
+        delimiter: Delimiter,
+        warning: {
+          class: Warning,
+          inlineToolbar: true,
+          shortcut: "CMD+SHIFT+W",
+          config: {
+            titlePlaceholder: "Title",
+            messagePlaceholder: "Message",
+          },
+        },
+        table: {
+          class: Table,
+        },
+        headline: {
+          class: Headline,
         },
       },
     });
@@ -132,33 +176,7 @@ const Describe = ({
       </div>
       <Form onSubmit={handleSubmit(onSubmit)}>
         <Row>
-          <Col md="12" className="mb-1">
-            <Label className="form-label" for="courseType">
-              نوع دوره
-            </Label>
-            <Controller
-              id="courseType"
-              name="courseType"
-              control={control}
-              render={({ field }) => (
-                <Select
-                  theme={selectThemeColors}
-                  className="react-select"
-                  classNamePrefix="select"
-                  name="courseType"
-                  options={createCourseOptions?.courseTypeDtos}
-                  getOptionValue={(type) => type.id}
-                  getOptionLabel={(type) => type.typeName}
-                  isClearable
-                  components={animatedComponents}
-                  {...field}
-                />
-              )}
-            />
-            {errors.courseType && (
-              <FormFeedback>{errors.courseType.message}</FormFeedback>
-            )}
-          </Col>
+          <Col md="12" className="mb-1"></Col>
         </Row>
         <div ref={editorRef}></div>
         <div className="d-flex justify-content-between">

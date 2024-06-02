@@ -42,6 +42,22 @@
   }
 }
 
+.tableTitle {
+  margin-top: 10px;
+}
+
+.delete-course-btn {
+  gap: 5px;
+}
+
+.delete-course-btn span {
+  margin-top: 2px;
+}
+
+.mt-one {
+  margin-top: 5px;
+}
+
 body.dark-layout
   .headline-lesson-container:not(.headline-lesson-container:last-of-type) {
   border-color: #1111115d;

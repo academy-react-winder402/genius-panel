@@ -1,46 +1,71 @@
 // ** React Imports
-import { Fragment, memo } from "react";
+import { forwardRef, Fragment, memo, useState } from "react";
 
 // ** Third Party Components
-import ReactPaginate from "react-paginate";
-import { ChevronDown } from "react-feather";
 import DataTable from "react-data-table-component";
+import { ChevronDown, Trash } from "react-feather";
+import ReactPaginate from "react-paginate";
 
 // ** Reactstrap Imports
 import {
+  Button,
   Card,
   CardHeader,
   CardTitle,
+  Col,
   Input,
   Label,
   Row,
-  Col,
 } from "reactstrap";
 
 // ** Columns
 import { columns } from "../course-columns";
 
+// ** Utility Imports
+import { useTimeOut } from "../../../utility/hooks/useTimeOut";
+import { Link } from "react-router-dom";
+import { deleteCourseAPI } from "../../../core/services/api/course/delete-course.api";
+import toast from "react-hot-toast";
+
+// ** Bootstrap Checkbox Component
+const BootstrapCheckbox = forwardRef((props, ref) => (
+  <div className="form-check">
+    <Input type="checkbox" ref={ref} {...props} />
+  </div>
+));
+
 const DataTableServerSide = ({
-  totalCount,
+  data,
+  renderTitle,
   currentPage,
+  rowsPerPage,
   setCurrentPage,
-  searchValue,
+  setRowsPerPage,
   setSearchValue,
   setSort,
   setSortColumn,
-  rowsPerPage,
-  setRowsPerPage,
-  data,
-  allData,
 }) => {
-  // ** Function to handle filter
-  const handleFilter = (e) => {
-    setSearchValue(e.target.value);
+  const [itemOffset, setItemOffset] = useState(0);
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [selectedRows, setSelectedRows] = useState();
+
+  const endOffset = itemOffset + rowsPerPage;
+  const currentItems = data?.slice(itemOffset, endOffset);
+
+  const textTimeOut = useTimeOut();
+
+  const handlePageClick = (event) => {
+    setCurrentPage(event.selected + 1);
+    const newOffset = (event.selected * rowsPerPage) % data?.length;
+
+    setItemOffset(newOffset);
   };
 
-  // ** Function to handle Pagination and get data
-  const handlePagination = (page) => {
-    setCurrentPage(page.selected + 1);
+  // ** Function to handle filter
+  const handleFilter = (e) => {
+    textTimeOut(() => {
+      setSearchValue(e.target.value);
+    }, 800);
   };
 
   // ** Function to handle per page
@@ -50,7 +75,7 @@ const DataTableServerSide = ({
 
   // ** Custom Pagination
   const CustomPagination = () => {
-    const count = Math.ceil(totalCount / rowsPerPage);
+    const count = Math.ceil(data.length / rowsPerPage);
 
     return (
       <ReactPaginate
@@ -62,7 +87,7 @@ const DataTableServerSide = ({
         pageRangeDisplayed={2}
         activeClassName="active"
         forcePage={currentPage !== 0 ? currentPage - 1 : 0}
-        onPageChange={(page) => handlePagination(page)}
+        onPageChange={(page) => handlePageClick(page)}
         pageClassName="page-item"
         breakClassName="page-item"
         nextLinkClassName="page-link"
@@ -84,27 +109,55 @@ const DataTableServerSide = ({
     setSortColumn(column.sortField);
   };
 
-  // ** Table data to render
-  const dataToRender = () => {
-    if (data?.length > 0) {
-      return data;
-    } else if (data?.length === 0 && data) {
-      return [];
-    } else {
-      return allData?.slice(0, rowsPerPage);
+  const onSelectedRows = async (e) => {
+    setSelectedRows(e.selectedRows);
+    setIsDeleting(e.selectedRows);
+    if (e.selectedRows?.length !== 0) setIsDeleting(true);
+    else setIsDeleting(false);
+  };
+
+  const handleDeleteCourse = async () => {
+    try {
+      selectedRows.map(async (course) => {
+        const deleteCourse = await deleteCourseAPI(true, course.courseId);
+
+        if (deleteCourse.success) toast.success("دوره با موفقیت حذف شد !");
+        else toast.error("مشکلی در حذف دوره به وجود آمد ...");
+      });
+    } catch (error) {
+      toast.error("مشکلی در حذف دوره به وجود آمد ...");
     }
   };
 
   return (
     <Fragment>
       <Card>
-        <CardHeader className="border-bottom">
-          <CardTitle tag="h4">دوره ها</CardTitle>
+        <CardHeader className="d-flex justify-content-between align-items-center border-bottom">
+          <CardTitle tag="h4" className="tableTitle">
+            {renderTitle}
+          </CardTitle>
+          <div className="d-flex gap-1">
+            {isDeleting && (
+              <Button
+                className="d-flex align-items-center delete-course-btn"
+                onClick={handleDeleteCourse}
+                color="danger"
+              >
+                <Trash size={16} />
+                <span>حذف</span>
+              </Button>
+            )}
+            <Button tag={Link} to="/create-course" color="primary">
+              افزودن دوره
+            </Button>
+          </div>
         </CardHeader>
         <Row className="mx-0 mt-1 mb-50">
           <Col sm="6">
-            <div className="d-flex align-items-center">
-              <Label for="sort-select">نمایش</Label>
+            <div className="d-flex gap-1 align-items-center">
+              <Label for="sort-select" className="mt-one">
+                تعداد نمایش در صفحه
+              </Label>
               <Input
                 className="dataTable-select"
                 type="select"
@@ -125,7 +178,7 @@ const DataTableServerSide = ({
             className="d-flex align-items-center justify-content-sm-end mt-sm-0 mt-1"
             sm="6"
           >
-            <Label className="me-1" for="search-input">
+            <Label className="me-1 mt-one" for="search-input">
               جستجو
             </Label>
             <Input
@@ -133,23 +186,29 @@ const DataTableServerSide = ({
               type="text"
               bsSize="sm"
               id="search-input"
-              value={searchValue}
               onChange={handleFilter}
             />
           </Col>
         </Row>
         <div className="react-dataTable">
-          <DataTable
-            noHeader
-            pagination
-            paginationServer
-            className="react-dataTable"
-            columns={columns}
-            onSort={handleSort}
-            sortIcon={<ChevronDown size={10} />}
-            paginationComponent={CustomPagination}
-            data={dataToRender()}
-          />
+          {!currentItems || currentItems?.length === 0 ? (
+            <h5 className="text-center">دوره ای پیدا نشد !</h5>
+          ) : (
+            <DataTable
+              noHeader
+              pagination
+              paginationServer
+              className="react-dataTable"
+              columns={columns}
+              onSort={handleSort}
+              sortIcon={<ChevronDown size={10} />}
+              paginationComponent={CustomPagination}
+              data={currentItems}
+              selectableRows
+              selectableRowsComponent={BootstrapCheckbox}
+              onSelectedRowsChange={onSelectedRows}
+            />
+          )}
         </div>
       </Card>
     </Fragment>

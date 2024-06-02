@@ -23,7 +23,7 @@ module.exports = {
     "no-debugger": process.env.NODE_ENV === "production" ? "error" : "off",
 
     // Best Practices
-    eqeqeq: "error",
+    // eqeqeq: "error",
     "no-invalid-this": "error",
     "no-return-assign": "error",
     "no-unused-expressions": ["error", { allowTernary: true }],

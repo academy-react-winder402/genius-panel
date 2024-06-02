@@ -1,4 +1,5 @@
 import axios from "axios";
+import toast from "react-hot-toast";
 
 import { getItem, removeItem } from "../common/storage.services";
 
@@ -12,9 +13,9 @@ const onSuccess = (response) => {
 };
 
 const onError = (err) => {
-  console.log(err);
-
   if (err.response?.status === 401) {
+    toast.error("لطفا وارد شوید !");
+
     removeItem("token");
 
     window.location.pathname = "/login";

@@ -1,26 +1,26 @@
 // ** React Imports
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { useState, useEffect } from "react";
 
 // Toast Import
 import toast from "react-hot-toast";
 
-// ** Table Columns
-import { columns } from "../@core/components/course-columns";
+// ** Third Party Components
+import DataTable from "react-data-table-component";
+import ReactPaginate from "react-paginate";
+import BreadCrumbs from "../@core/components/breadcrumbs";
 
+// ** Core Imports
 import { courseReserveAPI } from "../core/services/api/course/course-reserve.api";
 
-// ** Third Party Components
-import ReactPaginate from "react-paginate";
-import { ChevronDown } from "react-feather";
-import DataTable from "react-data-table-component";
-import BreadCrumbs from "../@core/components/breadcrumbs";
+// ** Table Columns
+import { COURSE_RESERVED_COLUMNS } from "../@core/components/course-columns/course-reserved-columns";
 
 // Hooks import
 import { useTimeOut } from "../utility/hooks/useTimeOut";
 
 // ** Reactstrap Imports
-import { Button, Input, Row, Col, Card } from "reactstrap";
+import { Button, Card, Col, Input, Row } from "reactstrap";
 
 // ** Styles
 import "@styles/react/apps/app-invoice.scss";
@@ -145,7 +145,7 @@ const CourseReservedPage = () => {
             pagination
             paginationServer
             subHeader={true}
-            columns={columns}
+            columns={COURSE_RESERVED_COLUMNS}
             responsive={true}
             data={dataToRender()}
             className="react-dataTable"

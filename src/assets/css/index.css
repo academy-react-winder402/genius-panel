@@ -58,6 +58,55 @@
   margin-top: 5px;
 }
 
+.course-column-truncate {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  max-width: 118px;
+}
+
+.course-column-badge {
+  margin-left: 20px !important;
+}
+
+.course-column-status {
+  margin-left: 19px;
+}
+
+.course-column-is-delete {
+  margin-left: 10px;
+}
+
+.course-column-image {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+}
+
+.student-course-reserve-picture {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+}
+
+.course-reserve-student-name {
+  display: block;
+  font-weight: bold;
+  max-width: 100px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.course-reserve-filters {
+  height: 50px;
+}
+
+.course-reserve-rows-per-page-input {
+  margin-bottom: 8px;
+  margin-left: 10px !important;
+}
+
 body.dark-layout
   .headline-lesson-container:not(.headline-lesson-container:last-of-type) {
   border-color: #1111115d;

@@ -11,7 +11,7 @@ import { Facebook, GitHub, Mail, Twitter } from "react-feather";
 // Core Imports
 import { loginAPI } from "../core/services/api/auth/login.api";
 import { loginFormSchema } from "../core/validations/login-form.validation";
-import { setItem } from "../core/services/common/storage.services";
+import { getItem, setItem } from "../core/services/common/storage.services";
 
 // ** Custom Components
 import InputPasswordToggle from "@components/input-password-toggle";
@@ -35,6 +35,7 @@ import illustrationsLight from "@src/assets/images/pages/login-v2.svg";
 
 // ** Styles
 import "@styles/react/pages/page-authentication.scss";
+import { useEffect } from "react";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -67,6 +68,12 @@ const Login = () => {
       toast.error("مشکلی در فرایند ورود به وجود آمد !");
     }
   };
+
+  useEffect(() => {
+    const token = getItem("token");
+
+    if (token) navigate("/");
+  }, []);
 
   return (
     <div className="auth-wrapper auth-cover">
@@ -138,7 +145,7 @@ const Login = () => {
               </g>
             </g>
           </svg>
-          <h2 className="brand-text text-primary ms-1">Genius</h2>
+          <h2 className="brand-text text-primary ms-1">نابغه</h2>
         </Link>
         <Col
           className="d-flex align-items-center auth-bg px-2 p-lg-5"

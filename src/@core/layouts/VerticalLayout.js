@@ -1,6 +1,6 @@
 // ** React Imports
 import { useState, useEffect } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 // ** Store & Actions
 import { useSelector, useDispatch } from "react-redux";
@@ -39,6 +39,7 @@ import { useNavbarColor } from "@hooks/useNavbarColor";
 // ** Styles
 import "@styles/base/core/menu/menu-types/vertical-menu.scss";
 import "@styles/base/core/menu/menu-types/vertical-overlay-menu.scss";
+import { getItem } from "../../core/services/common/storage.services";
 
 const VerticalLayout = (props) => {
   // ** Props
@@ -51,6 +52,7 @@ const VerticalLayout = (props) => {
   const { footerType, setFooterType } = useFooterType();
   const { navbarColor, setNavbarColor } = useNavbarColor();
   const { layout, setLayout, setLastLayout } = useLayout();
+  const navigate = useNavigate();
 
   // ** States
   const [isMounted, setIsMounted] = useState(false);
@@ -80,6 +82,14 @@ const VerticalLayout = (props) => {
 
   // ** Handles Content Width
   const setIsHidden = (val) => dispatch(handleMenuHidden(val));
+
+  useEffect(() => {
+    const token = getItem("token");
+
+    if (!token) {
+      navigate("/login");
+    }
+  }, []);
 
   //** This function will detect the Route Change and will hide the menu on menu item click
   useEffect(() => {

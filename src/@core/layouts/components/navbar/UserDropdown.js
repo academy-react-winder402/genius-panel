@@ -24,10 +24,16 @@ import {
   DropdownItem,
 } from "reactstrap";
 
+// ** Core Imports
+import { removeItem } from "../../../../core/services/common/storage.services";
+
 // ** Default Avatar Image
 import defaultAvatar from "@src/assets/images/portrait/small/avatar-s-11.jpg";
 
 const UserDropdown = () => {
+  const handleLogout = async () => {
+    removeItem("token");
+  };
   return (
     <UncontrolledDropdown tag="li" className="dropdown-user nav-item">
       <DropdownToggle
@@ -50,40 +56,20 @@ const UserDropdown = () => {
       <DropdownMenu end>
         <DropdownItem tag={Link} to="/" onClick={(e) => e.preventDefault()}>
           <User size={14} className="me-75" />
-          <span className="align-middle">Profile</span>
-        </DropdownItem>
-        <DropdownItem tag={Link} to="/" onClick={(e) => e.preventDefault()}>
-          <Mail size={14} className="me-75" />
-          <span className="align-middle">Inbox</span>
-        </DropdownItem>
-        <DropdownItem tag={Link} to="/" onClick={(e) => e.preventDefault()}>
-          <CheckSquare size={14} className="me-75" />
-          <span className="align-middle">Tasks</span>
-        </DropdownItem>
-        <DropdownItem tag={Link} to="/" onClick={(e) => e.preventDefault()}>
-          <MessageSquare size={14} className="me-75" />
-          <span className="align-middle">Chats</span>
+          <span className="align-middle">حساب کاربری</span>
         </DropdownItem>
         <DropdownItem divider />
         <DropdownItem
           tag={Link}
-          to="/pages/"
+          to="/users/edit/1"
           onClick={(e) => e.preventDefault()}
         >
           <Settings size={14} className="me-75" />
-          <span className="align-middle">Settings</span>
+          <span className="align-middle">ویرایش پروفایل</span>
         </DropdownItem>
-        <DropdownItem tag={Link} to="/" onClick={(e) => e.preventDefault()}>
-          <CreditCard size={14} className="me-75" />
-          <span className="align-middle">Pricing</span>
-        </DropdownItem>
-        <DropdownItem tag={Link} to="/" onClick={(e) => e.preventDefault()}>
-          <HelpCircle size={14} className="me-75" />
-          <span className="align-middle">FAQ</span>
-        </DropdownItem>
-        <DropdownItem tag={Link} to="/login">
+        <DropdownItem tag={Link} to="/login" onClick={handleLogout}>
           <Power size={14} className="me-75" />
-          <span className="align-middle">Logout</span>
+          <span className="align-middle">خروح از سایت</span>
         </DropdownItem>
       </DropdownMenu>
     </UncontrolledDropdown>

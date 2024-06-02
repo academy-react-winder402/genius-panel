@@ -16,6 +16,8 @@ import GlobalData from "../@core/components/create-course/steps/GlobalData";
 import { createCourseAPI } from "../core/services/api/course/create-course.api";
 import { getCreateCourseAPI } from "../core/services/api/course/get-create-course.api";
 import { onFormData } from "../core/utils/form-data-helper.utils";
+
+// ** Custom Components
 import Describe from "../@core/components/create-course/steps/Describe";
 
 const CreateCoursePage = () => {
@@ -114,7 +116,13 @@ const CreateCoursePage = () => {
       id: "describe",
       title: "توضیحات",
       subtitle: "توضیحات دوره",
-      content: <Describe stepper={stepper} setDescribe={setDescribe} describe={describe} />,
+      content: (
+        <Describe
+          stepper={stepper}
+          setDescribe={setDescribe}
+          describe={describe}
+        />
+      ),
     },
     {
       id: "advance-data",

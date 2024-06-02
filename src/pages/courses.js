@@ -26,7 +26,7 @@ const CoursesPage = () => {
   const [sort, setSort] = useState("desc");
   const [sortColumn, setSortColumn] = useState("id");
   const [currentPage, setCurrentPage] = useState(1);
-  const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [rowsPerPage, setRowsPerPage] = useState(7);
   const [searchText, setSearchText] = useState();
   const [activeCourses, setActiveCourses] = useState();
   const [deletedCourses, setDeletedCourses] = useState();

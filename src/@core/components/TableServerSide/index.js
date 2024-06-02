@@ -1,5 +1,7 @@
 // ** React Imports
 import { forwardRef, Fragment, memo, useState } from "react";
+import toast from "react-hot-toast";
+import { Link } from "react-router-dom";
 
 // ** Third Party Components
 import DataTable from "react-data-table-component";
@@ -18,14 +20,14 @@ import {
   Row,
 } from "reactstrap";
 
+// ** Core Imports
+import { deleteCourseAPI } from "../../../core/services/api/course/delete-course.api";
+
 // ** Columns
-import { columns } from "../course-columns";
+import { COURSE_COLUMNS } from "../course-columns";
 
 // ** Utility Imports
 import { useTimeOut } from "../../../utility/hooks/useTimeOut";
-import { Link } from "react-router-dom";
-import { deleteCourseAPI } from "../../../core/services/api/course/delete-course.api";
-import toast from "react-hot-toast";
 
 // ** Bootstrap Checkbox Component
 const BootstrapCheckbox = forwardRef((props, ref) => (
@@ -199,7 +201,7 @@ const DataTableServerSide = ({
               pagination
               paginationServer
               className="react-dataTable"
-              columns={columns}
+              columns={COURSE_COLUMNS}
               onSort={handleSort}
               sortIcon={<ChevronDown size={10} />}
               paginationComponent={CustomPagination}

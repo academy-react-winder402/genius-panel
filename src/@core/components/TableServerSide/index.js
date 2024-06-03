@@ -56,15 +56,19 @@ const DataTableServerSide = ({
 
   const textTimeOut = useTimeOut();
 
-  const handlePageClick = (event) => {
-    setCurrentPage(event.selected + 1);
-    const newOffset = (event.selected * rowsPerPage) % data?.length;
+  const handlePageClick = (event, isFilter, currentPage) => {
+    setCurrentPage(isFilter ? currentPage : event.selected + 1);
+    const newOffset =
+      (isFilter ? currentPage * rowsPerPage : event.selected * rowsPerPage) %
+      data?.length;
 
     setItemOffset(newOffset);
   };
 
   // ** Function to handle filter
   const handleFilter = (e) => {
+    handlePageClick(undefined, true, 0);
+
     textTimeOut(() => {
       setSearchValue(e.target.value);
     }, 800);

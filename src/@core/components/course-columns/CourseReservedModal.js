@@ -144,9 +144,9 @@ const CourseReservedModal = ({
                 </div>
               </Col>
               <Col
-                className="d-flex align-items-center justify-content-end"
                 md="6"
                 sm="12"
+                className="d-flex align-items-center justify-content-end course-reserve-filters-search"
               >
                 <Label className="me-1" for="search-input">
                   جستجو

@@ -36,12 +36,6 @@
   padding-bottom: 40px;
 }
 
-@media (min-width: 1000px) {
-  .save-editor-js-data {
-    margin-left: 120px !important;
-  }
-}
-
 .tableTitle {
   margin-top: 10px;
 }
@@ -98,10 +92,6 @@
   text-overflow: ellipsis;
 }
 
-.course-reserve-filters {
-  height: 50px;
-}
-
 .course-reserve-rows-per-page-input {
   margin-bottom: 8px;
   margin-left: 10px !important;
@@ -110,4 +100,24 @@
 body.dark-layout
   .headline-lesson-container:not(.headline-lesson-container:last-of-type) {
   border-color: #1111115d;
+}
+
+/* Responsive */
+@media (max-width: 1000px) {
+  .course-reserve-filters {
+    flex-direction: column !important;
+  }
+  .course-reserve-filters-search {
+    justify-content: start !important;
+    margin: 10px 0;
+  }
+}
+
+@media (min-width: 1000px) {
+  .course-reserve-filters {
+    height: 50px;
+  }
+  .save-editor-js-data {
+    margin-left: 120px !important;
+  }
 }

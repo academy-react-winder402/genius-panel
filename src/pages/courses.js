@@ -116,7 +116,7 @@ const CoursesPage = () => {
     };
 
     fetchCourses();
-  }, [searchText, sort]);
+  }, [searchText, sort, sortColumn]);
 
   return (
     <div className="invoice-list-wrapper">

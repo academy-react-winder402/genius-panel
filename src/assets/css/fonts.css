@@ -85,6 +85,7 @@ input,
 textarea,
 blockquote,
 label,
-button {
+button,
+.table-tooltip {
   font-family: YekanBakh !important;
 }

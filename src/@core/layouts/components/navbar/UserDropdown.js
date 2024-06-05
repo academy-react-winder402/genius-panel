@@ -1,39 +1,56 @@
 // ** React Imports
+import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
 import { Link } from "react-router-dom";
 
 // ** Custom Components
 import Avatar from "@components/avatar";
 
 // ** Third Party Components
-import {
-  User,
-  Mail,
-  CheckSquare,
-  MessageSquare,
-  Settings,
-  CreditCard,
-  HelpCircle,
-  Power,
-} from "react-feather";
+import { Power, Settings, User } from "react-feather";
 
 // ** Reactstrap Imports
 import {
-  UncontrolledDropdown,
+  DropdownItem,
   DropdownMenu,
   DropdownToggle,
-  DropdownItem,
+  UncontrolledDropdown,
 } from "reactstrap";
 
 // ** Core Imports
+import { getProfileInfoAPI } from "../../../../core/services/api/user-panel/get-profile-info.api";
 import { removeItem } from "../../../../core/services/common/storage.services";
 
 // ** Default Avatar Image
 import defaultAvatar from "@src/assets/images/portrait/small/avatar-s-11.jpg";
 
 const UserDropdown = () => {
+  // ** State
+  const [profileInfo, setProfileInfo] = useState({
+    fName: "ادمین",
+    lName: "",
+    currentPictureAddress: defaultAvatar,
+  });
+
+  // ** Function for handle logout
   const handleLogout = async () => {
     removeItem("token");
   };
+
+  useEffect(() => {
+    const fetchUserInfo = async () => {
+      try {
+        const getProfileInfo = await getProfileInfoAPI();
+
+        setProfileInfo(getProfileInfo);
+      } catch (error) {
+        toast.error("مشکلی در دریافت اطلاعات شما به وجود آمد !");
+      }
+    };
+
+    fetchUserInfo();
+  }, []);
+
   return (
     <UncontrolledDropdown tag="li" className="dropdown-user nav-item">
       <DropdownToggle
@@ -43,11 +60,17 @@ const UserDropdown = () => {
         onClick={(e) => e.preventDefault()}
       >
         <div className="user-nav d-sm-flex d-none">
-          <span className="user-name fw-bold">John Doe</span>
-          <span className="user-status">Admin</span>
+          <span className="user-name fw-bold">
+            {profileInfo.fName + " " + profileInfo.lName}
+          </span>
+          <span className="user-status">ادمین</span>
         </div>
         <Avatar
-          img={defaultAvatar}
+          img={
+            profileInfo?.currentPictureAddress == "Not-set"
+              ? defaultAvatar
+              : profileInfo?.currentPictureAddress
+          }
           imgHeight="40"
           imgWidth="40"
           status="online"

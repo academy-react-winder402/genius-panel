@@ -1,7 +1,7 @@
 // ** React Imports
 import { useState } from "react";
 import toast from "react-hot-toast";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 // ** Reactstrap Imports
 import {
@@ -14,13 +14,14 @@ import {
 } from "reactstrap";
 
 // ** Third Party Components
-import { Edit, Eye, MoreVertical, Trash } from "react-feather";
+import { CheckCircle, Edit, Eye, MoreVertical, Trash, X } from "react-feather";
 
 // ** Core Imports
 import { getCourseReserveWithIdAPI } from "../../../core/services/api/course/course-reserve/get-course-reserve-with-id.api";
 import { deleteCourseAPI } from "../../../core/services/api/course/delete-course.api";
 
 // ** Util Imports
+import { handleActiveInActiveCourse } from "../../../core/utils/handle-active-inactive-course.utils";
 import { numberWithCommas } from "../../../core/utils/number-helper.utils";
 
 // ** Custom Components
@@ -115,6 +116,9 @@ export const COURSE_COLUMNS = [
     sortField: "active",
     // selector: row => row.active,
     cell: (row) => {
+      // ** Hooks
+      const navigate = useNavigate();
+
       return (
         <Badge
           color={
@@ -124,7 +128,10 @@ export const COURSE_COLUMNS = [
               ? "light-danger"
               : "light-warning"
           }
-          className="course-column-badge"
+          className="course-column-badge cursor-pointer"
+          onClick={() =>
+            handleActiveInActiveCourse(row.isActive, row.courseId, navigate)
+          }
         >
           {row.isActive ? "فعال" : "غیر فعال"}
         </Badge>
@@ -158,8 +165,12 @@ export const COURSE_COLUMNS = [
     name: "عملیات",
     minWidth: "160px",
     cell: (row) => {
+      // ** States
       const [modal, setModal] = useState(null);
       const [courseReserve, setCourseReserve] = useState();
+
+      // ** Hooks
+      const navigate = useNavigate();
 
       const toggleModal = (id) => {
         if (modal !== id) {
@@ -215,6 +226,25 @@ export const COURSE_COLUMNS = [
               >
                 <Trash size={14} className="me-50" />
                 <span className="align-middle">حذف</span>
+              </DropdownItem>
+              <DropdownItem
+                className="w-100"
+                onClick={() =>
+                  handleActiveInActiveCourse(
+                    row.isActive,
+                    row.courseId,
+                    navigate
+                  )
+                }
+              >
+                {row.isActive ? (
+                  <X size={14} className="me-50" />
+                ) : (
+                  <CheckCircle size={14} className="me-50" />
+                )}
+                <span className="align-middle">
+                  {row.isActive ? "غیر کردن دوره" : "فعال کردن دوره"}
+                </span>
               </DropdownItem>
             </DropdownMenu>
           </UncontrolledDropdown>

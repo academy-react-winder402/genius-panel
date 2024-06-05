@@ -14,14 +14,22 @@ import {
 } from "reactstrap";
 
 // ** Third Party Components
-import { CheckCircle, Edit, Eye, MoreVertical, Trash, X } from "react-feather";
+import {
+  CheckCircle,
+  Edit,
+  Eye,
+  MoreVertical,
+  RotateCcw,
+  Trash,
+  X,
+} from "react-feather";
 
 // ** Core Imports
 import { getCourseReserveWithIdAPI } from "../../../core/services/api/course/course-reserve/get-course-reserve-with-id.api";
-import { deleteCourseAPI } from "../../../core/services/api/course/delete-course.api";
 
 // ** Util Imports
 import { handleActiveInActiveCourse } from "../../../core/utils/handle-active-inactive-course.utils";
+import { handleDeleteCourse } from "../../../core/utils/handle-delete-course.api";
 import { numberWithCommas } from "../../../core/utils/number-helper.utils";
 
 // ** Custom Components
@@ -30,17 +38,6 @@ import CourseReservedModal from "./CourseReservedModal";
 // ** Image Imports
 import blankThumbnail from "../../../assets/images/common/blank-thumbnail.jpg";
 
-// ** Handle delete course functionality
-const handleDeleteCourse = async (courseId) => {
-  try {
-    const deleteCourse = await deleteCourseAPI(true, courseId);
-    if (deleteCourse.success) toast.success("دوره با موفقیت حذف شد !");
-    else toast.error("مشکلی در حذف دوره به وجود آمد ...");
-  } catch (error) {
-    toast.error("مشکلی در حذف دوره به وجود آمد ...");
-  }
-};
-
 // ** Table columns
 export const COURSE_COLUMNS = [
   {
@@ -48,7 +45,6 @@ export const COURSE_COLUMNS = [
     sortable: true,
     minWidth: "180px",
     sortField: "title",
-    // selector: (row) => row?.title,
     cell: (row) => (
       <div className="d-flex justify-content-left align-items-center gap-1">
         <img
@@ -80,7 +76,6 @@ export const COURSE_COLUMNS = [
     sortable: true,
     minWidth: "150px",
     sortField: "fullName",
-    // selector: (row) => row?.fullName,
     cell: (row) => (
       <div className="mr-5">
         <span className="text-sm">{row?.fullName}</span>
@@ -114,7 +109,6 @@ export const COURSE_COLUMNS = [
     name: "وضعیت",
     minWidth: "120px",
     sortField: "active",
-    // selector: row => row.active,
     cell: (row) => {
       // ** Hooks
       const navigate = useNavigate();
@@ -143,8 +137,9 @@ export const COURSE_COLUMNS = [
     name: "وضعیت حذف",
     minWidth: "130px",
     sortField: "isdelete",
-    // selector: row => row.isdelete,
     cell: (row) => {
+      const navigate = useNavigate();
+
       return (
         <Badge
           color={
@@ -155,6 +150,9 @@ export const COURSE_COLUMNS = [
               : "light-warning"
           }
           className="course-column-is-delete"
+          onClick={() =>
+            handleDeleteCourse(row.isdelete, row.courseId, navigate)
+          }
         >
           {row.isdelete ? "حذف شده" : "حذف نشده"}
         </Badge>
@@ -222,10 +220,18 @@ export const COURSE_COLUMNS = [
               </DropdownItem>
               <DropdownItem
                 className="w-100"
-                onClick={() => handleDeleteCourse(row.courseId)}
+                onClick={() =>
+                  handleDeleteCourse(row.isdelete, row.courseId, navigate)
+                }
               >
-                <Trash size={14} className="me-50" />
-                <span className="align-middle">حذف</span>
+                {row.isdelete ? (
+                  <RotateCcw size={14} className="me-50" />
+                ) : (
+                  <Trash size={14} className="me-50" />
+                )}
+                <span className="align-middle">
+                  {row.isdelete ? "برگرداندن" : "حذف"}
+                </span>
               </DropdownItem>
               <DropdownItem
                 className="w-100"

@@ -1,7 +1,7 @@
 // ** React Imports
 import { forwardRef, Fragment, memo, useState } from "react";
 import toast from "react-hot-toast";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 // ** Third Party Components
 import DataTable from "react-data-table-component";
@@ -47,9 +47,13 @@ const DataTableServerSide = ({
   setSort,
   setSortColumn,
 }) => {
+  // ** States
   const [itemOffset, setItemOffset] = useState(0);
   const [isDeleting, setIsDeleting] = useState(false);
   const [selectedRows, setSelectedRows] = useState();
+
+  // ** Hooks
+  const navigate = useNavigate();
 
   const endOffset = itemOffset + rowsPerPage;
   const currentItems = data?.slice(itemOffset, endOffset);
@@ -125,13 +129,25 @@ const DataTableServerSide = ({
   const handleDeleteCourse = async () => {
     try {
       selectedRows.map(async (course) => {
-        const deleteCourse = await deleteCourseAPI(true, course.courseId);
+        const deleteCourse = await deleteCourseAPI(
+          course.isdelete,
+          course.courseId
+        );
 
-        if (deleteCourse.success) toast.success("دوره با موفقیت حذف شد !");
-        else toast.error("مشکلی در حذف دوره به وجود آمد ...");
+        if (deleteCourse.success) {
+          toast.success(
+            `دوره با موفقیت ${course.isdelete ? "بازگردانی" : "حذف"} شد !`
+          );
+          navigate("/courses");
+        } else
+          toast.error(
+            `مشکلی در ${
+              course.isdelete ? "بازگردانی" : "حذف"
+            } دوره به وجود آمد ...`
+          );
       });
     } catch (error) {
-      toast.error("مشکلی در حذف دوره به وجود آمد ...");
+      toast.error("مشکلی در حذف یا بازگردانی دوره به وجود آمد ...");
     }
   };
 
@@ -150,7 +166,7 @@ const DataTableServerSide = ({
                 color="danger"
               >
                 <Trash size={16} />
-                <span>حذف</span>
+                <span>حذف یا بازگرادنی</span>
               </Button>
             )}
             <Button tag={Link} to="/create-course" color="primary">

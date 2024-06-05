@@ -61,7 +61,7 @@ const UserDropdown = () => {
       >
         <div className="user-nav d-sm-flex d-none">
           <span className="user-name fw-bold">
-            {profileInfo.fName + " " + profileInfo.lName}
+            {profileInfo?.fName + " " + profileInfo?.lName}
           </span>
           <span className="user-status">ادمین</span>
         </div>

@@ -69,6 +69,7 @@
 
 .course-column-is-delete {
   margin-left: 10px;
+  cursor: pointer;
 }
 
 .course-column-image {

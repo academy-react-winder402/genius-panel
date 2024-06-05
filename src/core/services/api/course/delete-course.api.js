@@ -4,7 +4,7 @@ export const deleteCourseAPI = async (active, id) => {
   try {
     const response = await http.delete("/Course/DeleteCourse", {
       data: {
-        active,
+        active: !active,
         id,
       },
     });

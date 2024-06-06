@@ -39,7 +39,7 @@ import CourseReservedModal from "./CourseReservedModal";
 import blankThumbnail from "../../../assets/images/common/blank-thumbnail.jpg";
 
 // ** Table columns
-export const COURSE_COLUMNS = [
+export const COURSE_COLUMNS = (redirectUrl) => [
   {
     name: "نام دوره",
     sortable: true,
@@ -124,7 +124,12 @@ export const COURSE_COLUMNS = [
           }
           className="course-column-badge cursor-pointer"
           onClick={() =>
-            handleActiveInActiveCourse(row.isActive, row.courseId, navigate)
+            handleActiveInActiveCourse(
+              row.isActive,
+              row.courseId,
+              navigate,
+              redirectUrl
+            )
           }
         >
           {row.isActive ? "فعال" : "غیر فعال"}
@@ -221,7 +226,12 @@ export const COURSE_COLUMNS = [
               <DropdownItem
                 className="w-100"
                 onClick={() =>
-                  handleDeleteCourse(row.isdelete, row.courseId, navigate)
+                  handleDeleteCourse(
+                    row.isdelete,
+                    row.courseId,
+                    navigate,
+                    redirectUrl
+                  )
                 }
               >
                 {row.isdelete ? (
@@ -239,7 +249,8 @@ export const COURSE_COLUMNS = [
                   handleActiveInActiveCourse(
                     row.isActive,
                     row.courseId,
-                    navigate
+                    navigate,
+                    redirectUrl
                   )
                 }
               >

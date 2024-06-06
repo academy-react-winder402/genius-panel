@@ -20,7 +20,7 @@ import TableServerSide from "../@core/components/TableServerSide";
 import "@styles/react/apps/app-invoice.scss";
 import "@styles/react/libs/tables/react-dataTable-component.scss";
 
-const CoursesPage = () => {
+const MyCoursesPages = () => {
   // ** States
   const [allCourses, setAllCourses] = useState();
   const [sort, setSort] = useState("desc");
@@ -63,18 +63,29 @@ const CoursesPage = () => {
   useEffect(() => {
     const fetchCourses = async () => {
       try {
-        const getCourses = await getCourseListAPI(1, 1000);
-        const getActiveCourses = getCourses.courseDtos.filter((course) => {
-          return course.isActive === true;
-        });
-        const getDeletedCourses = getCourses.courseDtos.filter((course) => {
-          return course.isdelete === true;
-        });
-        const getOpenCourses = getCourses.courseDtos.filter((course) => {
+        const getCourses = await getCourseListAPI(
+          1,
+          1000,
+          undefined,
+          undefined,
+          undefined,
+          true
+        );
+        const getActiveCourses = getCourses.teacherCourseDtos.filter(
+          (course) => {
+            return course.isActive === true;
+          }
+        );
+        const getDeletedCourses = getCourses.teacherCourseDtos.filter(
+          (course) => {
+            return course.isdelete === true;
+          }
+        );
+        const getOpenCourses = getCourses.teacherCourseDtos.filter((course) => {
           return course.statusName == "در حال برگذاری";
         });
 
-        setAllCourses(getCourses.courseDtos);
+        setAllCourses(getCourses.teacherCourseDtos);
         setActiveCourses(getActiveCourses);
         setDeletedCourses(getDeletedCourses);
         setOpenCourses(getOpenCourses);
@@ -94,19 +105,24 @@ const CoursesPage = () => {
           1000,
           sort ? sort : undefined,
           sortColumn ? sortColumn : undefined,
-          searchText ? searchText : undefined
+          searchText ? searchText : undefined,
+          true
         );
-        const getActiveCourses = getCourses.courseDtos.filter((course) => {
-          return course.isActive === true;
-        });
-        const getDeletedCourses = getCourses.courseDtos.filter((course) => {
-          return course.isdelete === true;
-        });
-        const getOpenCourses = getCourses.courseDtos.filter((course) => {
+        const getActiveCourses = getCourses.teacherCourseDtos.filter(
+          (course) => {
+            return course.isActive === true;
+          }
+        );
+        const getDeletedCourses = getCourses.teacherCourseDtos.filter(
+          (course) => {
+            return course.isdelete === true;
+          }
+        );
+        const getOpenCourses = getCourses.teacherCourseDtos.filter((course) => {
           return course.statusName == "در حال برگذاری";
         });
 
-        setAllCourses(getCourses.courseDtos);
+        setAllCourses(getCourses.teacherCourseDtos);
         setActiveCourses(getActiveCourses);
         setDeletedCourses(getDeletedCourses);
         setOpenCourses(getOpenCourses);
@@ -121,11 +137,8 @@ const CoursesPage = () => {
   return (
     <div className="invoice-list-wrapper">
       <BreadCrumbs
-        title="لیست دوره ها"
-        data={[
-          { title: "مدیریت دوره ها", link: "/courses" },
-          { title: "لیست دوره ها" },
-        ]}
+        title="دوره های من"
+        data={[{ title: "مدیریت دوره ها" }, { title: "لیست دوره ی من" }]}
       />
       <div className="app-user-list w-100">
         <Row>
@@ -218,11 +231,11 @@ const CoursesPage = () => {
           setSearchValue={setSearchText}
           setSort={setSort}
           setSortColumn={setSortColumn}
-          redirectUrl="/courses"
+          redirectUrl="/my-courses"
         />
       </Card>
     </div>
   );
 };
 
-export default CoursesPage;
+export default MyCoursesPages;

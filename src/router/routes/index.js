@@ -20,7 +20,7 @@ const getLayout = {
 };
 
 // ** Document title
-const TemplateTitle = "%s - Vuexy React Admin Template";
+const TemplateTitle = "%s - Genius React Admin Template";
 
 // ** Default Route
 const DefaultRoute = "/home";
@@ -29,8 +29,9 @@ const Home = lazy(() => import("../../pages/Home"));
 const Login = lazy(() => import("../../pages/Login"));
 const Error = lazy(() => import("../../pages/Error"));
 const Courses = lazy(() => import("../../pages/Courses"));
-const CreateCourse = lazy(() => import("../../pages/CreateCourse"));
+const MyCourses = lazy(() => import("../../pages/MyCourses"));
 const CourseReserved = lazy(() => import("../../pages/CourseReserved"));
+const CreateCourse = lazy(() => import("../../pages/CreateCourse"));
 
 // ** Merge Routes
 const Routes = [
@@ -55,12 +56,16 @@ const Routes = [
     element: <Courses />,
   },
   {
-    path: "/create-course",
-    element: <CreateCourse />,
+    path: "/my-courses",
+    element: <MyCourses />,
   },
   {
     path: "/course-reserved",
     element: <CourseReserved />,
+  },
+  {
+    path: "/create-course",
+    element: <CreateCourse />,
   },
   {
     path: "*",

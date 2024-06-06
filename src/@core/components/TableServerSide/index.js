@@ -46,6 +46,7 @@ const DataTableServerSide = ({
   setSearchValue,
   setSort,
   setSortColumn,
+  redirectUrl,
 }) => {
   // ** States
   const [itemOffset, setItemOffset] = useState(0);
@@ -138,7 +139,7 @@ const DataTableServerSide = ({
           toast.success(
             `دوره با موفقیت ${course.isdelete ? "بازگردانی" : "حذف"} شد !`
           );
-          navigate("/courses");
+          navigate(redirectUrl);
         } else
           toast.error(
             `مشکلی در ${
@@ -221,7 +222,7 @@ const DataTableServerSide = ({
               pagination
               paginationServer
               className="react-dataTable"
-              columns={COURSE_COLUMNS}
+              columns={COURSE_COLUMNS()}
               onSort={handleSort}
               sortIcon={<ChevronDown size={10} />}
               paginationComponent={CustomPagination}

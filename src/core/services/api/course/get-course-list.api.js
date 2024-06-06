@@ -5,18 +5,22 @@ export const getCourseListAPI = async (
   rowsOfPage,
   sortingCol,
   sortType,
-  query
+  query,
+  isTeacherCourse
 ) => {
   try {
-    const response = await http.get("/Course/CourseList", {
-      params: {
-        pageNumber,
-        rowsOfPage,
-        sortingCol,
-        sortType,
-        query,
-      },
-    });
+    const response = await http.get(
+      `${isTeacherCourse ? "/Course/TeacherCourseList" : "/Course/CourseList"}`,
+      {
+        params: {
+          pageNumber,
+          rowsOfPage,
+          sortingCol,
+          sortType,
+          query,
+        },
+      }
+    );
 
     return response;
   } catch (error) {

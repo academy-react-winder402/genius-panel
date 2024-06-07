@@ -3,6 +3,7 @@ import { Home, Circle, Code } from "react-feather";
 import CoursesPage from "../../pages/Courses";
 import CreateCoursePage from "../../pages/CreateCourse";
 import CourseReservedPage from "../../pages/CourseReserved";
+import BlogEdit from "../../pages/Blog/Edit";
 
 export default [
   {
@@ -36,7 +37,19 @@ export default [
       },
     ],
   },
-
+  {
+    id: "blog",
+    title: "مدیریت اخبار",
+    icon: <Code size={20} />,
+    children: [
+      {
+        title: "افزودن اخبار",
+        navLink: "/create-blog",
+        element: <BlogEdit />,
+        icon: <Circle />,
+      },
+    ],
+  },
   // {
   //   id: "smaplePage",
   //   title: "Sample Page",

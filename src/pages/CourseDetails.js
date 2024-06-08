@@ -62,7 +62,7 @@ const CourseDetailsPage = () => {
           className="course-tabs-wrapper"
         >
           <div class="course-tabs">
-            <CourseTabs active={active} toggleTab={toggleTab} />
+            <CourseTabs active={active} toggleTab={toggleTab} course={course} />
           </div>
         </Col>
       </Row>

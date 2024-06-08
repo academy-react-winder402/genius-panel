@@ -11,7 +11,7 @@ import { Bell, Bookmark, User } from "react-feather";
 import CourseData from "./CourseData";
 import CourseReserve from "./CourseReserve";
 
-const CourseTabs = ({ active, toggleTab }) => {
+const CourseTabs = ({ active, toggleTab, course }) => {
   return (
     <Fragment>
       <Nav pills className="mb-2">
@@ -36,7 +36,13 @@ const CourseTabs = ({ active, toggleTab }) => {
       </Nav>
       <TabContent activeTab={active}>
         <TabPane tabId="1">
-          <CourseData />
+          <CourseData
+            courseUserTotal={course?.courseUserTotal || 0}
+            courseCommentTotal={course?.courseCommentTotal || 0}
+            paymentDoneTotal={course?.paymentDoneTotal || 0}
+            courseLikeTotal={course?.courseLikeTotal || 0}
+            describe={course?.describe}
+          />
         </TabPane>
         <TabPane tabId="2">
           <CourseReserve />

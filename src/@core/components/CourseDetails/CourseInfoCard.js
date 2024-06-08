@@ -1,7 +1,7 @@
 // ** React Imports
 import { Fragment, useEffect, useState } from "react";
 import toast from "react-hot-toast";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 // ** Reactstrap Imports
 import { Badge, Button, Card, CardBody } from "reactstrap";
@@ -16,13 +16,14 @@ import Avatar from "@components/avatar";
 
 // ** Core Imports
 import { getCourseGroupAPI } from "../../../core/services/api/course/course-group/get-course-group.api";
+import { activeAndInactiveCourseAPI } from "../../../core/services/api/course/active-and-deactive-course.api";
+import { deleteCourseAPI } from "../../../core/services/api/course/delete-course.api";
 
 // ** Utils
 import { numberWithCommas } from "../../../core/utils/number-helper.utils";
 
 // ** Styles
 import "@styles/react/libs/react-select/_react-select.scss";
-import { deleteCourseAPI } from "../../../core/services/api/course/delete-course.api";
 
 const levelColors = {
   "فوق پیشرفته": "light-success",
@@ -42,6 +43,9 @@ const CourseInfoCard = ({ course }) => {
   // ** States
   const [courseGroup, setCourseGroup] = useState();
   const [isDeleted, setIsDeleted] = useState(false);
+
+  // ** Hooks
+  const navigate = useNavigate();
 
   // ** Render course img
   const renderCourseImg = () => {
@@ -96,6 +100,7 @@ const CourseInfoCard = ({ course }) => {
       },
       showCancelButton: true,
       confirmButtonText: isDeleted ? "بازگردانی" : "حذف",
+      cancelButtonText: "انصراف",
       showLoaderOnConfirm: true,
       async preConfirm() {
         const deleteCourse = await deleteCourseAPI(isDeleted, course?.courseId);
@@ -105,7 +110,51 @@ const CourseInfoCard = ({ course }) => {
           toast.success(
             `دوره با موفقیت ${isDeleted ? "بازگردانی" : "حذف"} شد !`
           );
-        } else toast.error("مشکلی در حذف دوره به وجود آمد !");
+        } else toast.error("مشکلی در حذف یا بازگردانی دوره به وجود آمد !");
+      },
+    });
+  };
+
+  const handleActiveInactiveCourse = async () => {
+    MySwal.fire({
+      title: course?.isActive
+        ? "آیا از غیر فعال دوره مطمئن هستید؟"
+        : "آیا از فعال دوره مطمئن هستید ؟",
+      text: `آیا از ${
+        course?.isActive ? "غیر فعال" : "فعال"
+      } کردن دوره اطمینان کامل دارید ؟`,
+      icon: "warning",
+      customClass: {
+        confirmButton: "btn btn-primary",
+        cancelButton: "btn btn-danger ms-1",
+      },
+      buttonsStyling: false,
+      inputAttributes: {
+        autocapitalize: "off",
+      },
+      showCancelButton: true,
+      confirmButtonText: course?.isActive ? "غیر فعال کردن" : "فعال کردن",
+      cancelButtonText: "انصراف",
+      showLoaderOnConfirm: true,
+      async preConfirm() {
+        const deleteCourse = await activeAndInactiveCourseAPI(
+          !course?.isActive,
+          course?.courseId
+        );
+
+        if (deleteCourse) {
+          setIsDeleted((prev) => !prev);
+
+          toast.success(
+            `دوره با موفقیت ${isDeleted ? "فعال" : "غیر فعال"} شد !`
+          );
+          navigate(`/courses/${course?.courseId}`);
+        } else
+          toast.error(
+            `مشکلی در ${
+              course?.isActive ? "غیر فعال کردن" : "فعال کردن"
+            } دوره به وجود آمد !`
+          );
       },
     });
   };
@@ -140,7 +189,7 @@ const CourseInfoCard = ({ course }) => {
               {renderCourseImg()}
               <div className="d-flex flex-column align-items-center text-center">
                 <div className="user-info">
-                  <h4>{course !== null ? course?.title : "Eleanor Aguilar"}</h4>
+                  <h4>{course?.title}</h4>
                 </div>
               </div>
             </div>
@@ -217,22 +266,34 @@ const CourseInfoCard = ({ course }) => {
               </ul>
             ) : null}
           </div>
-          <div className="d-flex justify-content-center pt-2">
-            <Button
-              color="primary"
-              tag={Link}
-              to={`/courses/edit/${course?.courseId}`}
-            >
-              ویرایش
-            </Button>
-            <Button
-              className="ms-1"
-              color="danger"
-              outline
-              onClick={handleSuspendedClick}
-            >
-              {isDeleted ? "بازگردانی دوره" : "حذف دوره"}
-            </Button>
+          <div className="d-flex flex-column justify-content-center">
+            <div className="d-flex justify-content-center pt-2">
+              <Button
+                color="primary"
+                tag={Link}
+                to={`/courses/edit/${course?.courseId}`}
+              >
+                ویرایش
+              </Button>
+              <Button
+                className="ms-1"
+                color="danger"
+                outline
+                onClick={handleSuspendedClick}
+              >
+                {isDeleted ? "بازگردانی دوره" : "حذف دوره"}
+              </Button>
+            </div>
+            <div className="course-details-active-inactive-button">
+              <Button
+                className="ms-1"
+                color="success"
+                outline
+                onClick={handleActiveInactiveCourse}
+              >
+                {course?.isActive ? "غیر فعال کردن دوره" : "فعال کردن دوره"}
+              </Button>
+            </div>
           </div>
         </CardBody>
       </Card>

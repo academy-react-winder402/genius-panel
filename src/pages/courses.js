@@ -2,14 +2,20 @@
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 
-// ** Core Imports
-import { getCourseListAPI } from "../core/services/api/course/get-course-list.api";
-
 // ** Reactstrap Imports
 import { Card, Col, Row } from "reactstrap";
 
 // ** Icon Imports
 import { Book, BookOpen, CheckCircle, Trash2 } from "react-feather";
+
+// ** Core Imports
+import { getCourseListAPI } from "../core/services/api/course/get-course-list.api";
+
+// ** Columns
+import { COURSE_COLUMNS } from "../@core/components/course-columns";
+
+// ** Utils
+import { handleDeleteCourse } from "../core/utils/delete-course.utils";
 
 // ** Custom Components
 import BreadCrumbs from "../@core/components/breadcrumbs";
@@ -35,6 +41,7 @@ const CoursesPage = () => {
   const [isActiveCourses, setIsActiveCourses] = useState(false);
   const [isDeletedCourses, setIsDeletedCourses] = useState(false);
   const [isOpenCourses, setIsOpenCourses] = useState(false);
+  const [selectedRows, setSelectedRows] = useState();
 
   const dataToRender = () => {
     if (isAllCourses) {
@@ -210,6 +217,7 @@ const CoursesPage = () => {
       <Card className="rounded">
         <TableServerSide
           data={dataToRender()}
+          columns={COURSE_COLUMNS()}
           renderTitle={renderTitle()}
           currentPage={currentPage}
           rowsPerPage={rowsPerPage}
@@ -218,7 +226,9 @@ const CoursesPage = () => {
           setSearchValue={setSearchText}
           setSort={setSort}
           setSortColumn={setSortColumn}
-          redirectUrl="/courses"
+          setSelectedRows={setSelectedRows}
+          handleDeleteData={() => handleDeleteCourse(selectedRows, "/courses")}
+          isCourseCreateButtonShow
         />
       </Card>
     </div>

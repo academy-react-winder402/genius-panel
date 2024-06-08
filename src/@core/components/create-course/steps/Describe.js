@@ -1,4 +1,5 @@
 // ** React Imports
+import { Fragment, useEffect, useRef } from "react";
 import Checklist from "@editorjs/checklist";
 import Delimiter from "@editorjs/delimiter";
 import EditorJS from "@editorjs/editorjs";
@@ -11,8 +12,9 @@ import Quote from "@editorjs/quote";
 import RawTool from "@editorjs/raw";
 import Warning from "@editorjs/warning";
 import Table from "editorjs-table";
-import { Fragment, useEffect, useRef } from "react";
 import toast from "react-hot-toast";
+
+// ** Reactstrap imports
 import { Button } from "reactstrap";
 
 // ** Utils

@@ -1,7 +1,6 @@
 // ** React Imports
 import { forwardRef, Fragment, memo, useState } from "react";
-import toast from "react-hot-toast";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 // ** Third Party Components
 import DataTable from "react-data-table-component";
@@ -20,12 +19,6 @@ import {
   Row,
 } from "reactstrap";
 
-// ** Core Imports
-import { deleteCourseAPI } from "../../../core/services/api/course/delete-course.api";
-
-// ** Columns
-import { COURSE_COLUMNS } from "../course-columns";
-
 // ** Utility Imports
 import { useTimeOut } from "../../../utility/hooks/useTimeOut";
 
@@ -38,6 +31,7 @@ const BootstrapCheckbox = forwardRef((props, ref) => (
 
 const DataTableServerSide = ({
   data,
+  columns,
   renderTitle,
   currentPage,
   rowsPerPage,
@@ -46,15 +40,13 @@ const DataTableServerSide = ({
   setSearchValue,
   setSort,
   setSortColumn,
-  redirectUrl,
+  setSelectedRows,
+  handleDeleteData,
+  isCourseCreateButtonShow,
 }) => {
   // ** States
   const [itemOffset, setItemOffset] = useState(0);
   const [isDeleting, setIsDeleting] = useState(false);
-  const [selectedRows, setSelectedRows] = useState();
-
-  // ** Hooks
-  const navigate = useNavigate();
 
   const endOffset = itemOffset + rowsPerPage;
   const currentItems = data?.slice(itemOffset, endOffset);
@@ -127,31 +119,6 @@ const DataTableServerSide = ({
     else setIsDeleting(false);
   };
 
-  const handleDeleteCourse = async () => {
-    try {
-      selectedRows.map(async (course) => {
-        const deleteCourse = await deleteCourseAPI(
-          course.isdelete,
-          course.courseId
-        );
-
-        if (deleteCourse.success) {
-          toast.success(
-            `دوره با موفقیت ${course.isdelete ? "بازگردانی" : "حذف"} شد !`
-          );
-          navigate(redirectUrl);
-        } else
-          toast.error(
-            `مشکلی در ${
-              course.isdelete ? "بازگردانی" : "حذف"
-            } دوره به وجود آمد ...`
-          );
-      });
-    } catch (error) {
-      toast.error("مشکلی در حذف یا بازگردانی دوره به وجود آمد ...");
-    }
-  };
-
   return (
     <Fragment>
       <Card>
@@ -163,16 +130,18 @@ const DataTableServerSide = ({
             {isDeleting && (
               <Button
                 className="d-flex align-items-center delete-course-btn"
-                onClick={handleDeleteCourse}
+                onClick={handleDeleteData}
                 color="danger"
               >
                 <Trash size={16} />
                 <span>حذف یا بازگرادنی</span>
               </Button>
             )}
-            <Button tag={Link} to="/create-course" color="primary">
-              افزودن دوره
-            </Button>
+            {isCourseCreateButtonShow && (
+              <Button tag={Link} to="/create-course" color="primary">
+                افزودن دوره
+              </Button>
+            )}
           </div>
         </CardHeader>
         <Row className="mx-0 mt-1 mb-50">
@@ -222,7 +191,7 @@ const DataTableServerSide = ({
               pagination
               paginationServer
               className="react-dataTable"
-              columns={COURSE_COLUMNS()}
+              columns={columns}
               onSort={handleSort}
               sortIcon={<ChevronDown size={10} />}
               paginationComponent={CustomPagination}

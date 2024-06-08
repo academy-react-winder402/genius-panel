@@ -119,6 +119,10 @@ body.dark-layout
   border-color: #1111115d;
 }
 
+.course-reply-comment-text {
+  gap: 3px;
+}
+
 /* Responsive */
 @media (max-width: 1000px) {
   .course-reserve-filters {

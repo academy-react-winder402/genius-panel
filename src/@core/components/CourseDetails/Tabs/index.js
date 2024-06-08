@@ -8,6 +8,7 @@ import { Nav, NavItem, NavLink, TabContent, TabPane } from "reactstrap";
 import { Bell, Bookmark, User } from "react-feather";
 
 // ** Course Components
+import CourseComments from "./CourseComments";
 import CourseData from "./CourseData";
 import CourseReserve from "./CourseReserve";
 
@@ -48,7 +49,7 @@ const CourseTabs = ({ active, toggleTab, course }) => {
           <CourseReserve />
         </TabPane>
         <TabPane tabId="3">
-          <CourseReserve />
+          <CourseComments />
         </TabPane>
       </TabContent>
     </Fragment>

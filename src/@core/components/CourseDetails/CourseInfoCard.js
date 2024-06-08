@@ -1,5 +1,6 @@
 // ** React Imports
-import { Fragment } from "react";
+import { Fragment, useEffect, useState } from "react";
+import toast from "react-hot-toast";
 import { Link } from "react-router-dom";
 
 // ** Reactstrap Imports
@@ -13,42 +14,42 @@ import withReactContent from "sweetalert2-react-content";
 // ** Custom Components
 import Avatar from "@components/avatar";
 
+// ** Core Imports
+import { getCourseGroupAPI } from "../../../core/services/api/course/course-group/get-course-group.api";
+
 // ** Utils
 import { numberWithCommas } from "../../../core/utils/number-helper.utils";
 
 // ** Styles
 import "@styles/react/libs/react-select/_react-select.scss";
-
-const roleColors = {
-  editor: "light-info",
-  admin: "light-danger",
-  author: "light-warning",
-  maintainer: "light-success",
-  subscriber: "light-primary",
-};
+import { deleteCourseAPI } from "../../../core/services/api/course/delete-course.api";
 
 const levelColors = {
   "فوق پیشرفته": "light-success",
-  پیشرفته: "light-secondary",
+  پیشرقته: "light-secondary",
   مبتدی: "light-warning",
 };
 
 const statusColors = {
   "شروع ثبت نام": "light-success",
-  "در حال برگزاری": "light-secondary",
+  "درحال برگزاری": "light-secondary",
   "منقضی شده": "light-warning",
 };
 
 const MySwal = withReactContent(Swal);
 
 const CourseInfoCard = ({ course }) => {
-  // ** render course img
+  // ** States
+  const [courseGroup, setCourseGroup] = useState();
+  const [isDeleted, setIsDeleted] = useState(false);
+
+  // ** Render course img
   const renderCourseImg = () => {
-    if (course?.imageAddress !== "undefined") {
+    if (course?.imageAddress !== "undefined" && course?.imageAddress !== null) {
       return (
         <img
           height="110"
-          width="110"
+          width="200"
           alt="course-image"
           src={course?.imageAddress}
           className="img-fluid rounded mt-3 mb-2"
@@ -76,63 +77,70 @@ const CourseInfoCard = ({ course }) => {
     }
   };
 
-  const handleSuspendedClick = () => {
-    return MySwal.fire({
-      title: "Are you sure?",
-      text: "You won't be able to revert user!",
+  const handleSuspendedClick = async () => {
+    MySwal.fire({
+      title: isDeleted
+        ? "آیا از بازگردانی دوره مطمئن هستید؟"
+        : "آیا از حذف دوره مطمئن هستید ؟",
+      text: isDeleted
+        ? "در صورت بازگردانی دوره،دوره برای کاربران قابل رویت بود ."
+        : "در صورت حذف دوره، دوره دیگر برای کاربران قابل رویت نخواهد بود.",
       icon: "warning",
-      showCancelButton: true,
-      confirmButtonText: "Yes, Suspend user!",
       customClass: {
         confirmButton: "btn btn-primary",
-        cancelButton: "btn btn-outline-danger ms-1",
+        cancelButton: "btn btn-danger ms-1",
       },
       buttonsStyling: false,
-    }).then(function (result) {
-      if (result.value) {
-        MySwal.fire({
-          icon: "success",
-          title: "Suspended!",
-          text: "User has been suspended.",
-          customClass: {
-            confirmButton: "btn btn-success",
-          },
-        });
-      } else if (result.dismiss === MySwal.DismissReason.cancel) {
-        MySwal.fire({
-          title: "Cancelled",
-          text: "Cancelled Suspension :)",
-          icon: "error",
-          customClass: {
-            confirmButton: "btn btn-success",
-          },
-        });
-      }
+      inputAttributes: {
+        autocapitalize: "off",
+      },
+      showCancelButton: true,
+      confirmButtonText: isDeleted ? "بازگردانی" : "حذف",
+      showLoaderOnConfirm: true,
+      async preConfirm() {
+        const deleteCourse = await deleteCourseAPI(isDeleted, course?.courseId);
+
+        if (deleteCourse) {
+          setIsDeleted((prev) => !prev);
+          toast.success(
+            `دوره با موفقیت ${isDeleted ? "بازگردانی" : "حذف"} شد !`
+          );
+        } else toast.error("مشکلی در حذف دوره به وجود آمد !");
+      },
     });
   };
 
   const formattedCoursePrice = () => numberWithCommas(course?.cost);
 
+  useEffect(() => {
+    if (course) {
+      const fetchCourseGroup = async () => {
+        try {
+          const getCourseGroup = await getCourseGroupAPI(
+            course?.teacherId,
+            course?.courseId
+          );
+
+          setCourseGroup(getCourseGroup[0]);
+        } catch (error) {
+          toast.error("مشکلی در دریافت گروه دوره به وجود آمد.");
+        }
+      };
+
+      fetchCourseGroup();
+    }
+  }, [course]);
+
   return (
     <Fragment>
-      <Card>
+      <Card className="course-info-card">
         <CardBody>
           <div className="user-avatar-section">
             <div className="d-flex align-items-center flex-column">
               {renderCourseImg()}
               <div className="d-flex flex-column align-items-center text-center">
                 <div className="user-info">
-                  <h4>
-                    {course !== null ? course?.fullName : "Eleanor Aguilar"}
-                  </h4>
-                  {course !== null ? (
-                    <Badge
-                      color={roleColors[course?.role]}
-                      className="text-capitalize"
-                    >
-                      {course?.role}
-                    </Badge>
-                  ) : null}
+                  <h4>{course !== null ? course?.title : "Eleanor Aguilar"}</h4>
                 </div>
               </div>
             </div>
@@ -152,8 +160,8 @@ const CourseInfoCard = ({ course }) => {
                 <Briefcase className="font-medium-2" />
               </Badge>
               <div className="ms-75">
-                <h4 className="mb-0">568</h4>
-                <small>Projects Done</small>
+                <h4 className="mb-0">{courseGroup?.groupName}</h4>
+                <small>نام گروه</small>
               </div>
             </div>
           </div>
@@ -195,6 +203,17 @@ const CourseInfoCard = ({ course }) => {
                   <span className="fw-bolder me-25">نام کلاس:</span>
                   <span>{course?.courseClassRoomName}</span>
                 </li>
+                {course && course.courseTeches.length > 0 && (
+                  <li className="mb-75">
+                    <span className="fw-bolder me-25">تکنولوژی های دوره :</span>
+                    {course &&
+                      course?.courseTeches.map((tech) => (
+                        <Badge key={course.courseId} color="light-primary">
+                          {tech}
+                        </Badge>
+                      ))}
+                  </li>
+                )}
               </ul>
             ) : null}
           </div>
@@ -212,7 +231,7 @@ const CourseInfoCard = ({ course }) => {
               outline
               onClick={handleSuspendedClick}
             >
-              حذف کاربر
+              {isDeleted ? "بازگردانی دوره" : "حذف دوره"}
             </Button>
           </div>
         </CardBody>

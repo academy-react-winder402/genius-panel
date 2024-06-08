@@ -98,6 +98,15 @@
   margin-left: 10px !important;
 }
 
+.course-tabs-wrapper {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.course-tabs {
+  width: 95%;
+}
+
 body.dark-layout
   .headline-lesson-container:not(.headline-lesson-container:last-of-type) {
   border-color: #1111115d;
@@ -120,5 +129,9 @@ body.dark-layout
   }
   .save-editor-js-data {
     margin-left: 120px !important;
+  }
+
+  .course-info-card {
+    width: 110%;
   }
 }

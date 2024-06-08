@@ -21,26 +21,17 @@ import Headline from "../../../core/utils/headline-class-helper.utils";
 // ** Icon Imports
 import { ArrowLeft, ArrowRight } from "react-feather";
 
-const Describe = ({ stepper, describe }) => {
+const Describe = ({ stepper, describe, setDescribe }) => {
   // ** Hooks
   const editorJsInstance = useRef(null);
   const editorRef = useRef(null);
 
-  const onSubmit = async (e) => {
-    const convertBlog = e.technologies.map((blog) => ({
-      data: blog.id,
-    }));
+  const handleSaveData = async () => {
+    if (editorJsInstance.current) {
+      const savedData = await editorJsInstance.current.save();
 
-    try {
-      const addBlog = await createBlogAPI(data, convertBlog);
-
-      if (addBlog.success) {
-        toast.success("اطلاعات اخبار با موفقیت اضافه شد !");
-        navigate("/add-blog");
-      } else toast.error("مکشلی در افزودن اخبار به وجود آمد !");
-    } catch (error) {
-      toast.error("مکشلی در افزودن اخبار به وجود آمد !");
-    }
+      setDescribe(savedData);
+    } else toast.error("لطفا توضیحات را وارد کنید !");
   };
 
   useEffect(() => {
@@ -124,7 +115,7 @@ const Describe = ({ stepper, describe }) => {
   }, []);
 
   useEffect(() => {
-    if (describe) stepper.submit();
+    if (describe) stepper.next();
   }, [describe]);
 
   return (
@@ -149,13 +140,8 @@ const Describe = ({ stepper, describe }) => {
           ></ArrowLeft>
           <span className="align-middle d-sm-inline-block d-none">قبلی</span>
         </Button>
-        <Button
-          type="submit"
-          color="primary"
-          className="btn-next"
-          onClick={onSubmit}
-        >
-          <span className="align-middle d-sm-inline-block d-none">بعدی</span>
+        <Button color="primary" className="btn-next" onClick={handleSaveData}>
+          <span className="align-middle d-sm-inline-block d-none">ثبت</span>
           <ArrowRight
             size={14}
             className="align-middle ms-sm-25 ms-0"

@@ -1,4 +1,3 @@
-// ** React Imports
 import { useRef, useState } from "react";
 import toast from "react-hot-toast";
 
@@ -7,14 +6,12 @@ import Wizard from "@components/wizard";
 
 import Global from "../../../@core/components/create-blog/GlobalData";
 
-// ** Core Imports
 import { createBlogAPI } from "../../../core/services/api/blog/create-Blog.api";
 import { onFormData } from "../../../core/utils/form-data-helper.utils";
 
-// ** Custom Components
 import Describe from "../../../@core/components/create-blog/Describe";
 
-const AddBlog = () => {
+const CreateBlogPage = () => {
   // ** Ref
   const ref = useRef(null);
 
@@ -22,30 +19,31 @@ const AddBlog = () => {
   const [stepper, setStepper] = useState(null);
   const [files, setFiles] = useState([]);
   const [title, setTitle] = useState();
+
   const [miniDescribe, setMiniDescribe] = useState();
   const [describe, setDescribe] = useState();
-  const [data, setDataId] = useState();
+
+  const [blogId, setBlogId] = useState();
 
   const onSubmit = async () => {
-    const blogData = {
+    const Data = {
       image: files[0],
       tumbImage: files[0],
       imageAddress: files[0],
       title,
       miniDescribe,
       describe,
-      data,
     };
 
     try {
-      const formData = onFormData(blogData);
+      const formData = onFormData(Data);
       const createBlog = await createBlogAPI(formData);
 
       if (createBlog.success) {
         toast.success("اخبار با موفقیت ثبت شد !");
-        setDataId(createBlog.id);
+        setBlogId(createBlog.id);
         stepper.next();
-      } else toast.error(createBlog.message);
+      } else toast.error(createCourse.message);
     } catch (error) {
       toast.error("مشکلی در ارسال اخبار به وجود آمد !");
     }
@@ -54,13 +52,12 @@ const AddBlog = () => {
   const steps = [
     {
       id: "global-data",
-      title: "اطلاعات عمومی",
-      subtitle: "اطلاعات عمومی دوره",
+      title: "اطلاعات کلی ",
+      subtitle: "اطلاعات کلی اخبار",
       content: (
         <Global
           stepper={stepper}
           title={title}
-          handleSubmitFn={onSubmit}
           miniDescribe={miniDescribe}
           setTitle={setTitle}
           setMiniDescribe={setMiniDescribe}
@@ -72,10 +69,12 @@ const AddBlog = () => {
     {
       id: "describe",
       title: "توضیحات",
-      subtitle: "توضیحات دوره",
+      subtitle: "توضیحات اخبار",
       content: (
         <Describe
           stepper={stepper}
+          handleSubmitFn={onSubmit}
+          blogId={blogId}
           setDescribe={setDescribe}
           describe={describe}
         />
@@ -93,4 +92,4 @@ const AddBlog = () => {
   );
 };
 
-export default AddBlog;
+export default CreateBlogPage;

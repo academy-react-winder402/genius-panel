@@ -1,27 +1,31 @@
-// ** React Imports
 import { Fragment, useEffect } from "react";
 
-// ** Third Party Components
+import { isObjEmpty } from "@utils";
+
 import { useForm, Controller } from "react-hook-form";
 import { ArrowLeft, ArrowRight } from "react-feather";
 import { yupResolver } from "@hookform/resolvers/yup";
 
-// ** Reactstrap Imports
 import { Form, Label, Input, Row, Col, Button, FormFeedback } from "reactstrap";
 
-// ** Core Import
 import { createCourseStepOneFormSchema } from "../../../core/validations/create-course/create-course-step-one-form.validation";
 
-// ** Custom Components
 import FileUploaderSingle from "../FileUploaderSingle";
-import { createBlogAPI } from "../../../core/services/api/blog/create-Blog.api";
 
 const defaultValues = {
   title: "",
   miniDescribe: "",
 };
 
-const Global = ({ title, miniDescribe, data, files, setFiles }) => {
+const Global = ({
+  stepper,
+  title,
+  miniDescribe,
+  setTitle,
+  setMiniDescribe,
+  files,
+  setFiles,
+}) => {
   // ** Hooks
   const {
     control,
@@ -32,25 +36,22 @@ const Global = ({ title, miniDescribe, data, files, setFiles }) => {
     resolver: yupResolver(createCourseStepOneFormSchema),
   });
 
-  const onSubmit = async (e) => {
-    const convertBlog = e.blogs.map((blog) => ({
-      data: blog.id,
-    }));
+  const onSubmit = (e) => {
+    if (isObjEmpty(errors)) {
+      const { title, miniDescribe } = e;
 
-    try {
-      const addBlog = await createBlogAPI(data, convertBlog);
+      setTitle(title);
+      setMiniDescribe(miniDescribe);
 
-      if (addBlog.success) {
-        toast.success("اطلاعات اخبار با موفقیت اضافه شد !");
-        navigate("/add-blog");
-      } else toast.error("مکشلی در افزودن اخبار به وجود آمد !");
-    } catch (error) {
-      toast.error("مکشلی در افزودن اخبار به وجود آمد !");
+      if (title && miniDescribe) {
+        stepper.next();
+      }
     }
   };
 
   useEffect(() => {
     if (title && miniDescribe) {
+      stepper.next();
     }
   }, [title, miniDescribe]);
 
@@ -75,7 +76,7 @@ const Global = ({ title, miniDescribe, data, files, setFiles }) => {
               render={({ field }) => (
                 <Input
                   id="title"
-                  placeholder="موضوع اخبار"
+                  placeholder="مانند: دوره جامع react"
                   invalid={errors.title && true}
                   {...field}
                 />
@@ -111,7 +112,7 @@ const Global = ({ title, miniDescribe, data, files, setFiles }) => {
           </Col>
         </Row>
         <div className="mt-4">
-          <h5>آپلود عکس اخبار</h5>
+          <h5>آپلود عکس دوره</h5>
           <FileUploaderSingle files={files} setFiles={setFiles} />
         </div>
         <div className="d-flex justify-content-between">

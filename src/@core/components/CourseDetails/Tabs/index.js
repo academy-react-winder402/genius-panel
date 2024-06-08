@@ -7,7 +7,7 @@ import { Nav, NavItem, NavLink, TabContent, TabPane } from "reactstrap";
 // ** Icons Imports
 import { Bell, Bookmark, User } from "react-feather";
 
-// ** User Components
+// ** Course Components
 import CourseReserve from "./CourseReserve";
 
 const CourseTabs = ({ active, toggleTab }) => {
@@ -29,7 +29,7 @@ const CourseTabs = ({ active, toggleTab }) => {
         <NavItem>
           <NavLink active={active === "3"} onClick={() => toggleTab("3")}>
             <User className="font-medium-3 me-50" />
-            <span className="fw-bold">کامنت ها</span>
+            <span className="fw-bold">نظرات</span>
           </NavLink>
         </NavItem>
       </Nav>

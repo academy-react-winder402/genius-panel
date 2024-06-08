@@ -57,7 +57,7 @@ const CreateCoursePage = () => {
       capacity,
       sessionNumber,
       miniDescribe,
-      describe,
+      describe: JSON.stringify(describe),
       startTime,
       endTime,
       courseLvlId,
@@ -113,7 +113,7 @@ const CreateCoursePage = () => {
       ),
     },
     {
-      id: "describe",
+      id: "course-describe",
       title: "توضیحات",
       subtitle: "توضیحات دوره",
       content: (

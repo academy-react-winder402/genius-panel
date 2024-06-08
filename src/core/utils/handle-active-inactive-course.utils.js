@@ -4,13 +4,18 @@ import toast from "react-hot-toast";
 // ** Core Imports
 import { activeAndInactiveCourseAPI } from "../services/api/course/active-and-deactive-course.api";
 
-export const handleActiveInActiveCourse = async (active, id, navigate) => {
+export const handleActiveInActiveCourse = async (
+  active,
+  id,
+  navigate,
+  redirectUrl
+) => {
   try {
     const activeInActiveCourse = await activeAndInactiveCourseAPI(!active, id);
 
     if (activeInActiveCourse.success) {
       toast.success(`دوره با موفقیت ${active ? "غیر فعال" : "فعال"} شد`);
-      navigate("/courses");
+      navigate(redirectUrl);
     } else {
       toast.error(
         `مشکلی در ${active ? "غیر فعال کردن" : "فعال کردن"} به وجود آمد !`

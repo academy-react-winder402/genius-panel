@@ -30,7 +30,7 @@ import { getCourseReserveWithIdAPI } from "../../../core/services/api/course/cou
 // ** Util Imports
 import { handleActiveInActiveCourse } from "../../../core/utils/handle-active-inactive-course.utils";
 import { handleDeleteCourse } from "../../../core/utils/handle-delete-course.api";
-import { numberWithCommas } from "../../../core/utils/number-helper.utils";
+import { persianNumberFormatter } from "../../../core/utils/persian-number-formatter-helper";
 
 // ** Custom Components
 import CourseReservedModal from "./CourseReservedModal";
@@ -39,7 +39,7 @@ import CourseReservedModal from "./CourseReservedModal";
 import blankThumbnail from "../../../assets/images/common/blank-thumbnail.jpg";
 
 // ** Table columns
-export const COURSE_COLUMNS = [
+export const COURSE_COLUMNS = (redirectUrl) => [
   {
     name: "نام دوره",
     sortable: true,
@@ -87,11 +87,11 @@ export const COURSE_COLUMNS = [
     sortable: true,
     minWidth: "140px",
     sortField: "cost",
-    cell: (row) => (
-      <span className="course-column-truncate">
-        {numberWithCommas(row.cost) || 0} تومان
-      </span>
-    ),
+    cell: (row) => {
+      const formattedPrice = persianNumberFormatter(row.cost) || 0;
+
+      return <span className="course-column-truncate">{formattedPrice}</span>;
+    },
   },
   {
     name: "وضعیت برگزاری",
@@ -124,7 +124,12 @@ export const COURSE_COLUMNS = [
           }
           className="course-column-badge cursor-pointer"
           onClick={() =>
-            handleActiveInActiveCourse(row.isActive, row.courseId, navigate)
+            handleActiveInActiveCourse(
+              row.isActive,
+              row.courseId,
+              navigate,
+              redirectUrl
+            )
           }
         >
           {row.isActive ? "فعال" : "غیر فعال"}
@@ -221,7 +226,12 @@ export const COURSE_COLUMNS = [
               <DropdownItem
                 className="w-100"
                 onClick={() =>
-                  handleDeleteCourse(row.isdelete, row.courseId, navigate)
+                  handleDeleteCourse(
+                    row.isdelete,
+                    row.courseId,
+                    navigate,
+                    redirectUrl
+                  )
                 }
               >
                 {row.isdelete ? (
@@ -239,7 +249,8 @@ export const COURSE_COLUMNS = [
                   handleActiveInActiveCourse(
                     row.isActive,
                     row.courseId,
-                    navigate
+                    navigate,
+                    redirectUrl
                   )
                 }
               >

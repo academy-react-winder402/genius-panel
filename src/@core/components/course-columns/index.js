@@ -30,7 +30,7 @@ import { getCourseReserveWithIdAPI } from "../../../core/services/api/course/cou
 // ** Util Imports
 import { handleActiveInActiveCourse } from "../../../core/utils/handle-active-inactive-course.utils";
 import { handleDeleteCourse } from "../../../core/utils/handle-delete-course.api";
-import { numberWithCommas } from "../../../core/utils/number-helper.utils";
+import { persianNumberFormatter } from "../../../core/utils/persian-number-formatter-helper";
 
 // ** Custom Components
 import CourseReservedModal from "./CourseReservedModal";
@@ -87,11 +87,11 @@ export const COURSE_COLUMNS = (redirectUrl) => [
     sortable: true,
     minWidth: "140px",
     sortField: "cost",
-    cell: (row) => (
-      <span className="course-column-truncate">
-        {numberWithCommas(row.cost) || 0} تومان
-      </span>
-    ),
+    cell: (row) => {
+      const formattedPrice = persianNumberFormatter(row.cost) || 0;
+
+      return <span className="course-column-truncate">{formattedPrice}</span>;
+    },
   },
   {
     name: "وضعیت برگزاری",

@@ -15,12 +15,12 @@ import withReactContent from "sweetalert2-react-content";
 import Avatar from "@components/avatar";
 
 // ** Core Imports
-import { getCourseGroupAPI } from "../../../core/services/api/course/course-group/get-course-group.api";
 import { activeAndInactiveCourseAPI } from "../../../core/services/api/course/active-and-deactive-course.api";
+import { getCourseGroupAPI } from "../../../core/services/api/course/course-group/get-course-group.api";
 import { deleteCourseAPI } from "../../../core/services/api/course/delete-course.api";
 
 // ** Utils
-import { numberWithCommas } from "../../../core/utils/number-helper.utils";
+import { persianNumberFormatter } from "../../../core/utils/persian-number-formatter-helper";
 
 // ** Styles
 import "@styles/react/libs/react-select/_react-select.scss";
@@ -159,7 +159,7 @@ const CourseInfoCard = ({ course }) => {
     });
   };
 
-  const formattedCoursePrice = () => numberWithCommas(course?.cost);
+  const formattedCoursePrice = () => persianNumberFormatter(course?.cost);
 
   useEffect(() => {
     if (course) {
@@ -200,7 +200,7 @@ const CourseInfoCard = ({ course }) => {
                 <Check className="font-medium-2" />
               </Badge>
               <div className="ms-75">
-                <h4 className="mb-0">{formattedCoursePrice()} تومان</h4>
+                <h4 className="mb-0">{formattedCoursePrice()}</h4>
                 <small>قیمت دوره</small>
               </div>
             </div>

@@ -1,8 +1,6 @@
-import { Fragment } from "react";
 import { Link } from "react-router-dom";
 
 // ** Custom Components
-import Avatar from "@components/avatar";
 
 // ** Reactstrap Imports
 import {
@@ -10,27 +8,14 @@ import {
   DropdownItem,
   DropdownMenu,
   DropdownToggle,
-  UncontrolledTooltip,
   UncontrolledDropdown,
 } from "reactstrap";
 
 // ** Third Party Components
-import {
-  Eye,
-  Send,
-  Edit,
-  Copy,
-  Save,
-  Info,
-  Trash,
-  PieChart,
-  Download,
-  TrendingUp,
-  CheckCircle,
-  MoreVertical,
-  ArrowDownCircle,
-} from "react-feather";
-import { numberWithCommas } from "../../../core/utils/number-helper.utils";
+import { Edit, MoreVertical, Trash } from "react-feather";
+
+// ** Utils
+import { persianNumberFormatter } from "../../../core/utils/persian-number-formatter-helper";
 
 // ** Table columns
 export const columns = [
@@ -51,7 +36,11 @@ export const columns = [
     sortable: true,
     minWidth: "150px",
     sortField: "cost",
-    cell: (row) => <span>{numberWithCommas(row.cost) || 0} تومان</span>,
+    cell: (row) => {
+      const formattedPrice = persianNumberFormatter(row.cost) || 0;
+
+      return <span>{formattedPrice}</span>;
+    },
   },
   {
     sortable: true,

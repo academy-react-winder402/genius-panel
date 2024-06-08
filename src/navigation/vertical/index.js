@@ -43,8 +43,6 @@ export default [
       },
     ],
   },
-<<<<<<< HEAD
-=======
   {
     id: "blog",
     title: "مدیریت اخبار",
@@ -72,5 +70,4 @@ export default [
   //     },
   //   ],
   // },
->>>>>>> 9fd76f8f0af76ebdd26bc23ffabb757ca121ab62
 ];

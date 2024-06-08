@@ -29,15 +29,11 @@ const Home = lazy(() => import("../../pages/Home"));
 const Login = lazy(() => import("../../pages/Login"));
 const Error = lazy(() => import("../../pages/Error"));
 const Courses = lazy(() => import("../../pages/Courses"));
-<<<<<<< HEAD
 const MyCourses = lazy(() => import("../../pages/MyCourses"));
-=======
-const AddBlog = lazy(() => import("../../pages/Blog/Add-blog"));
 const CreateCourse = lazy(() => import("../../pages/CreateCourse"));
->>>>>>> 9fd76f8f0af76ebdd26bc23ffabb757ca121ab62
 const CourseReserved = lazy(() => import("../../pages/CourseReserved"));
-const CreateCourse = lazy(() => import("../../pages/CreateCourse"));
 const CourseDetails = lazy(() => import("../../pages/CourseDetails"));
+const AddBlog = lazy(() => import("../../pages/Blog/Add-blog"));
 
 // ** Merge Routes
 const Routes = [
@@ -70,17 +66,16 @@ const Routes = [
     element: <CourseReserved />,
   },
   {
-<<<<<<< HEAD
     path: "/courses/:id",
     element: <CourseDetails />,
   },
   {
     path: "/create-course",
     element: <CreateCourse />,
-=======
+  },
+  {
     path: "/add-blog",
     element: <AddBlog />,
->>>>>>> 9fd76f8f0af76ebdd26bc23ffabb757ca121ab62
   },
   {
     path: "*",

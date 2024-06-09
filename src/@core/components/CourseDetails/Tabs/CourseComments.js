@@ -3,11 +3,14 @@ import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { useParams } from "react-router-dom";
 
+// ** Reactstrap Imports
+import { Card } from "reactstrap";
+
 // ** Core Imports
 import { getCourseCommentsAPI } from "../../../../core/services/api/course/course-comments/get-course-comments.api";
 
-// ** Reactstrap Imports
-import { Card } from "reactstrap";
+// ** Columns
+import { COURSE_COMMENTS_COLUMNS } from "../../course-columns/course-comments-columns";
 
 // ** Custom Components
 import TableServerSide from "../../TableServerSide";
@@ -15,7 +18,6 @@ import TableServerSide from "../../TableServerSide";
 // ** Styles
 import "@styles/react/apps/app-invoice.scss";
 import "@styles/react/libs/tables/react-dataTable-component.scss";
-import { COURSE_COMMENTS_COLUMNS } from "../../course-columns/course-comments-columns";
 
 const CourseComments = () => {
   // ** States

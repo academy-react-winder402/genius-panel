@@ -20,7 +20,7 @@ export const COURSE_COMMENTS_COLUMNS = [
         <img
           src={
             row?.pictureAddress !== "Not-set" && row?.pictureAddress !== null
-              ? roe?.pictureAddress
+              ? row?.pictureAddress
               : blankThumbnail
           }
           className="student-course-reserve-picture"
@@ -92,7 +92,8 @@ export const COURSE_COMMENTS_COLUMNS = [
               ریپلای
             </Button>
             <CourseReplyCommentModal
-              id={row.courseId}
+              commentId={row.id}
+              courseId={row.courseId}
               title={row.title}
               describe={row.describe}
               toggleModal={toggleModal}

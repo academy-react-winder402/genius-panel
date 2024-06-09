@@ -2,18 +2,21 @@
 import { useState } from "react";
 
 // ** Reactstrap Imports
-import { Badge, Button, Tooltip } from "reactstrap";
+import { Badge, Button } from "reactstrap";
 
 // ** Custom Components
 import CourseReplyCommentModal from "./CourseReplyCommentModal";
 
 // ** Image Imports
-import { CheckCircle, XCircle, XOctagon } from "react-feather";
+import { CheckCircle, Trash, XCircle } from "react-feather";
+import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import blankThumbnail from "../../../assets/images/common/blank-thumbnail.jpg";
 import { acceptCourseCommentAPI } from "../../../core/services/api/course/course-comments/accept-course-comment.api";
-import toast from "react-hot-toast";
+import { deleteCourseCommentAPI } from "../../../core/services/api/course/course-comments/delete-course-comment.api";
 import { rejectCourseCommentAPI } from "../../../core/services/api/course/course-comments/reject-course-comment.api";
+import withReactContent from "sweetalert2-react-content";
+import Swal from "sweetalert2";
 
 export const COURSE_COMMENTS_COLUMNS = [
   {
@@ -89,6 +92,8 @@ export const COURSE_COMMENTS_COLUMNS = [
         }
       };
 
+      const MySwal = withReactContent(Swal);
+
       const handleReplyClick = () => {
         toggleModal(row.courseId);
       };
@@ -125,9 +130,52 @@ export const COURSE_COMMENTS_COLUMNS = [
         }
       };
 
+      // const handleDeleteCourseComment = async () => {
+      //   try {
+      //     const deleteCourseComment = await deleteCourseCommentAPI(row.id);
+
+      //     if (deleteCourseComment.success) {
+      //       toast.success("نظر با موفقیت حذف شد !");
+
+      //       navigate(`/courses/${row.courseId}`);
+      //     }
+      //   } catch (error) {
+      //     toast.error("مشکلی در حذف نظر به وجود آمد !");
+      //   }
+      // };
+
+      const handleDeleteCourseComment = async () => {
+        MySwal.fire({
+          title: "آیا از حذف این نظر مطمئن هستید؟",
+          text: "در صورت حذف نظر، نظر به طور کامل حذف خواهد شد.",
+          icon: "warning",
+          customClass: {
+            confirmButton: "btn btn-primary",
+            cancelButton: "btn btn-danger ms-1",
+          },
+          buttonsStyling: false,
+          inputAttributes: {
+            autocapitalize: "off",
+          },
+          showCancelButton: true,
+          confirmButtonText: "حذف",
+          cancelButtonText: "انصراف",
+          showLoaderOnConfirm: true,
+          async preConfirm() {
+            const deleteCourseComment = await deleteCourseCommentAPI(row.id);
+
+            if (deleteCourseComment.success) {
+              toast.success("نظر با موفقیت حذف شد !");
+
+              navigate(`/courses/${row.courseId}`);
+            }
+          },
+        });
+      };
+
       return (
         <div className="column-action d-flex align-items-center gap-1">
-          <div className="d-flex align-items-center gap-1">
+          <div className="d-flex align-items-center gap-2">
             {row.accept ? (
               <div
                 className="reject-comment"
@@ -136,8 +184,8 @@ export const COURSE_COMMENTS_COLUMNS = [
                 <XCircle
                   id="rejectCourseComment"
                   cursor="pointer"
-                  color="#000"
                   className="reject-comment-icon"
+                  size={20}
                 />
                 <span className="reject-comment-text">لغو نظر</span>
               </div>
@@ -150,6 +198,7 @@ export const COURSE_COMMENTS_COLUMNS = [
                   id="acceptCourseComment"
                   cursor="pointer"
                   className="accept-comment-icon"
+                  size={20}
                 />
                 <span className="accept-comment-text"> تایید نظر</span>
               </div>
@@ -157,6 +206,14 @@ export const COURSE_COMMENTS_COLUMNS = [
             <Button color="primary" onClick={handleReplyClick}>
               ریپلای
             </Button>
+            <div>
+              <Trash
+                cursor="pointer"
+                size={20}
+                className="delete-course-comment"
+                onClick={handleDeleteCourseComment}
+              />
+            </div>
             <CourseReplyCommentModal
               commentId={row.id}
               courseId={row.courseId}

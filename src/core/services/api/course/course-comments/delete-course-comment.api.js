@@ -1,10 +1,10 @@
 import http from "../../../interceptor";
 
-export const deleteCourseComment = async (courseCommentId) => {
+export const deleteCourseCommentAPI = async (courseCommentId) => {
   try {
     const response = await http.delete(`/Course/DeleteCourseComment`, {
       params: {
-        courseCommentId,
+        courseCommandId: courseCommentId,
       },
     });
 

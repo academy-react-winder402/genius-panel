@@ -130,6 +130,7 @@ body.dark-layout
   gap: 7px;
   font-size: 1rem;
   cursor: pointer;
+  width: 85px;
 }
 
 .accept-comment-text,
@@ -146,7 +147,8 @@ body.dark-layout
   stroke: #28c76f !important;
 }
 
-.reject-comment-icon {
+.reject-comment-icon,
+.delete-course-comment {
   stroke: #ea5455 !important;
 }
 

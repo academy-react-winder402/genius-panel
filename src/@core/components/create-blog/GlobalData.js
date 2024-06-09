@@ -15,11 +15,17 @@ import FileUploaderSingle from "../FileUploaderSingle";
 const defaultValues = {
   title: "",
   miniDescribe: "",
+  googleTitle: "",
+  googleDescribe: "",
 };
 
 const Global = ({
   stepper,
   title,
+  googleTitle,
+  setGoogleTitle,
+  googleDescribe,
+  setGoogleDescribe,
   miniDescribe,
   setTitle,
   setMiniDescribe,
@@ -38,10 +44,12 @@ const Global = ({
 
   const onSubmit = (e) => {
     if (isObjEmpty(errors)) {
-      const { title, miniDescribe } = e;
+      const { title, miniDescribe, googleTitle, googleDescribe } = e;
 
       setTitle(title);
       setMiniDescribe(miniDescribe);
+      setGoogleTitle(googleTitle);
+      setGoogleDescribe(googleDescribe);
 
       if (title && miniDescribe) {
         stepper.next();
@@ -50,10 +58,10 @@ const Global = ({
   };
 
   useEffect(() => {
-    if (title && miniDescribe) {
+    if (title && miniDescribe && googleTitle && googleDescribe) {
       stepper.next();
     }
-  }, [title, miniDescribe]);
+  }, [title, miniDescribe, googleTitle, googleDescribe]);
 
   return (
     <Fragment>
@@ -76,7 +84,7 @@ const Global = ({
               render={({ field }) => (
                 <Input
                   id="title"
-                  placeholder="مانند: دوره جامع react"
+                  placeholder="عنوان اخبار"
                   invalid={errors.title && true}
                   {...field}
                 />
@@ -84,6 +92,27 @@ const Global = ({
             />
             {errors.title && (
               <FormFeedback>{errors.title.message}</FormFeedback>
+            )}
+          </Col>
+          <Col md="6" className="mb-1">
+            <Label className="form-label" for="googleTitle">
+              عنوان گوگل
+            </Label>
+            <Controller
+              id="googleTitle"
+              name="googleTitle"
+              control={control}
+              render={({ field }) => (
+                <Input
+                  id="googleTitle"
+                  placeholder="عنوان گوگل اخبار"
+                  invalid={errors.googleTitle && true}
+                  {...field}
+                />
+              )}
+            />
+            {errors.googleTitle && (
+              <FormFeedback>{errors.googleTitle.message}</FormFeedback>
             )}
           </Col>
         </Row>
@@ -110,9 +139,31 @@ const Global = ({
               <FormFeedback>{errors.miniDescribe.message}</FormFeedback>
             )}
           </Col>
+          <Col md="6" className="mb-1">
+            <Label className="form-label" for="googleDescribe">
+              توضیحات گوگل
+            </Label>
+            <Controller
+              id="googleDescribe"
+              name="googleDescribe"
+              control={control}
+              render={({ field }) => (
+                <Input
+                  type="textarea"
+                  id="googleDescribe"
+                  placeholder="توضیحات گوگل اخبار"
+                  invalid={errors.googleDescribe && true}
+                  {...field}
+                />
+              )}
+            />
+            {errors.googleDescribe && (
+              <FormFeedback>{errors.googleDescribe.message}</FormFeedback>
+            )}
+          </Col>
         </Row>
         <div className="mt-4">
-          <h5>آپلود عکس دوره</h5>
+          <h5>آپلود عکس اخبار</h5>
           <FileUploaderSingle files={files} setFiles={setFiles} />
         </div>
         <div className="d-flex justify-content-between">

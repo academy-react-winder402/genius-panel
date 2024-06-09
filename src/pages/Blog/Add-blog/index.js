@@ -22,6 +22,8 @@ const CreateBlogPage = () => {
 
   const [miniDescribe, setMiniDescribe] = useState();
   const [describe, setDescribe] = useState();
+  const [googleTitle, setGoogleTitle] = useState();
+  const [googleDescribe, setGoogleDescribe] = useState();
 
   const [blogId, setBlogId] = useState();
 
@@ -31,6 +33,8 @@ const CreateBlogPage = () => {
       tumbImage: files[0],
       imageAddress: files[0],
       title,
+      googleTitle,
+      googleDescribe,
       miniDescribe,
       describe,
     };
@@ -60,6 +64,8 @@ const CreateBlogPage = () => {
           title={title}
           miniDescribe={miniDescribe}
           setTitle={setTitle}
+          setGoogleTitle={setGoogleTitle}
+          setGoogleDescribe={setGoogleDescribe}
           setMiniDescribe={setMiniDescribe}
           files={files}
           setFiles={setFiles}

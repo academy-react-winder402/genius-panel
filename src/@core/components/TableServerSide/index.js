@@ -45,6 +45,7 @@ const DataTableServerSide = ({
   isCourseCreateButtonShow,
   notFoundText,
   deleteSelectedRowsText,
+  handleSearchFilter,
 }) => {
   // ** States
   const [itemOffset, setItemOffset] = useState(0);
@@ -180,7 +181,7 @@ const DataTableServerSide = ({
               type="text"
               bsSize="sm"
               id="search-input"
-              onChange={handleFilter}
+              onChange={handleSearchFilter ? handleSearchFilter : handleFilter}
             />
           </Col>
         </Row>

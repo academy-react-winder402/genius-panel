@@ -25,9 +25,10 @@ import "@styles/react/libs/tables/react-dataTable-component.scss";
 const CourseComments = () => {
   // ** States
   const [courseComments, setCourseComments] = useState();
+  const [filteredData, setFilteredData] = useState();
   const [currentPage, setCurrentPage] = useState(1);
   const [rowsPerPage, setRowsPerPage] = useState(7);
-  const [searchText, setSearchText] = useState();
+  const [searchText, setSearchText] = useState("");
   const [selectedRows, setSelectedRows] = useState();
 
   // ** Hooks
@@ -67,6 +68,34 @@ const CourseComments = () => {
     });
   };
 
+  // ** Function to handle filter
+  const handleFilter = (e) => {
+    const value = e.target.value;
+    let updatedData = [];
+    setSearchText(value);
+
+    if (value.length) {
+      updatedData = courseComments.filter((comment) => {
+        const startsWith = comment.title
+          .toLowerCase()
+          .startsWith(value.toLowerCase());
+
+        const includes = comment.title
+          .toLowerCase()
+          .includes(value.toLowerCase());
+        comment.author.toLowerCase().includes(value.toLowerCase());
+
+        if (startsWith) {
+          return startsWith;
+        } else if (!startsWith && includes) {
+          return includes;
+        } else return null;
+      });
+      setFilteredData(updatedData);
+      setSearchText(value);
+    }
+  };
+
   useEffect(() => {
     const fetchCourseComments = async () => {
       try {
@@ -84,7 +113,7 @@ const CourseComments = () => {
     <div className="invoice-list-wrapper">
       <Card className="rounded">
         <TableServerSide
-          data={courseComments}
+          data={searchText.length ? filteredData : courseComments}
           columns={COURSE_COMMENTS_COLUMNS}
           renderTitle="نظرات کاربران"
           currentPage={currentPage}
@@ -96,6 +125,7 @@ const CourseComments = () => {
           handleDeleteData={() => handleDeleteCourseComment(selectedRows)}
           notFoundText="نظری پیدا نشد !"
           deleteSelectedRowsText="حذف"
+          handleSearchFilter={handleFilter}
         />
       </Card>
     </div>

@@ -9,13 +9,6 @@ export const createCourseStepThreeFormSchema = yup.object().shape({
       insertDate: yup.string(),
     })
     .required("این فیلد الزامی می باشد"),
-  courseLevel: yup
-    .object()
-    .shape({
-      id: yup.number().required("این فیلد الزامی می باشد"),
-      levelName: yup.string().required("این فیلد الزامی می باشد"),
-    })
-    .required("این فیلد الزامی می باشد"),
   teacherId: yup
     .object()
     .shape({

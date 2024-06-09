@@ -152,6 +152,12 @@ body.dark-layout
   stroke: #ea5455 !important;
 }
 
+.course-preview-image {
+  width: 150px !important;
+  border-radius: 10px;
+  margin-bottom: 20px;
+}
+
 /* Responsive */
 @media (max-width: 1000px) {
   .course-reserve-filters {

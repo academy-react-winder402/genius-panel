@@ -16,7 +16,7 @@ import {
 import { useDropzone } from "react-dropzone";
 import { FileText, X, DownloadCloud } from "react-feather";
 
-const FileUploaderSingle = ({ files, setFiles }) => {
+const FileUploaderSingle = ({ files, setFiles, image }) => {
   const { getRootProps, getInputProps } = useDropzone({
     multiple: false,
     onDrop: (acceptedFiles) => {
@@ -88,7 +88,7 @@ const FileUploaderSingle = ({ files, setFiles }) => {
         <div {...getRootProps({ className: "dropzone" })}>
           <input {...getInputProps()} />
           <div className="d-flex align-items-center justify-content-center flex-column">
-            <DownloadCloud size={64} />
+            {image ? <img src={image} className="course-preview-image" /> : <DownloadCloud size={64} />}
             <h5>فایل ها را اینجا رها کنید یا برای آپلود کلیک کنید</h5>
             <p className="text-secondary">
               فایل ها را اینجا رها کنید یا کلیک کنید{" "}

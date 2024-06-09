@@ -1,5 +1,5 @@
 // ** React Imports
-import { Fragment } from "react";
+import { Fragment, useEffect } from "react";
 
 // ** Utils
 import { isObjEmpty } from "@utils";
@@ -24,6 +24,7 @@ const defaultValues = {
 
 const AdvanceData = ({
   stepper,
+  course,
   setGoogleTitle,
   setGoogleSchema,
   setUniqueUrlString,
@@ -34,6 +35,7 @@ const AdvanceData = ({
     control,
     handleSubmit,
     formState: { errors },
+    setValue,
   } = useForm({
     defaultValues,
     resolver: yupResolver(createCourseStepTwoFormSchema),
@@ -49,6 +51,15 @@ const AdvanceData = ({
       stepper.next();
     }
   };
+
+  useEffect(() => {
+    if (course) {
+      setValue("googleTitle", course.googleTitle);
+      setValue("googleSchema", course.googleSchema);
+      setValue("uniqueUrlString", course.uniqeUrlString);
+      setValue("shortLink", course.shortLink);
+    }
+  }, [course]);
 
   return (
     <Fragment>

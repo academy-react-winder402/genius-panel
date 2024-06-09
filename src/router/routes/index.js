@@ -31,6 +31,7 @@ const Error = lazy(() => import("../../pages/Error"));
 const Courses = lazy(() => import("../../pages/Courses"));
 const MyCourses = lazy(() => import("../../pages/MyCourses"));
 const CreateCourse = lazy(() => import("../../pages/CreateCourse"));
+const EditCourse = lazy(() => import("../../pages/EditCourse"));
 const CourseReserved = lazy(() => import("../../pages/CourseReserved"));
 const CourseDetails = lazy(() => import("../../pages/CourseDetails"));
 const AddBlog = lazy(() => import("../../pages/Blog/Add-blog"));
@@ -72,6 +73,10 @@ const Routes = [
   {
     path: "/create-course",
     element: <CreateCourse />,
+  },
+  {
+    path: "/courses/edit/:id",
+    element: <EditCourse />,
   },
   {
     path: "/add-blog",

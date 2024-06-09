@@ -1,6 +1,6 @@
 // ** React Imports
 import { yupResolver } from "@hookform/resolvers/yup";
-import { Fragment, useEffect } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import Select from "react-select";
 import makeAnimated from "react-select/animated";
@@ -17,8 +17,10 @@ import { Button, Col, Form, FormFeedback, Label, Row } from "reactstrap";
 // ** Validation Import
 import { createCourseStepThreeFormSchema } from "../../../../core/validations/create-course/create-course-step-three-form.validation";
 
-// ** Util Imports
+// ** Utils
 import { selectThemeColors } from "../../../../utility/Utils";
+import { findDefaultOption } from "../../../../core/utils/default-option-helper.utils";
+import { convertOptions } from "../../../../core/utils/convert-options-helper.utils";
 
 const defaultValues = {
   courseType: undefined,
@@ -32,8 +34,8 @@ const defaultValues = {
 
 const CourseFeatures = ({
   stepper,
+  course,
   handleSubmitFn,
-  createCourseOptions,
   courseLvlId,
   courseTypeIdState,
   teacherIdState,
@@ -45,11 +47,24 @@ const CourseFeatures = ({
   setClassIdState,
   setTermIdState,
 }) => {
+  // ** States
+  const [types, setTypes] = useState();
+  const [defaultType, setDefaultType] = useState();
+  const [levels, setLevels] = useState();
+  const [defaultLevel, setDefaultLevel] = useState();
+  const [teachers, setTeachers] = useState();
+  const [defaultTeacher, setDefaultTeacher] = useState();
+  const [classrooms, setClassrooms] = useState();
+  const [defaultClassroom, setDefaultClassroom] = useState();
+  const [terms, setTerms] = useState();
+  const [defaultTerm, setDefaultTerm] = useState();
+
   // ** Hooks
   const {
     control,
     handleSubmit,
     formState: { errors },
+    setValue,
   } = useForm({
     defaultValues,
     resolver: yupResolver(createCourseStepThreeFormSchema),
@@ -57,11 +72,11 @@ const CourseFeatures = ({
 
   const onSubmit = (e) => {
     if (isObjEmpty(errors)) {
-      setCourseTypeIdState(e.courseType.id);
-      setCourseLvlId(e.courseLevel?.id);
-      setTeacherIdState(e.teacherId?.teacherId);
-      setClassIdState(e.classId?.id);
-      setTermIdState(+e.termId?.id);
+      setCourseTypeIdState(e.courseType.value);
+      setCourseLvlId(e.courseLevel?.value);
+      setTeacherIdState(e.teacherId?.value);
+      setClassIdState(e.classId?.value);
+      setTermIdState(+e.termId?.value);
 
       if (
         courseLvlId &&
@@ -93,6 +108,46 @@ const CourseFeatures = ({
     termIdState,
   ]);
 
+  useEffect(() => {
+    if (course) {
+      // ** Types
+      const getTypes = convertOptions(course.getCourseFor.courseTypeDtos);
+      const findType = findDefaultOption(getTypes, course.courseTypeId);
+      setTypes(getTypes);
+      setDefaultType(findType);
+
+      // ** Levels
+      const getLevels = convertOptions(course.getCourseFor.courseLevelDtos);
+      const findLevel = findDefaultOption(getLevels, course.courseLvlId);
+      setLevels(getLevels);
+      setDefaultLevel(findLevel);
+
+      // ** Teachers
+      const getTeachers = convertOptions(course.getCourseFor.teachers);
+      const findTeacher = findDefaultOption(getTeachers, course.teacherId);
+      setTeachers(getTeachers);
+      setDefaultTeacher(findTeacher);
+
+      // ** Classrooms
+      const getClassRooms = convertOptions(course.getCourseFor.classRoomDtos);
+      const findClassroom = findDefaultOption(getClassRooms, course.classId);
+      setClassrooms(getClassRooms);
+      setDefaultClassroom(findClassroom);
+
+      // ** Terms
+      const getTerms = convertOptions(course.getCourseFor.termDtos);
+      const findTerm = findDefaultOption(getTerms, course.tremId);
+      setTerms(getTerms);
+      setDefaultTerm(findTerm);
+
+      setValue("courseType", findType);
+      setValue("courseLevel", findLevel);
+      setValue("teacherId", findTeacher);
+      setValue("classId", findClassroom);
+      setValue("termId", findTerm);
+    }
+  }, [course]);
+
   const animatedComponents = makeAnimated();
 
   return (
@@ -109,25 +164,26 @@ const CourseFeatures = ({
             <Label className="form-label" for="courseType">
               نوع دوره
             </Label>
-            <Controller
-              id="courseType"
-              name="courseType"
-              control={control}
-              render={({ field }) => (
-                <Select
-                  theme={selectThemeColors}
-                  className="react-select"
-                  classNamePrefix="select"
-                  name="courseType"
-                  options={createCourseOptions?.courseTypeDtos}
-                  getOptionValue={(type) => type.id}
-                  getOptionLabel={(type) => type.typeName}
-                  isClearable
-                  components={animatedComponents}
-                  {...field}
-                />
-              )}
-            />
+            {defaultType && types && (
+              <Controller
+                id="courseType"
+                name="courseType"
+                control={control}
+                render={({ field }) => (
+                  <Select
+                    theme={selectThemeColors}
+                    className="react-select"
+                    classNamePrefix="select"
+                    name="courseType"
+                    defaultInputValue={defaultType.label}
+                    options={types}
+                    isClearable
+                    components={animatedComponents}
+                    {...field}
+                  />
+                )}
+              />
+            )}
             {errors.courseType && (
               <FormFeedback>{errors.courseType.message}</FormFeedback>
             )}
@@ -136,25 +192,26 @@ const CourseFeatures = ({
             <Label className="form-label" for="courseLevel">
               سطح دوره
             </Label>
-            <Controller
-              control={control}
-              id="courseLevel"
-              name="courseLevel"
-              render={({ field }) => (
-                <Select
-                  theme={selectThemeColors}
-                  className="react-select"
-                  classNamePrefix="select"
-                  name="courseLevel"
-                  options={createCourseOptions?.courseLevelDtos}
-                  getOptionValue={(level) => level.id}
-                  getOptionLabel={(level) => level.levelName}
-                  isClearable
-                  components={animatedComponents}
-                  {...field}
-                />
-              )}
-            />
+            {levels && defaultLevel && (
+              <Controller
+                control={control}
+                id="courseLevel"
+                name="courseLevel"
+                render={({ field }) => (
+                  <Select
+                    theme={selectThemeColors}
+                    className="react-select"
+                    classNamePrefix="select"
+                    name="courseLevel"
+                    options={levels}
+                    defaultInputValue={defaultLevel.label}
+                    isClearable
+                    components={animatedComponents}
+                    {...field}
+                  />
+                )}
+              />
+            )}
             {errors.courseLevel && (
               <FormFeedback>{errors.courseLevel.message}</FormFeedback>
             )}
@@ -165,25 +222,26 @@ const CourseFeatures = ({
             <Label className="form-label" for="teacherId">
               استاد دوره
             </Label>
-            <Controller
-              id="teacherId"
-              name="teacherId"
-              control={control}
-              render={({ field }) => (
-                <Select
-                  theme={selectThemeColors}
-                  className="react-select"
-                  classNamePrefix="select"
-                  name="teacherId"
-                  options={createCourseOptions?.teachers}
-                  getOptionValue={(teacher) => teacher.teacherId}
-                  getOptionLabel={(teacher) => teacher.fullName}
-                  isClearable
-                  components={animatedComponents}
-                  {...field}
-                />
-              )}
-            />
+            {teachers && defaultTeacher && (
+              <Controller
+                id="teacherId"
+                name="teacherId"
+                control={control}
+                render={({ field }) => (
+                  <Select
+                    theme={selectThemeColors}
+                    className="react-select"
+                    classNamePrefix="select"
+                    name="teacherId"
+                    options={teachers}
+                    defaultInputValue={defaultTeacher.label}
+                    isClearable
+                    components={animatedComponents}
+                    {...field}
+                  />
+                )}
+              />
+            )}
             {errors.teacherId && (
               <FormFeedback>{errors.teacherId.message}</FormFeedback>
             )}
@@ -192,25 +250,26 @@ const CourseFeatures = ({
             <Label className="form-label" for="classId">
               انتخاب کلاس
             </Label>
-            <Controller
-              id="classId"
-              name="classId"
-              control={control}
-              render={({ field }) => (
-                <Select
-                  theme={selectThemeColors}
-                  className="react-select"
-                  classNamePrefix="select"
-                  name="classId"
-                  options={createCourseOptions?.classRoomDtos}
-                  getOptionValue={(classRoom) => classRoom.id}
-                  getOptionLabel={(classRoom) => classRoom.classRoomName}
-                  isClearable
-                  components={animatedComponents}
-                  {...field}
-                />
-              )}
-            />
+            {classrooms && defaultClassroom && (
+              <Controller
+                id="classId"
+                name="classId"
+                control={control}
+                render={({ field }) => (
+                  <Select
+                    theme={selectThemeColors}
+                    className="react-select"
+                    classNamePrefix="select"
+                    name="classId"
+                    options={classrooms}
+                    defaultInputValue={defaultClassroom.label}
+                    isClearable
+                    components={animatedComponents}
+                    {...field}
+                  />
+                )}
+              />
+            )}
             {errors.classId && (
               <FormFeedback>{errors.classId.message}</FormFeedback>
             )}
@@ -221,25 +280,26 @@ const CourseFeatures = ({
             <Label className="form-label" for="termId">
               وضعیت دوره
             </Label>
-            <Controller
-              id="termId"
-              name="termId"
-              control={control}
-              render={({ field }) => (
-                <Select
-                  theme={selectThemeColors}
-                  className="react-select"
-                  classNamePrefix="select"
-                  name="termId"
-                  options={createCourseOptions?.termDtos}
-                  getOptionValue={(term) => term.id}
-                  getOptionLabel={(term) => term.termName}
-                  isClearable
-                  components={animatedComponents}
-                  {...field}
-                />
-              )}
-            />
+            {terms && defaultTerm && (
+              <Controller
+                id="termId"
+                name="termId"
+                control={control}
+                render={({ field }) => (
+                  <Select
+                    theme={selectThemeColors}
+                    className="react-select"
+                    classNamePrefix="select"
+                    name="termId"
+                    options={terms}
+                    defaultInputValue={defaultTerm.label}
+                    isClearable
+                    components={animatedComponents}
+                    {...field}
+                  />
+                )}
+              />
+            )}
             {errors.termId && (
               <FormFeedback>{errors.termId.message}</FormFeedback>
             )}
@@ -259,7 +319,9 @@ const CourseFeatures = ({
             <span className="align-middle d-sm-inline-block d-none">قبلی</span>
           </Button>
           <Button type="submit" color="primary" className="btn-next">
-            <span className="align-middle d-sm-inline-block d-none">ایجاد دوره</span>
+            <span className="align-middle d-sm-inline-block d-none">
+              {course ? "آپدیت" : "ایجاد"} دوره
+            </span>
             <ArrowRight
               size={14}
               className="align-middle ms-sm-25 ms-0"

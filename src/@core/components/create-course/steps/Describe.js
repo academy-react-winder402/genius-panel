@@ -1,5 +1,4 @@
 // ** React Imports
-import { Fragment, useEffect, useRef } from "react";
 import Checklist from "@editorjs/checklist";
 import Delimiter from "@editorjs/delimiter";
 import EditorJS from "@editorjs/editorjs";
@@ -12,10 +11,11 @@ import Quote from "@editorjs/quote";
 import RawTool from "@editorjs/raw";
 import Warning from "@editorjs/warning";
 import Table from "editorjs-table";
+import { Fragment, useEffect, useRef } from "react";
 import toast from "react-hot-toast";
 
 // ** Reactstrap imports
-import { Button } from "reactstrap";
+import { Button, Input } from "reactstrap";
 
 // ** Utils
 import Headline from "../../../../core/utils/headline-class-helper.utils";
@@ -23,7 +23,7 @@ import Headline from "../../../../core/utils/headline-class-helper.utils";
 // ** Icon Imports
 import { ArrowLeft, ArrowRight } from "react-feather";
 
-const Describe = ({ stepper, describe, setDescribe }) => {
+const Describe = ({ stepper, describe, setDescribe, defaultValue }) => {
   // ** Hooks
   const editorJsInstance = useRef(null);
   const editorRef = useRef(null);
@@ -115,6 +115,85 @@ const Describe = ({ stepper, describe, setDescribe }) => {
       }
     };
   }, []);
+
+  useEffect(() => {
+    if (defaultValue) {
+      try {
+        const convertDescribe = JSON.parse(defaultValue);
+        editorJsInstance.current = new EditorJS({
+          holder: editorRef.current,
+          autofocus: true,
+          data: convertDescribe,
+          tools: {
+            header: Header,
+            linkTool: {
+              class: LinkTool,
+              config: {
+                endpoint: "http://localhost:3000/fetchUrl", // Your backend endpoint for url data fetching
+              },
+            },
+            raw: RawTool,
+            image: {
+              class: ImageTool,
+              config: {
+                endpoints: {
+                  byFile: "http://localhost:8008/uploadFile", // Your backend file uploader endpoint
+                  byUrl: "http://localhost:8008/fetchUrl", // Your endpoint that provides uploading by Url
+                },
+              },
+            },
+            checklist: {
+              class: Checklist,
+              inlineToolbar: true,
+            },
+            list: {
+              class: List,
+              inlineToolbar: true,
+              config: {
+                defaultStyle: "unordered",
+              },
+            },
+            embed: {
+              class: Embed,
+              config: {
+                services: {
+                  youtube: true,
+                  coub: true,
+                },
+              },
+            },
+            quote: {
+              class: Quote,
+              inlineToolbar: true,
+              shortcut: "CMD+SHIFT+O",
+              config: {
+                quotePlaceholder: "Enter a quote",
+                captionPlaceholder: "Quote's author",
+              },
+            },
+            delimiter: Delimiter,
+            warning: {
+              class: Warning,
+              inlineToolbar: true,
+              shortcut: "CMD+SHIFT+W",
+              config: {
+                titlePlaceholder: "عنوان",
+                messagePlaceholder: "پیام",
+              },
+            },
+            table: {
+              class: Table,
+            },
+            headline: {
+              class: Headline,
+            },
+          },
+        });
+      } catch (error) {
+        return null;
+      }
+    }
+  }, [defaultValue]);
 
   useEffect(() => {
     if (describe) stepper.next();

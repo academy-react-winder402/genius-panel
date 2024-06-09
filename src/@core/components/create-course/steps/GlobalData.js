@@ -21,19 +21,11 @@ import { createCourseStepOneFormSchema } from "../../../../core/validations/crea
 
 // ** Custom Components
 import FileUploaderSingle from "../../FileUploaderSingle";
-
-const defaultValues = {
-  title: "",
-  cost: "",
-  capacity: "",
-  sessionNumber: "",
-  miniDescribe: "",
-  startTime: "",
-  endTime: "",
-};
+import { convertDateToPersian } from "../../../../core/utils/date-helper.utils";
 
 const GlobalData = ({
   stepper,
+  course,
   title,
   cost,
   capacity,
@@ -51,61 +43,87 @@ const GlobalData = ({
   files,
   setFiles,
 }) => {
+  const defaultValues = {
+    title: "",
+    cost: "",
+    capacity: "",
+    sessionNumber: "",
+    miniDescribe: "",
+    startTime: "",
+    endTime: "",
+  };
+
   // ** Hooks
   const {
     control,
     handleSubmit,
     formState: { errors },
+    setValue,
   } = useForm({
     defaultValues,
     resolver: yupResolver(createCourseStepOneFormSchema),
   });
 
   const onSubmit = (e) => {
+    console.log(isObjEmpty(errors));
     if (isObjEmpty(errors)) {
-      const { title, cost, capacity, sessionNumber, miniDescribe, date } = e;
+      const {
+        title,
+        cost,
+        capacity,
+        sessionNumber,
+        miniDescribe,
+        date,
+        startTime,
+        endTime,
+      } = e;
 
-      const dateFormatter = new Intl.DateTimeFormat("en", {
-        year: "numeric",
-        month: "2-digit",
-        day: "2-digit",
-      });
-
-      const startTime = dateFormatter.format(date[0][0]);
-      const endTime = dateFormatter.format(date[0][1]);
+      if (date) {
+        const dateFormatter = new Intl.DateTimeFormat("en", {
+          year: "numeric",
+          month: "2-digit",
+          day: "2-digit",
+        });
+        console.log(date);
+        const startTime = dateFormatter.format(date[0]);
+        const endTime = dateFormatter.format(date[1]);
+        setStartTime(startTime);
+        setEndTime(endTime);
+      }
 
       setTitle(title);
       setCost(cost);
       setCapacity(capacity);
       setSessionNumber(sessionNumber);
-      setMiniDescribe(miniDescribe);
       setStartTime(startTime);
       setEndTime(endTime);
+      setMiniDescribe(miniDescribe);
 
-      if (
-        title &&
-        cost &&
-        capacity &&
-        sessionNumber &&
-        miniDescribe &&
-        startTime &&
-        endTime
-      ) {
+      if (title && cost && capacity && sessionNumber && miniDescribe) {
         stepper.next();
       }
     }
   };
 
   useEffect(() => {
-    if (
-      title &&
-      cost &&
-      capacity &&
-      sessionNumber &&
-      miniDescribe &&
-      startTime &&
-      endTime
-    ) {
+    if (course) {
+      const formattedStartTime = convertDateToPersian(course.startTime);
+      const formattedEndTime = convertDateToPersian(course.endTime);
+      const formattedDate = [formattedStartTime, formattedEndTime];
+
+      setValue("title", course.title);
+      setValue("cost", course.cost);
+      setValue("capacity", course.capacity);
+      setValue("sessionNumber", course.sessionNumber);
+      setValue("miniDescribe", course.miniDescribe);
+      setValue("date", formattedDate);
+      setValue("startTime", course.startTime);
+      setValue("endTime", course.endTime);
+    }
+  }, [course, setValue]);
+
+  useEffect(() => {
+    if (title && cost && capacity && sessionNumber && miniDescribe) {
       stepper.next();
     }
   }, [title, cost, capacity, sessionNumber, miniDescribe, startTime, endTime]);
@@ -241,6 +259,7 @@ const GlobalData = ({
                   <DatePicker
                     name="date"
                     id="date"
+                    value={[startTime, endTime]}
                     format="YYYY/MM/DD"
                     calendar={persian}
                     locale={persian_fa}
@@ -259,15 +278,14 @@ const GlobalData = ({
         </Row>
         <div className="mt-4">
           <h5>آپلود عکس دوره</h5>
-          <FileUploaderSingle files={files} setFiles={setFiles} />
+          <FileUploaderSingle
+            files={files}
+            setFiles={setFiles}
+            image={course?.imageAddress}
+          />
         </div>
         <div className="d-flex justify-content-between">
-          <Button
-            type="button"
-            color="primary"
-            className="btn-prev"
-            disabled
-          >
+          <Button type="button" color="primary" className="btn-prev" disabled>
             <ArrowLeft
               size={14}
               className="align-middle me-sm-25 me-0"

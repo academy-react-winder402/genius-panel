@@ -43,6 +43,10 @@ const DataTableServerSide = ({
   setSelectedRows,
   handleDeleteData,
   isCourseCreateButtonShow,
+  notFoundText,
+  deleteSelectedRowsText,
+  handleSearchFilter,
+  selectableRows,
 }) => {
   // ** States
   const [itemOffset, setItemOffset] = useState(0);
@@ -134,7 +138,7 @@ const DataTableServerSide = ({
                 color="danger"
               >
                 <Trash size={16} />
-                <span>حذف یا بازگرادنی</span>
+                <span>{deleteSelectedRowsText}</span>
               </Button>
             )}
             {isCourseCreateButtonShow && (
@@ -178,13 +182,13 @@ const DataTableServerSide = ({
               type="text"
               bsSize="sm"
               id="search-input"
-              onChange={handleFilter}
+              onChange={handleSearchFilter ? handleSearchFilter : handleFilter}
             />
           </Col>
         </Row>
         <div className="react-dataTable">
           {!currentItems || currentItems?.length === 0 ? (
-            <h5 className="text-center">دوره ای پیدا نشد !</h5>
+            <h5 className="text-center">{notFoundText}</h5>
           ) : (
             <DataTable
               noHeader
@@ -196,7 +200,7 @@ const DataTableServerSide = ({
               sortIcon={<ChevronDown size={10} />}
               paginationComponent={CustomPagination}
               data={currentItems}
-              selectableRows
+              selectableRows={selectableRows}
               selectableRowsComponent={BootstrapCheckbox}
               onSelectedRowsChange={onSelectedRows}
             />

@@ -4,7 +4,11 @@ import toast from "react-hot-toast";
 // ** Core Imports
 import { deleteCourseAPI } from "../services/api/course/delete-course.api";
 
-export const handleDeleteCourse = async (selectedRows, redirectUrl) => {
+export const handleDeleteCourse = async (
+  selectedRows,
+  navigate,
+  redirectUrl
+) => {
   try {
     selectedRows.map(async (course) => {
       const deleteCourse = await deleteCourseAPI(
@@ -13,9 +17,10 @@ export const handleDeleteCourse = async (selectedRows, redirectUrl) => {
       );
 
       if (deleteCourse.success) {
-        toastt.success(
+        toast.success(
           `دوره با موفقیت ${course.isdelete ? "بازگردانی" : "حذف"} شد !`
         );
+
         navigate(redirectUrl);
       } else
         toast.error(
@@ -25,6 +30,7 @@ export const handleDeleteCourse = async (selectedRows, redirectUrl) => {
         );
     });
   } catch (error) {
+    console.log(error);
     toast.error("مشکلی در حذف یا بازگردانی دوره به وجود آمد ...");
   }
 };

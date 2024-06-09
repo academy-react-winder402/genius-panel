@@ -1,6 +1,7 @@
 // ** React Imports
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 
 // ** Reactstrap Imports
 import { Card, Col, Row } from "reactstrap";
@@ -42,6 +43,9 @@ const CoursesPage = () => {
   const [isDeletedCourses, setIsDeletedCourses] = useState(false);
   const [isOpenCourses, setIsOpenCourses] = useState(false);
   const [selectedRows, setSelectedRows] = useState();
+
+  // ** Hooks
+  const navigate = useNavigate();
 
   const dataToRender = () => {
     if (isAllCourses) {
@@ -227,8 +231,13 @@ const CoursesPage = () => {
           setSort={setSort}
           setSortColumn={setSortColumn}
           setSelectedRows={setSelectedRows}
-          handleDeleteData={() => handleDeleteCourse(selectedRows, "/courses")}
+          selectableRows
+          handleDeleteData={() =>
+            handleDeleteCourse(selectedRows, navigate, "/courses")
+          }
           isCourseCreateButtonShow
+          notFoundText="دوره ای پیدا نشد !"
+          deleteSelectedRowsText="حذف یا بازگرادنی"
         />
       </Card>
     </div>

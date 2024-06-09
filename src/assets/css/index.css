@@ -123,6 +123,41 @@ body.dark-layout
   gap: 3px;
 }
 
+.accept-comment,
+.reject-comment {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 1rem;
+  cursor: pointer;
+  width: 85px;
+}
+
+.accept-comment-text,
+.reject-comment-text {
+  color: #28c76f;
+  margin-top: 1px;
+}
+
+.reject-comment-text {
+  color: #ea5455;
+}
+
+.accept-comment-icon {
+  stroke: #28c76f !important;
+}
+
+.reject-comment-icon,
+.delete-course-comment {
+  stroke: #ea5455 !important;
+}
+
+.course-preview-image {
+  width: 150px !important;
+  border-radius: 10px;
+  margin-bottom: 20px;
+}
+
 /* Responsive */
 @media (max-width: 1000px) {
   .course-reserve-filters {

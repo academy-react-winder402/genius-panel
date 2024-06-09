@@ -157,7 +157,7 @@ export const COURSE_RESERVED_COLUMNS = [
                   toggle={() => setAddReserveToCourse(!addReserveToCourse)}
                   innerClassName="table-tooltip"
                 >
-                  پذرفتن رزرو
+                  پذیرفتن رزرو
                 </Tooltip>
               </div>
               <div>

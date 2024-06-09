@@ -46,6 +46,7 @@ const DataTableServerSide = ({
   notFoundText,
   deleteSelectedRowsText,
   handleSearchFilter,
+  selectableRows,
 }) => {
   // ** States
   const [itemOffset, setItemOffset] = useState(0);
@@ -199,7 +200,7 @@ const DataTableServerSide = ({
               sortIcon={<ChevronDown size={10} />}
               paginationComponent={CustomPagination}
               data={currentItems}
-              selectableRows
+              selectableRows={selectableRows}
               selectableRowsComponent={BootstrapCheckbox}
               onSelectedRowsChange={onSelectedRows}
             />

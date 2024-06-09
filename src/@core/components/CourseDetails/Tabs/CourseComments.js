@@ -122,6 +122,7 @@ const CourseComments = () => {
           setRowsPerPage={setRowsPerPage}
           setSearchValue={setSearchText}
           setSelectedRows={setSelectedRows}
+          selectableRows
           handleDeleteData={() => handleDeleteCourseComment(selectedRows)}
           notFoundText="نظری پیدا نشد !"
           deleteSelectedRowsText="حذف"

@@ -1,165 +1,188 @@
 // ** React Imports
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
-
-// Toast Import
 import toast from "react-hot-toast";
 
-// ** Third Party Components
-import DataTable from "react-data-table-component";
-import ReactPaginate from "react-paginate";
-import BreadCrumbs from "../@core/components/breadcrumbs";
+// ** Reactstrap Imports
+import { Card, Col, Row } from "reactstrap";
+
+// ** Icon Imports
+import { Book, CheckCircle, Trash2 } from "react-feather";
 
 // ** Core Imports
-import { courseReserveAPI } from "../core/services/api/course/course-reserve.api";
+import { getCourseReserveAPI } from "../core/services/api/course/course-reserve/get-course-reserve.api";
 
-// ** Table Columns
-import { COURSE_RESERVED_COLUMNS } from "../@core/components/course-columns/course-reserved-columns";
+// ** Columns
+import { COURSE_RESERVED_PAGE_COLUMNS } from "../@core/components/course-columns/course-reserved-page-columns";
 
-// Hooks import
-import { useTimeOut } from "../utility/hooks/useTimeOut";
-
-// ** Reactstrap Imports
-import { Button, Card, Col, Input, Row } from "reactstrap";
+// ** Custom Components
+import BreadCrumbs from "../@core/components/breadcrumbs";
+import StatsHorizontal from "../@core/components/StatsHorizontal";
+import TableServerSide from "../@core/components/TableServerSide";
 
 // ** Styles
 import "@styles/react/apps/app-invoice.scss";
 import "@styles/react/libs/tables/react-dataTable-component.scss";
 
-const CustomHeader = ({ handlePerPage }) => {
-  return (
-    <div className="invoice-list-table-header w-100 py-2">
-      <Row>
-        <Col lg="6" className="d-flex align-items-center px-0 px-lg-1">
-          <div className="d-flex align-items-center me-2">
-            <label htmlFor="rows-per-page">نمایش</label>
-            <Input
-              type="select"
-              id="rows-per-page"
-              onChange={handlePerPage}
-              className="form-control ms-50 pe-3 coursesRowsPerPageSelectBox"
-            >
-              <option value="5">5</option>
-              <option value="10">10</option>
-              <option value="20">20</option>
-            </Input>
-          </div>
-        </Col>
-        <Col
-          lg="6"
-          className="actions-right d-flex align-items-center justify-content-lg-end flex-lg-nowrap flex-wrap mt-lg-0 mt-1 pe-lg-1 p-0"
-        >
-          <Button tag={Link} to="/create-course" color="primary">
-            رزرو
-          </Button>
-        </Col>
-      </Row>
-    </div>
-  );
-};
-
 const CourseReservedPage = () => {
   // ** States
-  const [reservedCourses, setReserveCourses] = useState();
+  const [allReserves, setAllReserves] = useState();
   const [currentPage, setCurrentPage] = useState(1);
-  const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [rowsPerPage, setRowsPerPage] = useState(7);
+  const [searchText, setSearchText] = useState("");
+  const [acceptedReserves, setAcceptedReserves] = useState();
+  const [notAcceptedReserves, setNotAcceptedReserves] = useState();
+  const [isAllReserves, setIsAllReserves] = useState(true);
+  const [acceptReserves, setAcceptReserves] = useState(false);
+  const [isNotAcceptedReserves, setIsNotAcceptedReserves] = useState(false);
+  const [filteredData, setFilteredData] = useState([]);
 
-  const textTimeOut = useTimeOut();
+  const dataToRender = () => {
+    if (isAllReserves) {
+      return allReserves;
+    } else if (acceptReserves) {
+      return acceptedReserves;
+    } else if (isNotAcceptedReserves) {
+      return notAcceptedReserves;
+    }
+  };
+
+  const renderTitle = () => {
+    if (isAllReserves) {
+      return "همه رزرو ها";
+    } else if (acceptReserves) {
+      return "رزرو های تایید شده";
+    } else if (isNotAcceptedReserves) {
+      return "رزرو های تایید نشده";
+    }
+  };
+
+  // ** Function to handle filter
+  const handleFilter = (e) => {
+    const value = e.target.value;
+    let updatedData = [];
+    setSearchText(value);
+
+    if (value.length) {
+      updatedData = allReserves.filter((reserve) => {
+        if (reserve.studentName === null) return null;
+        const startsWith = reserve?.studentName.startsWith(value.toLowerCase());
+
+        const includes = reserve?.studentName.includes(value.toLowerCase());
+
+        if (startsWith) {
+          return startsWith;
+        } else if (!startsWith && includes) {
+          return includes;
+        } else return null;
+      });
+      setFilteredData(updatedData);
+      setSearchText(value);
+    }
+  };
 
   useEffect(() => {
     const fetchCourses = async () => {
       try {
-        const getData = await courseReserveAPI();
+        const getCourseReserves = await getCourseReserveAPI();
+        const getAcceptedReserves = getCourseReserves.filter((course) => {
+          return course.accept === true;
+        });
+        const getNotAcceptedReserves = getCourseReserves.filter((course) => {
+          return course.accept === false;
+        });
 
-        setReserveCourses(getData);
+        setAllReserves(getCourseReserves);
+        setAcceptedReserves(getAcceptedReserves);
+        setNotAcceptedReserves(getNotAcceptedReserves);
       } catch (error) {
-        toast.error("مکشلی در دریافت دوره های رزرو شده به وجود آدمد ...");
+        toast.error("مشکلی در دریافت رزرو ها به وجود آمد !");
       }
     };
 
     fetchCourses();
   }, []);
 
-  const handleFilter = (val) => {
-    textTimeOut(() => {
-      setSearchText(val);
-    }, 800);
-  };
-
-  const handlePerPage = (e) => {
-    setRowsPerPage(parseInt(e.target.value));
-  };
-
-  const handlePagination = (page) => {
-    setCurrentPage(page.selected + 1);
-  };
-
-  const CustomPagination = () => {
-    const count = Number((reservedCourses.length / rowsPerPage).toFixed(0));
-
-    return (
-      <ReactPaginate
-        nextLabel=""
-        breakLabel="..."
-        previousLabel=""
-        pageCount={count || 1}
-        activeClassName="active"
-        breakClassName="page-item"
-        pageClassName={"page-item"}
-        breakLinkClassName="page-link"
-        nextLinkClassName={"page-link"}
-        pageLinkClassName={"page-link"}
-        nextClassName={"page-item next"}
-        previousLinkClassName={"page-link"}
-        previousClassName={"page-item prev"}
-        onPageChange={(page) => handlePagination(page)}
-        forcePage={currentPage !== 0 ? currentPage - 1 : 0}
-        containerClassName={"pagination react-paginate justify-content-end p-1"}
-      />
-    );
-  };
-
-  const dataToRender = () => {
-    if (reservedCourses?.length > 0) {
-      return reservedCourses.length;
-    } else if (reservedCourses?.length === 0) {
-      return [];
-    } else {
-      return reservedCourses?.slice(0, rowsPerPage);
-    }
-  };
-
   return (
     <div className="invoice-list-wrapper">
       <BreadCrumbs
-        title="لیست دوره های رزرو شده"
+        title="لیست رزرو ها"
         data={[
           { title: "مدیریت دوره ها", link: "/courses" },
-          { title: "لیست  دوره های رزرو شده" },
+          { title: "لیست رزرو ها" },
         ]}
       />
+      <div className="app-user-list w-100">
+        <Row>
+          <Col lg="3" sm="6">
+            <StatsHorizontal
+              color="primary"
+              statTitle="همه رزرو ها"
+              icon={<Book />}
+              renderStats={
+                <h3 className="fw-bolder mb-75">{allReserves?.length || 0}</h3>
+              }
+              onClick={() => {
+                setIsAllReserves(true);
+                setAcceptReserves(false);
+                setIsNotAcceptedReserves(false);
+              }}
+              className="cursor-pointer"
+              backgroundColor={isAllReserves && "rgb(0 0 0 / 23%)"}
+            />
+          </Col>
+          <Col lg="3" sm="6">
+            <StatsHorizontal
+              color="success"
+              statTitle="رزرو های تایید شده"
+              icon={<CheckCircle />}
+              renderStats={
+                <h3 className="fw-bolder mb-75">
+                  {acceptedReserves?.length || 0}
+                </h3>
+              }
+              onClick={() => {
+                setIsAllReserves(false);
+                setAcceptReserves(true);
+                setIsNotAcceptedReserves(false);
+              }}
+              className="cursor-pointer"
+              backgroundColor={acceptReserves && "rgb(0 0 0 / 23%)"}
+            />
+          </Col>
+          <Col lg="3" sm="6">
+            <StatsHorizontal
+              color="danger"
+              statTitle="رزرو های تایید نشده"
+              icon={<Trash2 size={20} />}
+              renderStats={
+                <h3 className="fw-bolder mb-75">
+                  {notAcceptedReserves?.length || 0}
+                </h3>
+              }
+              onClick={() => {
+                setIsAllReserves(false);
+                setAcceptReserves(false);
+                setIsNotAcceptedReserves(true);
+              }}
+              className="cursor-pointer"
+              backgroundColor={isNotAcceptedReserves && "rgb(0 0 0 / 23%)"}
+            />
+          </Col>
+        </Row>
+      </div>
       <Card className="rounded">
-        <div className="invoice-list-dataTable react-dataTable">
-          <DataTable
-            noHeader
-            pagination
-            paginationServer
-            subHeader={true}
-            columns={COURSE_RESERVED_COLUMNS}
-            responsive={true}
-            data={dataToRender()}
-            className="react-dataTable"
-            defaultSortField="invoiceId"
-            paginationDefaultPage={currentPage}
-            paginationComponent={CustomPagination}
-            subHeaderComponent={
-              <CustomHeader
-                handleFilter={handleFilter}
-                handlePerPage={handlePerPage}
-              />
-            }
-          />
-        </div>
+        <TableServerSide
+          data={searchText.length ? filteredData : dataToRender()}
+          columns={COURSE_RESERVED_PAGE_COLUMNS}
+          renderTitle={renderTitle()}
+          currentPage={currentPage}
+          rowsPerPage={rowsPerPage}
+          setCurrentPage={setCurrentPage}
+          setRowsPerPage={setRowsPerPage}
+          setSearchValue={setSearchText}
+          notFoundText="رزروی پیدا نشد !"
+          handleSearchFilter={handleFilter}
+        />
       </Card>
     </div>
   );

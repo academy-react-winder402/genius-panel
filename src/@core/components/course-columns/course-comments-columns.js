@@ -8,11 +8,12 @@ import { Badge, Button, Tooltip } from "reactstrap";
 import CourseReplyCommentModal from "./CourseReplyCommentModal";
 
 // ** Image Imports
-import { CheckCircle } from "react-feather";
+import { CheckCircle, XCircle, XOctagon } from "react-feather";
 import { useNavigate } from "react-router-dom";
 import blankThumbnail from "../../../assets/images/common/blank-thumbnail.jpg";
 import { acceptCourseCommentAPI } from "../../../core/services/api/course/course-comments/accept-course-comment.api";
 import toast from "react-hot-toast";
+import { rejectCourseCommentAPI } from "../../../core/services/api/course/course-comments/reject-course-comment.api";
 
 export const COURSE_COMMENTS_COLUMNS = [
   {
@@ -77,6 +78,7 @@ export const COURSE_COMMENTS_COLUMNS = [
       // ** States
       const [modal, setModal] = useState(null);
       const [acceptCourseCommentText, setAcceptCourseCommentText] = useState();
+      const [rejectCourseCommentText, setRejectCourseCommentText] = useState();
 
       // ** Hooks
       const navigate = useNavigate();
@@ -109,27 +111,49 @@ export const COURSE_COMMENTS_COLUMNS = [
         }
       };
 
+      const handleRejectCourseComment = async () => {
+        try {
+          const rejectCourseComment = await rejectCourseCommentAPI(row.id);
+
+          if (rejectCourseComment.success) {
+            toast.success("نظر با موفقیت لغو شد !");
+
+            navigate(`/courses/${row.courseId}`);
+          } else {
+            toast.error("مشکلی در لغو نظر از دید کاربران به وجود آمد !");
+          }
+        } catch (error) {
+          toast.error("مشکلی در لغو نظر از دید کاربران به وجود آمد !");
+        }
+      };
+
       return (
         <div className="column-action d-flex align-items-center gap-1">
           <div className="d-flex align-items-center gap-1">
-            {!row.accept && (
-              <div>
-                <CheckCircle
-                  className="cursor-pointer"
-                  id="acceptCourseComment"
-                  onClick={handleAcceptCourseComment}
+            {row.accept ? (
+              <div
+                className="reject-comment"
+                onClick={handleRejectCourseComment}
+              >
+                <XCircle
+                  id="rejectCourseComment"
+                  cursor="pointer"
+                  color="#000"
+                  className="reject-comment-icon"
                 />
-                <Tooltip
-                  placement="top"
-                  isOpen={acceptCourseCommentText}
-                  target="acceptCourseComment"
-                  toggle={() =>
-                    setAcceptCourseCommentText(!acceptCourseCommentText)
-                  }
-                  innerClassName="table-tooltip"
-                >
-                  تایید نظر
-                </Tooltip>
+                <span className="reject-comment-text">لغو نظر</span>
+              </div>
+            ) : (
+              <div
+                className="reject-comment"
+                onClick={handleAcceptCourseComment}
+              >
+                <CheckCircle
+                  id="acceptCourseComment"
+                  cursor="pointer"
+                  className="accept-comment-icon"
+                />
+                <span className="accept-comment-text"> تایید نظر</span>
               </div>
             )}
             <Button color="primary" onClick={handleReplyClick}>

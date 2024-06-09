@@ -123,6 +123,33 @@ body.dark-layout
   gap: 3px;
 }
 
+.accept-comment,
+.reject-comment {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.accept-comment-text,
+.reject-comment-text {
+  color: #28c76f;
+  margin-top: 1px;
+}
+
+.reject-comment-text {
+  color: #ea5455;
+}
+
+.accept-comment-icon {
+  stroke: #28c76f !important;
+}
+
+.reject-comment-icon {
+  stroke: #ea5455 !important;
+}
+
 /* Responsive */
 @media (max-width: 1000px) {
   .course-reserve-filters {

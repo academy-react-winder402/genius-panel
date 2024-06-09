@@ -47,7 +47,7 @@ const CreateBlogPage = () => {
         toast.success("اخبار با موفقیت ثبت شد !");
         setBlogId(createBlog.id);
         stepper.next();
-      } else toast.error(createCourse.message);
+      } else toast.error(createBlog.message);
     } catch (error) {
       toast.error("مشکلی در ارسال اخبار به وجود آمد !");
     }

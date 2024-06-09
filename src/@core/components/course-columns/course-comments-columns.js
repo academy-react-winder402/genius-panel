@@ -77,8 +77,6 @@ export const COURSE_COMMENTS_COLUMNS = [
     cell: (row) => {
       // ** States
       const [modal, setModal] = useState(null);
-      const [acceptCourseCommentText, setAcceptCourseCommentText] = useState();
-      const [rejectCourseCommentText, setRejectCourseCommentText] = useState();
 
       // ** Hooks
       const navigate = useNavigate();

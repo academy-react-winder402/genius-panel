@@ -8,7 +8,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 
 import { Form, Label, Input, Row, Col, Button, FormFeedback } from "reactstrap";
 
-import { createBlogFormSchema } from "../../../core/validations/create-blog/creat-blog";
+import { createBlogFormValidation } from "../../../core/validations/create-blog/creat-blog";
 
 import FileUploaderSingle from "../FileUploaderSingle";
 
@@ -39,7 +39,7 @@ const Global = ({
     formState: { errors },
   } = useForm({
     defaultValues,
-    resolver: yupResolver(createBlogFormSchema),
+    resolver: yupResolver(createBlogFormValidation),
   });
 
   const onSubmit = (e) => {

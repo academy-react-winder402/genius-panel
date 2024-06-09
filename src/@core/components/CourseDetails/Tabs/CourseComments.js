@@ -1,12 +1,15 @@
 // ** React Imports
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import Swal from "sweetalert2";
+import withReactContent from "sweetalert2-react-content";
 
 // ** Reactstrap Imports
 import { Card } from "reactstrap";
 
 // ** Core Imports
+import { deleteCourseCommentAPI } from "../../../../core/services/api/course/course-comments/delete-course-comment.api";
 import { getCourseCommentsAPI } from "../../../../core/services/api/course/course-comments/get-course-comments.api";
 
 // ** Columns
@@ -29,6 +32,40 @@ const CourseComments = () => {
 
   // ** Hooks
   const { id } = useParams();
+  const navigate = useNavigate();
+
+  const MySwal = withReactContent(Swal);
+
+  const handleDeleteCourseComment = async (selectedRows) => {
+    MySwal.fire({
+      title: "آیا از حذف نظر مطمئن هستید؟",
+      text: "در صورت حذف نظر، نظر به طور کامل حذف خواهد شد.",
+      icon: "warning",
+      customClass: {
+        confirmButton: "btn btn-primary",
+        cancelButton: "btn btn-danger ms-1",
+      },
+      buttonsStyling: false,
+      inputAttributes: {
+        autocapitalize: "off",
+      },
+      showCancelButton: true,
+      confirmButtonText: "حذف",
+      cancelButtonText: "انصراف",
+      showLoaderOnConfirm: true,
+      async preConfirm() {
+        selectedRows.map(async (comment) => {
+          const deleteCourseComment = await deleteCourseCommentAPI(comment.id);
+
+          if (deleteCourseComment.success) {
+            toast.success("نظر با موفقیت حذف شد !");
+
+            navigate(`/courses/${id}`);
+          }
+        });
+      },
+    });
+  };
 
   useEffect(() => {
     const fetchCourseComments = async () => {
@@ -56,7 +93,9 @@ const CourseComments = () => {
           setRowsPerPage={setRowsPerPage}
           setSearchValue={setSearchText}
           setSelectedRows={setSelectedRows}
-          handleDeleteData={() => {}}
+          handleDeleteData={() => handleDeleteCourseComment(selectedRows)}
+          notFoundText="نظری پیدا نشد !"
+          deleteSelectedRowsText="حذف"
         />
       </Card>
     </div>

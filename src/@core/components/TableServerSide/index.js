@@ -43,6 +43,8 @@ const DataTableServerSide = ({
   setSelectedRows,
   handleDeleteData,
   isCourseCreateButtonShow,
+  notFoundText,
+  deleteSelectedRowsText,
 }) => {
   // ** States
   const [itemOffset, setItemOffset] = useState(0);
@@ -134,7 +136,7 @@ const DataTableServerSide = ({
                 color="danger"
               >
                 <Trash size={16} />
-                <span>حذف یا بازگرادنی</span>
+                <span>{deleteSelectedRowsText}</span>
               </Button>
             )}
             {isCourseCreateButtonShow && (
@@ -184,7 +186,7 @@ const DataTableServerSide = ({
         </Row>
         <div className="react-dataTable">
           {!currentItems || currentItems?.length === 0 ? (
-            <h5 className="text-center">دوره ای پیدا نشد !</h5>
+            <h5 className="text-center">{notFoundText}</h5>
           ) : (
             <DataTable
               noHeader

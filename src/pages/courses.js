@@ -229,6 +229,8 @@ const CoursesPage = () => {
           setSelectedRows={setSelectedRows}
           handleDeleteData={() => handleDeleteCourse(selectedRows, "/courses")}
           isCourseCreateButtonShow
+          notFoundText="دوره ای پیدا نشد !"
+          deleteSelectedRowsText="حذف یا بازگرادنی"
         />
       </Card>
     </div>

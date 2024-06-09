@@ -1,22 +1,26 @@
 // ** React Imports
 import { useState } from "react";
+import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
+import withReactContent from "sweetalert2-react-content";
 
 // ** Reactstrap Imports
 import { Badge, Button } from "reactstrap";
 
+// ** Icon Imports
+import { CheckCircle, Trash, XCircle } from "react-feather";
+
 // ** Custom Components
 import CourseReplyCommentModal from "./CourseReplyCommentModal";
 
-// ** Image Imports
-import { CheckCircle, Trash, XCircle } from "react-feather";
-import toast from "react-hot-toast";
-import { useNavigate } from "react-router-dom";
-import blankThumbnail from "../../../assets/images/common/blank-thumbnail.jpg";
+// ** Core Imports
 import { acceptCourseCommentAPI } from "../../../core/services/api/course/course-comments/accept-course-comment.api";
 import { deleteCourseCommentAPI } from "../../../core/services/api/course/course-comments/delete-course-comment.api";
 import { rejectCourseCommentAPI } from "../../../core/services/api/course/course-comments/reject-course-comment.api";
-import withReactContent from "sweetalert2-react-content";
-import Swal from "sweetalert2";
+
+// ** Image Imports
+import blankThumbnail from "../../../assets/images/common/blank-thumbnail.jpg";
 
 export const COURSE_COMMENTS_COLUMNS = [
   {
@@ -129,20 +133,6 @@ export const COURSE_COMMENTS_COLUMNS = [
           toast.error("مشکلی در لغو نظر از دید کاربران به وجود آمد !");
         }
       };
-
-      // const handleDeleteCourseComment = async () => {
-      //   try {
-      //     const deleteCourseComment = await deleteCourseCommentAPI(row.id);
-
-      //     if (deleteCourseComment.success) {
-      //       toast.success("نظر با موفقیت حذف شد !");
-
-      //       navigate(`/courses/${row.courseId}`);
-      //     }
-      //   } catch (error) {
-      //     toast.error("مشکلی در حذف نظر به وجود آمد !");
-      //   }
-      // };
 
       const handleDeleteCourseComment = async () => {
         MySwal.fire({

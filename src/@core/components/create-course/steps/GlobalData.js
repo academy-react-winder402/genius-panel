@@ -65,7 +65,7 @@ const GlobalData = ({
   });
 
   const onSubmit = (e) => {
-    console.log(isObjEmpty(errors));
+    console.log(errors);
     if (isObjEmpty(errors)) {
       const {
         title,
@@ -78,25 +78,60 @@ const GlobalData = ({
         endTime,
       } = e;
 
-      if (date) {
+      console.log(e);
+
+      if (!course) {
         const dateFormatter = new Intl.DateTimeFormat("en", {
           year: "numeric",
           month: "2-digit",
           day: "2-digit",
         });
-        console.log(date);
-        const startTime = dateFormatter.format(date[0]);
-        const endTime = dateFormatter.format(date[1]);
-        setStartTime(startTime);
-        setEndTime(endTime);
+        const getStartTime = dateFormatter.format(date[0][0]);
+        const getEndTime = dateFormatter.format(date[0][1]);
+        e.startTime = getStartTime;
+        e.endTime = getEndTime;
+        setStartTime(e.startTime);
+        setEndTime(e.endTime);
+        console.log(getStartTime);
+      }
+
+      if (course) {
+        const dateFormatter = new Intl.DateTimeFormat("en", {
+          year: "numeric",
+          month: "2-digit",
+          day: "2-digit",
+        });
+
+        console.log(date.length);
+
+        console.log(e.date);
+
+        if (e.date.length === 1) {
+          const getStartTime = dateFormatter.format(date[0][0]);
+          console.log(date[0][0]);
+          console.log(dateFormatter);
+          const getEndTime = dateFormatter.format(date[0][1]);
+          setStartTime(getStartTime);
+          setEndTime(getEndTime);
+          e.startTime = getStartTime;
+          e.endTime = getEndTime;
+          console.log(e.startTime, "startTime");
+          console.log(e.endTime, "endTime");
+          console.log(getStartTime, "endTime");
+          console.log(getEndTime, "endTime");
+        } else {
+          setStartTime(course.startTime);
+          setEndTime(course.endTime);
+          e.startTime = course.startTime;
+          e.endTime = course.endTime;
+          console.log("shdks");
+        }
       }
 
       setTitle(title);
       setCost(cost);
       setCapacity(capacity);
       setSessionNumber(sessionNumber);
-      setStartTime(startTime);
-      setEndTime(endTime);
       setMiniDescribe(miniDescribe);
 
       if (title && cost && capacity && sessionNumber && miniDescribe) {
@@ -117,8 +152,6 @@ const GlobalData = ({
       setValue("sessionNumber", course.sessionNumber);
       setValue("miniDescribe", course.miniDescribe);
       setValue("date", formattedDate);
-      setValue("startTime", course.startTime);
-      setValue("endTime", course.endTime);
     }
   }, [course, setValue]);
 

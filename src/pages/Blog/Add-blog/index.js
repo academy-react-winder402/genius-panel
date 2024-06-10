@@ -10,6 +10,7 @@ import { createBlogAPI } from "../../../core/services/api/blog/create-Blog.api";
 import { onFormData } from "../../../core/utils/form-data-helper.utils";
 
 import Describe from "../../../@core/components/create-blog/Describe";
+import CheckBox from "../../../@core/components/create-blog/CheckBox";
 
 const CreateBlogPage = () => {
   // ** Ref
@@ -19,13 +20,12 @@ const CreateBlogPage = () => {
   const [stepper, setStepper] = useState(null);
   const [files, setFiles] = useState([]);
   const [title, setTitle] = useState();
-
   const [miniDescribe, setMiniDescribe] = useState();
   const [describe, setDescribe] = useState();
   const [googleTitle, setGoogleTitle] = useState();
   const [googleDescribe, setGoogleDescribe] = useState();
-
-  const [blogId, setBlogId] = useState();
+  const [data, setDataId] = useState();
+  const [createBlogOptions] = useState();
 
   const onSubmit = async () => {
     const Data = {
@@ -45,7 +45,7 @@ const CreateBlogPage = () => {
 
       if (createBlog.success) {
         toast.success("اخبار با موفقیت ثبت شد !");
-        setBlogId(createBlog.id);
+        setDataId(createBlog.id);
         stepper.next();
       } else toast.error(createBlog.message);
     } catch (error) {
@@ -79,10 +79,21 @@ const CreateBlogPage = () => {
       content: (
         <Describe
           stepper={stepper}
-          handleSubmitFn={onSubmit}
-          blogId={blogId}
           setDescribe={setDescribe}
           describe={describe}
+        />
+      ),
+    },
+    {
+      id: "check-box",
+      title: "اطلاعات نهایی اخبار",
+      subtitle: "اطلاعات اخبار",
+      content: (
+        <CheckBox
+          stepper={stepper}
+          handleSubmitFn={onSubmit}
+          data={data}
+          createBlogOptions={createBlogOptions}
         />
       ),
     },

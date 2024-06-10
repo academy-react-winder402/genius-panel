@@ -141,7 +141,7 @@ const Describe = ({ stepper, describe, setDescribe }) => {
           <span className="align-middle d-sm-inline-block d-none">قبلی</span>
         </Button>
         <Button color="primary" className="btn-next" onClick={handleSaveData}>
-          <span className="align-middle d-sm-inline-block d-none">ثبت</span>
+          <span className="align-middle d-sm-inline-block d-none">بعدی</span>
           <ArrowRight
             size={14}
             className="align-middle ms-sm-25 ms-0"

@@ -28,6 +28,7 @@ const DefaultRoute = "/home";
 const Home = lazy(() => import("../../pages/Home"));
 const Login = lazy(() => import("../../pages/Login"));
 const Error = lazy(() => import("../../pages/Error"));
+const Users = lazy(() => import("../../pages/Users"));
 const Courses = lazy(() => import("../../pages/Courses"));
 const MyCourses = lazy(() => import("../../pages/MyCourses"));
 const CreateCourse = lazy(() => import("../../pages/CreateCourse"));
@@ -53,6 +54,10 @@ const Routes = [
     meta: {
       layout: "blank",
     },
+  },
+  {
+    path: "/users",
+    element: <Users />,
   },
   {
     path: "/courses",

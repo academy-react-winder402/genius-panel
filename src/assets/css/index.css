@@ -158,6 +158,16 @@ body.dark-layout
   margin-bottom: 20px;
 }
 
+.add-user-role-card-header {
+  padding-bottom: 10px;
+}
+
+.select-role-switch {
+  font-size: 17px !important;
+  font-weight: 500;
+  margin-top: 1px;
+}
+
 /* Responsive */
 @media (max-width: 1000px) {
   .course-reserve-filters {

@@ -175,6 +175,7 @@ export const COURSE_COLUMNS = (redirectUrl) => [
       // ** Hooks
       const navigate = useNavigate();
 
+      // ** Toggle modal function
       const toggleModal = (id) => {
         if (modal !== id) {
           setModal(id);

@@ -52,6 +52,7 @@ const EditCourse = () => {
 
   const onSubmit = async () => {
     const courseDataObj = {
+      id,
       image: (files && files[0]) || courseData.imageAddress,
       tumbImage: (files && files[0]) || courseData.imageAddress,
       imageAddress: (files && files[0]) || courseData.imageAddress,

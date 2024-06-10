@@ -1,4 +1,4 @@
-// ** Reactstrap Imports
+// ** React Imports
 import { useState } from "react";
 
 // ** Third Party Components

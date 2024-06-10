@@ -1,9 +1,10 @@
-import { Home, Circle, Code } from "react-feather";
+import { Circle, Code, Home, Users } from "react-feather";
 
+import AddBlog from "../../pages/Blog/Add-blog";
+import CourseReservedPage from "../../pages/CourseReserved";
 import CoursesPage from "../../pages/Courses";
 import CreateCoursePage from "../../pages/CreateCourse";
-import CourseReservedPage from "../../pages/CourseReserved";
-import AddBlog from "../../pages/Blog/Add-blog";
+import UsersPage from "../../pages/Users";
 
 export default [
   {
@@ -11,6 +12,19 @@ export default [
     title: "داشبورد",
     icon: <Home size={20} />,
     navLink: "/home",
+  },
+  {
+    id: "users",
+    title: "مدیریت کاربران",
+    icon: <Users size={20} />,
+    children: [
+      {
+        title: "لیست کاربران",
+        navLink: "/users",
+        element: <UsersPage />,
+        icon: <Circle />,
+      },
+    ],
   },
   {
     id: "courses",
@@ -56,18 +70,4 @@ export default [
       },
     ],
   },
-  // {
-  //   id: "smaplePage",
-  //   title: "Sample Page",
-  //   icon: <Airplay size={20} />,
-  //   // navLink: "/sample",
-  //   children: [
-  //     {
-  //       id: "invoiceList",
-  //       title: "List",
-  //       icon: <Circle size={12} />,
-  //       navLink: "/apps/invoice/list",
-  //     },
-  //   ],
-  // },
 ];

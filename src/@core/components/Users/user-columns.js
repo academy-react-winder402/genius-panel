@@ -125,7 +125,11 @@ export const USER_COLUMNS = [
             to={`/users/${row.id}`}
             className="user_name text-truncate text-body"
           >
-            <span className="fw-bolder">{row.fname + " " + row.lname}</span>
+            <span className="fw-bolder">
+              {row.fname && row.lname
+                ? row.fname + " " + row.lname
+                : "کاربر نابغه"}
+            </span>
           </Link>
           <small className="text-truncate text-muted mb-0">{row.gmail}</small>
         </div>

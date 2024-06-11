@@ -18,8 +18,11 @@ import { Button, Col, Form, FormFeedback, Input, Label, Row } from "reactstrap";
 // ** Core Import
 import { createCourseStepOneFormSchema } from "../../../../core/validations/create-course/create-course-step-one-form.validation";
 
-// ** Custom Components
+// ** Utils
+import { dateFormatter } from "../../../../core/utils/date-formatter.utils";
 import { convertDateToPersian } from "../../../../core/utils/date-helper.utils";
+
+// ** Custom Components
 import FileUploaderSingle from "../../FileUploaderSingle";
 
 const GlobalData = ({
@@ -64,25 +67,16 @@ const GlobalData = ({
   });
 
   const onSubmit = (e) => {
-    console.log(errors);
     if (isObjEmpty(errors)) {
       const { title, cost, capacity, sessionNumber, miniDescribe, date } = e;
 
-      console.log(e);
-
       if (!course) {
-        const dateFormatter = new Intl.DateTimeFormat("en", {
-          year: "numeric",
-          month: "2-digit",
-          day: "2-digit",
-        });
         const getStartTime = dateFormatter.format(date[0][0]);
         const getEndTime = dateFormatter.format(date[0][1]);
         e.startTime = getStartTime;
         e.endTime = getEndTime;
         setStartTime(e.startTime);
         setEndTime(e.endTime);
-        console.log(getStartTime);
       }
 
       if (course) {
@@ -92,29 +86,18 @@ const GlobalData = ({
           day: "2-digit",
         });
 
-        console.log(date.length);
-
-        console.log(e.date);
-
         if (e.date.length === 1) {
           const getStartTime = dateFormatter.format(date[0][0]);
-          console.log(date[0][0]);
-          console.log(dateFormatter);
           const getEndTime = dateFormatter.format(date[0][1]);
           setStartTime(getStartTime);
           setEndTime(getEndTime);
           e.startTime = getStartTime;
           e.endTime = getEndTime;
-          console.log(e.startTime, "startTime");
-          console.log(e.endTime, "endTime");
-          console.log(getStartTime, "endTime");
-          console.log(getEndTime, "endTime");
         } else {
           setStartTime(course.startTime);
           setEndTime(course.endTime);
           e.startTime = course.startTime;
           e.endTime = course.endTime;
-          console.log("shdks");
         }
       }
 

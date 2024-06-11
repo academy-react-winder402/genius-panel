@@ -10,15 +10,13 @@ import SelectTechnologies from "../@core/components/create-course/steps/selectTe
 // ** Steps
 import AdvanceData from "../@core/components/create-course/steps/AdvanceData";
 import CourseFeatures from "../@core/components/create-course/steps/CourseFeatures";
+import Describe from "../@core/components/create-course/steps/Describe";
 import GlobalData from "../@core/components/create-course/steps/GlobalData";
 
 // ** Core Imports
 import { createCourseAPI } from "../core/services/api/course/create-course.api";
 import { getCreateCourseAPI } from "../core/services/api/course/get-create-course.api";
 import { onFormData } from "../core/utils/form-data-helper.utils";
-
-// ** Custom Components
-import Describe from "../@core/components/create-course/steps/Describe";
 
 const CreateCoursePage = () => {
   // ** Ref

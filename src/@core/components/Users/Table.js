@@ -1,53 +1,42 @@
 // ** React Imports
-import { Fragment, useState } from "react";
-
-// ** Invoice List Sidebar
-import Sidebar from "./Sidebar";
+import { forwardRef, Fragment } from "react";
 
 // ** Table Columns
 import { USER_COLUMNS } from "./user-columns";
 
 // ** Third Party Components
-import Select from "react-select";
-import ReactPaginate from "react-paginate";
 import DataTable from "react-data-table-component";
-import {
-  ChevronDown,
-  Share,
-  Printer,
-  FileText,
-  File,
-  Grid,
-  Copy,
-} from "react-feather";
+import { ChevronDown, FileText, Share } from "react-feather";
+import ReactPaginate from "react-paginate";
+import Select from "react-select";
 
 // ** Utils
 import { selectThemeColors } from "@utils";
 
 // ** Reactstrap Imports
 import {
-  Row,
-  Col,
+  Button,
   Card,
+  CardBody,
+  CardHeader,
+  CardTitle,
+  Col,
+  DropdownItem,
+  DropdownMenu,
+  DropdownToggle,
   Input,
   Label,
-  Button,
-  CardBody,
-  CardTitle,
-  CardHeader,
-  DropdownMenu,
-  DropdownItem,
-  DropdownToggle,
+  Row,
   UncontrolledDropdown,
 } from "reactstrap";
 
 // ** Styles
 import "@styles/react/libs/react-select/_react-select.scss";
 import "@styles/react/libs/tables/react-dataTable-component.scss";
+import { Link } from "react-router-dom";
 
 // ** Table Header
 const CustomHeader = ({
-  toggleSidebar,
   handlePerPage,
   rowsOfPage,
   handleFilter,
@@ -154,9 +143,10 @@ const CustomHeader = ({
             </UncontrolledDropdown>
 
             <Button
+              tag={Link}
+              to="/create-user"
               className="add-new-user"
               color="primary"
-              onClick={toggleSidebar}
             >
               افزودن کاربر
             </Button>
@@ -166,6 +156,13 @@ const CustomHeader = ({
     </div>
   );
 };
+
+// ** Bootstrap Checkbox Component
+const BootstrapCheckbox = forwardRef((props, ref) => (
+  <div className="form-check">
+    <Input type="checkbox" ref={ref} {...props} />
+  </div>
+));
 
 const UsersListTable = ({
   users,
@@ -182,12 +179,6 @@ const UsersListTable = ({
   setCurrentRole,
   setCurrentStatus,
 }) => {
-  // ** States
-  const [sidebarOpen, setSidebarOpen] = useState(false);
-
-  // ** Function to toggle sidebar
-  const toggleSidebar = () => setSidebarOpen(!sidebarOpen);
-
   // ** User filter options
   const roleOptions = [
     { value: "", label: "انتخاب نقش" },
@@ -327,7 +318,6 @@ const UsersListTable = ({
                 rowsOfPage={rowsOfPage}
                 handleFilter={handleFilter}
                 handlePerPage={handlePerPage}
-                toggleSidebar={toggleSidebar}
                 users={users}
               />
             }
@@ -335,7 +325,6 @@ const UsersListTable = ({
           />
         </div>
       </Card>
-      <Sidebar open={sidebarOpen} toggleSidebar={toggleSidebar} />
     </Fragment>
   );
 };

@@ -4,6 +4,7 @@ import AddBlog from "../../pages/Blog/Add-blog";
 import CourseReservedPage from "../../pages/CourseReserved";
 import CoursesPage from "../../pages/Courses";
 import CreateCoursePage from "../../pages/CreateCourse";
+import CreateUserPage from "../../pages/CreateUser";
 import UsersPage from "../../pages/Users";
 
 export default [
@@ -22,6 +23,12 @@ export default [
         title: "لیست کاربران",
         navLink: "/users",
         element: <UsersPage />,
+        icon: <Circle />,
+      },
+      {
+        title: "افزودن کاربر",
+        navLink: "/create-user",
+        element: <CreateUserPage />,
         icon: <Circle />,
       },
     ],

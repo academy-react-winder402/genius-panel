@@ -1,5 +1,6 @@
 // ** React Imports
-import { Link } from "react-router-dom";
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 
 // ** Custom Components
 import Avatar from "@components/avatar";
@@ -28,7 +29,8 @@ import {
 } from "reactstrap";
 import { convertDateToPersian } from "../../../core/utils/date-helper.utils";
 import UserAddRole from "./UserAddRole";
-import { useState } from "react";
+import toast from "react-hot-toast";
+import { deleteUserAPI } from "../../../core/services/api/user/delete-user.api";
 
 // ** Renders Client Columns
 const renderClient = (row) => {
@@ -125,7 +127,11 @@ export const USER_COLUMNS = [
             to={`/users/${row.id}`}
             className="user_name text-truncate text-body"
           >
-            <span className="fw-bolder">{row.fname + " " + row.lname}</span>
+            <span className="fw-bolder">
+              {row.fname && row.lname
+                ? row.fname + " " + row.lname
+                : "کاربر نابغه"}
+            </span>
           </Link>
           <small className="text-truncate text-muted mb-0">{row.gmail}</small>
         </div>
@@ -178,6 +184,9 @@ export const USER_COLUMNS = [
       // ** States
       const [modal, setModal] = useState(null);
 
+      // ** Hook
+      const navigate = useNavigate();
+
       // ** Toggle modal function
       const toggleModal = (id) => {
         if (modal !== id) {
@@ -191,11 +200,27 @@ export const USER_COLUMNS = [
         toggleModal(row.id);
       };
 
+      const handleDeleteUser = async () => {
+        try {
+          const deleteUser = await deleteUserAPI(row.id);
+
+          if (deleteUser.success) {
+            toast.success("کاربر با موفقیت حذف شد !");
+
+            navigate("/users");
+          } else {
+            toast.error("مشکلی در حذف کاربر به وجود آمد !");
+          }
+        } catch (error) {
+          toast.error("مشکلی در حذف کاربر به وجود آمد !");
+        }
+      };
+
       return (
         <div className="d-flex gap-1">
           <div className="column-action">
-            <UncontrolledDropdown>
-              <DropdownToggle tag="div" className="btn btn-sm">
+            <UncontrolledDropdown direction="right">
+              <DropdownToggle tag="div" className="btn btn-sm" caret>
                 <MoreVertical size={14} className="cursor-pointer" />
               </DropdownToggle>
               <DropdownMenu>
@@ -210,19 +235,12 @@ export const USER_COLUMNS = [
                 <DropdownItem
                   tag={Link}
                   className="w-100"
-                  to={`/users/${row.id}`}
+                  to={`/users/edit/${row.id}`}
                 >
                   <Archive size={14} className="me-50" />
                   <span className="align-middle">ویرایش</span>
                 </DropdownItem>
-                <DropdownItem
-                  tag="a"
-                  href="/"
-                  className="w-100"
-                  onClick={(e) => {
-                    e.preventDefault();
-                  }}
-                >
+                <DropdownItem className="w-100" onClick={handleDeleteUser}>
                   <Trash2 size={14} className="me-50" />
                   <span className="align-middle">حذف</span>
                 </DropdownItem>

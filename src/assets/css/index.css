@@ -168,6 +168,14 @@ body.dark-layout
   margin-top: 1px;
 }
 
+.isStudentRoleLabel {
+  white-space: nowrap;
+}
+
+.isStudentRoleWrapper {
+  margin-right: 10px;
+}
+
 /* Responsive */
 @media (max-width: 1000px) {
   .course-reserve-filters {

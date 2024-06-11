@@ -1,27 +1,26 @@
 // ** React Imports
 import { Fragment, useEffect } from "react";
-// Package Imports
-import DatePicker from "react-multi-date-picker";
 import persian from "react-date-object/calendars/persian";
 import persian_fa from "react-date-object/locales/persian_fa";
+import DatePicker from "react-multi-date-picker";
 
 // ** Utils
 import { isObjEmpty } from "@utils";
 
 // ** Third Party Components
-import { useForm, Controller } from "react-hook-form";
-import { ArrowLeft, ArrowRight } from "react-feather";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { ArrowLeft, ArrowRight } from "react-feather";
+import { Controller, useForm } from "react-hook-form";
 
 // ** Reactstrap Imports
-import { Form, Label, Input, Row, Col, Button, FormFeedback } from "reactstrap";
+import { Button, Col, Form, FormFeedback, Input, Label, Row } from "reactstrap";
 
 // ** Core Import
 import { createCourseStepOneFormSchema } from "../../../../core/validations/create-course/create-course-step-one-form.validation";
 
 // ** Custom Components
-import FileUploaderSingle from "../../FileUploaderSingle";
 import { convertDateToPersian } from "../../../../core/utils/date-helper.utils";
+import FileUploaderSingle from "../../FileUploaderSingle";
 
 const GlobalData = ({
   stepper,
@@ -67,16 +66,7 @@ const GlobalData = ({
   const onSubmit = (e) => {
     console.log(errors);
     if (isObjEmpty(errors)) {
-      const {
-        title,
-        cost,
-        capacity,
-        sessionNumber,
-        miniDescribe,
-        date,
-        startTime,
-        endTime,
-      } = e;
+      const { title, cost, capacity, sessionNumber, miniDescribe, date } = e;
 
       console.log(e);
 

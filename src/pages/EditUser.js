@@ -9,6 +9,7 @@ import Wizard from "@components/wizard";
 
 // ** Steps
 import GlobalData from "../@core/components/EditUser/steps/GlobalData";
+import UserConnection from "../@core/components/EditUser/steps/UserConnection";
 
 // ** Core Imports
 import { getUserWithIdAPI } from "../core/services/api/user/get-user-with-id.api";
@@ -21,6 +22,7 @@ const EditUserPage = () => {
   const [userDetails, setUserDetails] = useState();
   const [stepper, setStepper] = useState(null);
   const [globalData, setGlobalData] = useState();
+  const [birthDay, setBirthDay] = useState();
 
   // ** Hooks
   const { id } = useParams();
@@ -30,7 +32,19 @@ const EditUserPage = () => {
       id: "global-data",
       title: "اطلاعات عمومی",
       subtitle: "اطلاعات عمومی کاربر",
-      content: <GlobalData stepper={stepper} user={userDetails} />,
+      content: (
+        <GlobalData
+          stepper={stepper}
+          user={userDetails}
+          setGlobalData={setGlobalData}
+        />
+      ),
+    },
+    {
+      id: "user-connection",
+      title: "راه های ارتباطی",
+      subtitle: "راه های ارتباطی کاربر",
+      content: <UserConnection stepper={stepper} user={userDetails} />,
     },
   ];
 
@@ -62,7 +76,12 @@ const EditUserPage = () => {
           { title: "ویرایش کاربر" },
         ]}
       />
-      <Wizard instance={(el) => setStepper(el)} ref={ref} steps={steps} setGlobalData={setGlobalData} />
+      <Wizard
+        instance={(el) => setStepper(el)}
+        ref={ref}
+        steps={steps}
+        setGlobalData={setGlobalData}
+      />
     </div>
   );
 };

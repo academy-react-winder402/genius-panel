@@ -1,5 +1,5 @@
 // ** React Imports
-import { Fragment, useEffect, useState } from "react";
+import { Fragment, useEffect } from "react";
 import persian from "react-date-object/calendars/persian";
 import persian_fa from "react-date-object/locales/persian_fa";
 import DatePicker from "react-multi-date-picker";
@@ -7,34 +7,28 @@ import Select from "react-select";
 import makeAnimated from "react-select/animated";
 
 // ** Core Imports
-import { globalDataFromSchema } from "../../../../core/validations/edit-user/global-data-form.validation";
+import { dateFormatter } from "../../../../core/utils/date-formatter.utils";
 
 // ** Utils
 import { isObjEmpty } from "@utils";
-import { dateFormatter } from "../../../../core/utils/date-formatter.utils";
 import { convertDateToPersian } from "../../../../core/utils/date-helper.utils";
 import { selectThemeColors } from "../../../../utility/Utils";
 
 // ** Third Party Components
-import { yupResolver } from "@hookform/resolvers/yup";
 import { ArrowLeft, ArrowRight } from "react-feather";
 import { Controller, useForm } from "react-hook-form";
 
 // ** Reactstrap Imports
 import { Button, Col, Form, FormFeedback, Input, Label, Row } from "reactstrap";
 
-const GlobalData = ({ stepper, user, setGlobalData }) => {
-  const [birthday, setBirthday] = useState(null);
-
+const UserConnection = ({ stepper, user, setGlobalData }) => {
   // ** Hooks
   const {
     control,
     handleSubmit,
     formState: { errors },
     setValue,
-  } = useForm({
-    resolver: yupResolver(globalDataFromSchema),
-  });
+  } = useForm();
 
   const onSubmit = (e) => {
     if (isObjEmpty(errors)) {
@@ -48,11 +42,7 @@ const GlobalData = ({ stepper, user, setGlobalData }) => {
         birthDay,
       } = e;
 
-      let formattedBirthday = null;
-
-      if (birthDay instanceof Date && !isNaN(birthDay)) {
-        formattedBirthday = dateFormatter.format(birthDay);
-      }
+      const convertBirthday = dateFormatter.format(birthDay);
 
       setGlobalData({
         fName,
@@ -61,14 +51,14 @@ const GlobalData = ({ stepper, user, setGlobalData }) => {
         gender,
         userAbout,
         homeAdderess,
-        birthDay: formattedBirthday || birthDay,
+        convertBirthday,
       });
 
       stepper.next();
     }
   };
 
-  const convertDefaultBirthday = convertDateToPersian(user?.birthDay);
+  const convertBirthday = convertDateToPersian(user?.birthDay);
 
   useEffect(() => {
     if (user) {
@@ -79,7 +69,7 @@ const GlobalData = ({ stepper, user, setGlobalData }) => {
       setValue("nationalCode", user.nationalCode);
       setValue("gender", user.gender);
       setValue("homeAdderess", user.homeAdderess);
-      setValue("birthDay", convertDefaultBirthday);
+      setValue("birthDay", convertBirthday);
     }
   }, [user, setValue]);
 
@@ -238,34 +228,37 @@ const GlobalData = ({ stepper, user, setGlobalData }) => {
               تاریخ تولد کاربر
             </Label>
             <div className="coursesDatePickerWrapper">
-              <Controller
-                control={control}
-                id="birthDay"
-                name="birthDay"
-                render={({ field: { onChange, ref } }) => (
-                  <DatePicker
-                    name="birthDay"
-                    id="birthDay"
-                    value={birthday || convertDefaultBirthday}
-                    format="YYYY/MM/DD"
-                    calendar={persian}
-                    locale={persian_fa}
-                    calendarPosition="bottom-right"
-                    inputClass="form-control coursesDatePickerInput"
-                    onChange={(date) => {
-                      onChange(date);
-                      setBirthday(date);
-                    }}
-                    ref={ref}
-                  />
-                )}
-              />
+              {user && (
+                <Controller
+                  control={control}
+                  id="birthDay"
+                  name="birthDay"
+                  render={({ field }) => (
+                    <DatePicker
+                      name="birthDay"
+                      id="birthDay"
+                      value={convertBirthday}
+                      format="YYYY/MM/DD"
+                      calendar={persian}
+                      locale={persian_fa}
+                      calendarPosition="bottom-right"
+                      inputClass="form-control coursesDatePickerInput"
+                      {...field}
+                    />
+                  )}
+                />
+              )}
             </div>
             {errors.date && <FormFeedback>{errors.date.message}</FormFeedback>}
           </Col>
         </Row>
         <div className="d-flex justify-content-between">
-          <Button type="button" color="primary" className="btn-prev" disabled>
+          <Button
+            type="button"
+            color="primary"
+            className="btn-prev"
+            onClick={() => stepper.previous()}
+          >
             <ArrowLeft
               size={14}
               className="align-middle me-sm-25 me-0"
@@ -285,4 +278,4 @@ const GlobalData = ({ stepper, user, setGlobalData }) => {
   );
 };
 
-export default GlobalData;
+export default UserConnection;

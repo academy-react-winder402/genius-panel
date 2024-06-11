@@ -235,7 +235,7 @@ export const USER_COLUMNS = [
                 <DropdownItem
                   tag={Link}
                   className="w-100"
-                  to={`/users/${row.id}`}
+                  to={`/users/edit/${row.id}`}
                 >
                   <Archive size={14} className="me-50" />
                   <span className="align-middle">ویرایش</span>

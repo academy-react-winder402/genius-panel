@@ -1,8 +1,5 @@
 // ** React Imports
-import { forwardRef, Fragment, useState } from "react";
-
-// ** Invoice List Sidebar
-import Sidebar from "./Sidebar";
+import { forwardRef, Fragment } from "react";
 
 // ** Table Columns
 import { USER_COLUMNS } from "./user-columns";
@@ -36,10 +33,10 @@ import {
 // ** Styles
 import "@styles/react/libs/react-select/_react-select.scss";
 import "@styles/react/libs/tables/react-dataTable-component.scss";
+import { Link } from "react-router-dom";
 
 // ** Table Header
 const CustomHeader = ({
-  toggleSidebar,
   handlePerPage,
   rowsOfPage,
   handleFilter,
@@ -146,9 +143,10 @@ const CustomHeader = ({
             </UncontrolledDropdown>
 
             <Button
+              tag={Link}
+              to="/create-user"
               className="add-new-user"
               color="primary"
-              onClick={toggleSidebar}
             >
               افزودن کاربر
             </Button>
@@ -181,12 +179,6 @@ const UsersListTable = ({
   setCurrentRole,
   setCurrentStatus,
 }) => {
-  // ** States
-  const [sidebarOpen, setSidebarOpen] = useState(false);
-
-  // ** Function to toggle sidebar
-  const toggleSidebar = () => setSidebarOpen(!sidebarOpen);
-
   // ** User filter options
   const roleOptions = [
     { value: "", label: "انتخاب نقش" },
@@ -326,7 +318,6 @@ const UsersListTable = ({
                 rowsOfPage={rowsOfPage}
                 handleFilter={handleFilter}
                 handlePerPage={handlePerPage}
-                toggleSidebar={toggleSidebar}
                 users={users}
               />
             }
@@ -334,7 +325,6 @@ const UsersListTable = ({
           />
         </div>
       </Card>
-      <Sidebar open={sidebarOpen} toggleSidebar={toggleSidebar} />
     </Fragment>
   );
 };

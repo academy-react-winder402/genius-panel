@@ -1,10 +1,11 @@
-import { Circle, Code, Home, Users } from "react-feather";
+import { Circle, Code, FileText, Home, Users } from "react-feather";
 
 import CourseReservedPage from "../../pages/CourseReserved";
 import CoursesPage from "../../pages/Courses";
 import CreateCoursePage from "../../pages/CreateCourse";
 import CreateNewsPage from "../../pages/CreateNews";
 import CreateUserPage from "../../pages/CreateUser";
+import NewsPage from "../../pages/News";
 import UsersPage from "../../pages/Users";
 
 export default [
@@ -67,8 +68,14 @@ export default [
   {
     id: "news",
     title: "مدیریت اخبار",
-    icon: <Code size={20} />,
+    icon: <FileText size={20} />,
     children: [
+      {
+        title: "لیست اخبار",
+        navLink: "/news",
+        element: <NewsPage />,
+        icon: <Circle />,
+      },
       {
         title: "افزودن خبر",
         navLink: "/create-news",

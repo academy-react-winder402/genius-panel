@@ -173,7 +173,7 @@ const CourseReservedPage = () => {
       <Card className="rounded">
         <TableServerSide
           data={searchText.length ? filteredData : dataToRender()}
-          columns={COURSE_RESERVED_PAGE_COLUMNS}
+          columns={COURSE_RESERVED_PAGE_COLUMNS()}
           renderTitle={renderTitle()}
           currentPage={currentPage}
           rowsPerPage={rowsPerPage}

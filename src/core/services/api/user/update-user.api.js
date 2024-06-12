@@ -1,66 +1,8 @@
 import http from "../../interceptor";
 
-export const updateUserAPI = async (
-  id,
-  fName,
-  lName,
-  userName,
-  gmail,
-  phoneNumber,
-  active,
-  isDelete,
-  isTeacher,
-  isStudent,
-  recoveryEmail,
-  twoStepAuth,
-  userAbout,
-  currentPictureAddress,
-  linkdinProfile,
-  telegramLink,
-  receiveMessageEvent,
-  homeAdderess,
-  nationalCode,
-  gender,
-  latitude,
-  longitude,
-  insertDate,
-  birthDay,
-  roles,
-  courses,
-  coursesReseves,
-  userProfileId
-) => {
+export const updateUserAPI = async (user) => {
   try {
-    const response = await http.put("/User/UpdateUser", {
-      id,
-      fName,
-      lName,
-      userName,
-      gmail,
-      phoneNumber,
-      active,
-      isDelete,
-      isTeacher,
-      isStudent,
-      recoveryEmail,
-      twoStepAuth,
-      userAbout,
-      currentPictureAddress,
-      linkdinProfile,
-      telegramLink,
-      receiveMessageEvent,
-      homeAdderess,
-      nationalCode,
-      gender,
-      latitude,
-      longitude,
-      insertDate,
-      birthDay,
-      roles,
-      courses,
-      coursesReseves,
-      userProfileId,
-    });
+    const response = await http.put("/User/UpdateUser", user);
 
     return response;
   } catch (error) {

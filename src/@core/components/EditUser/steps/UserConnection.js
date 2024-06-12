@@ -1,255 +1,197 @@
 // ** React Imports
 import { Fragment, useEffect } from "react";
-import persian from "react-date-object/calendars/persian";
-import persian_fa from "react-date-object/locales/persian_fa";
-import DatePicker from "react-multi-date-picker";
-import Select from "react-select";
-import makeAnimated from "react-select/animated";
-
-// ** Core Imports
-import { dateFormatter } from "../../../../core/utils/date-formatter.utils";
-
-// ** Utils
-import { isObjEmpty } from "@utils";
-import { convertDateToPersian } from "../../../../core/utils/date-helper.utils";
-import { selectThemeColors } from "../../../../utility/Utils";
 
 // ** Third Party Components
+import { yupResolver } from "@hookform/resolvers/yup";
 import { ArrowLeft, ArrowRight } from "react-feather";
 import { Controller, useForm } from "react-hook-form";
+import Swal from "sweetalert2";
+import withReactContent from "sweetalert2-react-content";
 
 // ** Reactstrap Imports
 import { Button, Col, Form, FormFeedback, Input, Label, Row } from "reactstrap";
 
-const UserConnection = ({ stepper, user, setGlobalData }) => {
+// ** Core Imports
+import { userConnectionFormSchema } from "../../../../core/validations/edit-user/user-connection-form.validation";
+
+const MySwal = withReactContent(Swal);
+
+const UserConnection = ({
+  stepper,
+  user,
+  userConnection,
+  setUserConnection,
+  handleSubmitFn,
+}) => {
   // ** Hooks
   const {
     control,
     handleSubmit,
     formState: { errors },
     setValue,
-  } = useForm();
+  } = useForm({
+    resolver: yupResolver(userConnectionFormSchema),
+  });
 
-  const onSubmit = (e) => {
-    if (isObjEmpty(errors)) {
-      const {
-        fName,
-        lName,
-        nationalCode,
-        gender,
-        userAbout,
-        homeAdderess,
-        birthDay,
-      } = e;
-
-      const convertBirthday = dateFormatter.format(birthDay);
-
-      setGlobalData({
-        fName,
-        lName,
-        nationalCode,
-        gender,
-        userAbout,
-        homeAdderess,
-        convertBirthday,
-      });
-
-      stepper.next();
-    }
+  const handleSubmitAlert = async () => {
+    MySwal.fire({
+      title: "آیا از ویرایش کاربر مطمئن هستید؟",
+      text: "در صورتی که از ویرایش کاربر مورد نظر مطمئن هستید این کار را انجام دهید.",
+      icon: "warning",
+      customClass: {
+        confirmButton: "btn btn-primary",
+        cancelButton: "btn btn-danger ms-1",
+      },
+      buttonsStyling: false,
+      inputAttributes: {
+        autocapitalize: "off",
+      },
+      showCancelButton: true,
+      confirmButtonText: "ویرایش کاربر",
+      cancelButtonText: "انصراف",
+      showLoaderOnConfirm: true,
+      async preConfirm() {
+        handleSubmitFn();
+      },
+    });
   };
 
-  const convertBirthday = convertDateToPersian(user?.birthDay);
+  const onSubmit = (e) => {
+    const { phoneNumber, gmail, recoveryEmail, telegramLink, linkdinProfile } =
+      e;
+
+    setUserConnection({
+      phoneNumber,
+      gmail,
+      recoveryEmail,
+      telegramLink,
+      linkdinProfile,
+    });
+
+    if (userConnection !== null) {
+      handleSubmitAlert();
+    }
+  };
 
   useEffect(() => {
     if (user) {
-      setValue("fName", user.fName);
-      setValue("lName", user.lName);
-      setValue("userAbout", user.userAbout);
+      setValue("phoneNumber", user.phoneNumber);
       setValue("gmail", user.gmail);
-      setValue("nationalCode", user.nationalCode);
-      setValue("gender", user.gender);
-      setValue("homeAdderess", user.homeAdderess);
-      setValue("birthDay", convertBirthday);
+      setValue("recoveryEmail", user.recoveryEmail);
+      setValue("telegramLink", user.telegramLink);
+      setValue("linkdinProfile", user.linkdinProfile);
     }
   }, [user, setValue]);
-
-  const userGenderOptions = [
-    { label: "مذکر", value: "true" },
-    { label: "مونث", value: "false" },
-  ];
-
-  const userGender = user && {
-    label: `${user?.gender ? "مذکر" : "مونث"}`,
-    value: user?.gender,
-  };
-
-  const animatedComponents = makeAnimated();
 
   return (
     <Fragment>
       <div className="content-header">
-        <h5 className="mb-0">اطلاعات عمومی کاربر</h5>
+        <h5 className="mb-0">راه های ارتباطی کاربر</h5>
         <small className="text-muted">
-          در این بخش میتوانید اطلاعات عمومی کاربر را ویرایش کنید.
+          در این بخش میتوانید راه های ارتباطی کاربر را ویرایش کنید.
         </small>
       </div>
       <Form onSubmit={handleSubmit(onSubmit)}>
         <Row>
           <Col md="6" className="mb-1">
-            <Label className="form-label" for="fName">
-              نام کاربر
+            <Label className="form-label" for="phoneNumber">
+              شماره تلفن کاربر
             </Label>
             <Controller
-              id="fName"
-              name="fName"
+              id="phoneNumber"
+              name="phoneNumber"
               control={control}
               render={({ field }) => (
-                <Input id="fName" invalid={errors.fName && true} {...field} />
+                <Input
+                  id="phoneNumber"
+                  invalid={errors.phoneNumber && true}
+                  {...field}
+                />
               )}
             />
-            {errors.fName && (
-              <FormFeedback>{errors.fName.message}</FormFeedback>
+            {errors.phoneNumber && (
+              <FormFeedback>{errors.phoneNumber.message}</FormFeedback>
             )}
           </Col>
           <Col md="6" className="mb-1">
-            <Label className="form-label" for="lName">
-              نام خانوادگی کاربر
+            <Label className="form-label" for="gmail">
+              جیمیل کاربر
             </Label>
             <Controller
               control={control}
-              id="lName"
-              name="lName"
+              id="gmail"
+              name="gmail"
               render={({ field }) => (
-                <Input id="lName" invalid={errors.title && true} {...field} />
+                <Input id="gmail" invalid={errors.title && true} {...field} />
               )}
             />
-            {errors.lName && (
-              <FormFeedback>{errors.lName.message}</FormFeedback>
+            {errors.gmail && (
+              <FormFeedback>{errors.gmail.message}</FormFeedback>
             )}
           </Col>
         </Row>
         <Row>
           <Col md="6" className="mb-1">
-            <Label className="form-label" for="nationalCode">
-              کد ملی کاربر
+            <Label className="form-label" for="recoveryEmail">
+              ایمیل بازگردانی کاربر
             </Label>
             <Controller
               control={control}
-              id="nationalCode"
-              name="nationalCode"
+              id="recoveryEmail"
+              name="recoveryEmail"
               render={({ field }) => (
                 <Input
-                  id="nationalCode"
-                  placeholder="تعداد جلسات دوره"
+                  id="recoveryEmail"
                   invalid={errors.title && true}
                   {...field}
                 />
               )}
             />
-            {errors.nationalCode && (
-              <FormFeedback>{errors.nationalCode.message}</FormFeedback>
+            {errors.recoveryEmail && (
+              <FormFeedback>{errors.recoveryEmail.message}</FormFeedback>
             )}
           </Col>
           <Col md="6" className="mb-1">
-            <Label className="form-label" for="gender">
-              جنسیت کاربر
+            <Label className="form-label" for="telegramLink">
+              لینک تلگرام کاربر
             </Label>
-            {user && userGender && (
-              <Controller
-                id="gender"
-                name="gender"
-                control={control}
-                render={({ field }) => (
-                  <Select
-                    theme={selectThemeColors}
-                    className="react-select"
-                    classNamePrefix="select"
-                    name="gender"
-                    id="gender"
-                    options={userGenderOptions}
-                    defaultInputValue={userGender.label}
-                    isClearable
-                    components={animatedComponents}
-                    value={user.gender}
-                    {...field}
-                  />
-                )}
-              />
+            <Controller
+              control={control}
+              id="telegramLink"
+              name="telegramLink"
+              render={({ field }) => (
+                <Input
+                  id="telegramLink"
+                  invalid={errors.title && true}
+                  {...field}
+                />
+              )}
+            />
+            {errors.telegramLink && (
+              <FormFeedback>{errors.telegramLink.message}</FormFeedback>
             )}
           </Col>
         </Row>
         <Row>
-          <Col md="6">
-            <Label className="form-label" for="userAbout">
-              درباره کاربر
+          <Col md="6" className="mb-1">
+            <Label className="form-label" for="linkdinProfile">
+              پروفایل لینکدین کاربر
             </Label>
             <Controller
               control={control}
-              id="userAbout"
-              name="userAbout"
+              id="linkdinProfile"
+              name="linkdinProfile"
               render={({ field }) => (
                 <Input
-                  type="textarea"
-                  id="userAbout"
+                  id="linkdinProfile"
                   invalid={errors.title && true}
                   {...field}
                 />
               )}
             />
-            {errors.userAbout && (
-              <FormFeedback>{errors.userAbout.message}</FormFeedback>
+            {errors.linkdinProfile && (
+              <FormFeedback>{errors.linkdinProfile.message}</FormFeedback>
             )}
-          </Col>
-          <Col md="6">
-            <Label className="form-label" for="homeAdderess">
-              آدرس کاربر
-            </Label>
-            <Controller
-              control={control}
-              id="homeAdderess"
-              name="homeAdderess"
-              render={({ field }) => (
-                <Input
-                  type="textarea"
-                  id="homeAdderess"
-                  invalid={errors.title && true}
-                  {...field}
-                />
-              )}
-            />
-            {errors.homeAdderess && (
-              <FormFeedback>{errors.homeAdderess.message}</FormFeedback>
-            )}
-          </Col>
-        </Row>
-        <Row className="mb-1">
-          <Col md="6" className="mt-2">
-            <Label className="form-label d-block" for="birthDay">
-              تاریخ تولد کاربر
-            </Label>
-            <div className="coursesDatePickerWrapper">
-              {user && (
-                <Controller
-                  control={control}
-                  id="birthDay"
-                  name="birthDay"
-                  render={({ field }) => (
-                    <DatePicker
-                      name="birthDay"
-                      id="birthDay"
-                      value={convertBirthday}
-                      format="YYYY/MM/DD"
-                      calendar={persian}
-                      locale={persian_fa}
-                      calendarPosition="bottom-right"
-                      inputClass="form-control coursesDatePickerInput"
-                      {...field}
-                    />
-                  )}
-                />
-              )}
-            </div>
-            {errors.date && <FormFeedback>{errors.date.message}</FormFeedback>}
           </Col>
         </Row>
         <div className="d-flex justify-content-between">
@@ -266,7 +208,9 @@ const UserConnection = ({ stepper, user, setGlobalData }) => {
             <span className="align-middle d-sm-inline-block d-none">قبلی</span>
           </Button>
           <Button type="submit" color="primary" className="btn-next">
-            <span className="align-middle d-sm-inline-block d-none">بعدی</span>
+            <span className="align-middle d-sm-inline-block d-none">
+              ویرایش کاربر
+            </span>
             <ArrowRight
               size={14}
               className="align-middle ms-sm-25 ms-0"

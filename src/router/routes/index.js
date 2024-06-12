@@ -1,11 +1,12 @@
 // ** React Imports
 import { Fragment, lazy } from "react";
 import { Navigate } from "react-router-dom";
+
 // ** Layouts
 import BlankLayout from "@layouts/BlankLayout";
-import VerticalLayout from "@src/layouts/VerticalLayout";
-import HorizontalLayout from "@src/layouts/HorizontalLayout";
 import LayoutWrapper from "@src/@core/layouts/components/layout-wrapper";
+import HorizontalLayout from "@src/layouts/HorizontalLayout";
+import VerticalLayout from "@src/layouts/VerticalLayout";
 
 // ** Route Components
 import PublicRoute from "@components/routes/PublicRoute";
@@ -38,6 +39,7 @@ const CreateCourse = lazy(() => import("../../pages/CreateCourse"));
 const EditCourse = lazy(() => import("../../pages/EditCourse"));
 const CourseReserved = lazy(() => import("../../pages/CourseReserved"));
 const CourseDetails = lazy(() => import("../../pages/CourseDetails"));
+const News = lazy(() => import("../../pages/News"));
 const CreateNews = lazy(() => import("../../pages/CreateNews"));
 
 // ** Merge Routes
@@ -97,6 +99,10 @@ const Routes = [
   {
     path: "/courses/edit/:id",
     element: <EditCourse />,
+  },
+  {
+    path: "/news",
+    element: <News />,
   },
   {
     path: "/create-news",
@@ -182,4 +188,4 @@ const getRoutes = (layout) => {
   return AllRoutes;
 };
 
-export { DefaultRoute, TemplateTitle, Routes, getRoutes };
+export { DefaultRoute, getRoutes, Routes, TemplateTitle };

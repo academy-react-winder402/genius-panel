@@ -1,27 +1,37 @@
-// ** React Imports
 import { Fragment, useEffect } from "react";
 
-// ** Third Party Components
+import { isObjEmpty } from "@utils";
+
 import { useForm, Controller } from "react-hook-form";
 import { ArrowLeft, ArrowRight } from "react-feather";
 import { yupResolver } from "@hookform/resolvers/yup";
 
-// ** Reactstrap Imports
 import { Form, Label, Input, Row, Col, Button, FormFeedback } from "reactstrap";
 
-// ** Core Import
-import { createCourseStepOneFormSchema } from "../../../core/validations/create-course/create-course-step-one-form.validation";
+import { createBlogFormValidation } from "../../../core/validations/create-blog/creat-blog";
 
-// ** Custom Components
 import FileUploaderSingle from "../FileUploaderSingle";
-import { createBlogAPI } from "../../../core/services/api/blog/create-Blog.api";
 
 const defaultValues = {
   title: "",
   miniDescribe: "",
+  googleTitle: "",
+  googleDescribe: "",
 };
 
-const Global = ({ title, miniDescribe, data, files, setFiles }) => {
+const Global = ({
+  stepper,
+  title,
+  googleTitle,
+  setGoogleTitle,
+  googleDescribe,
+  setGoogleDescribe,
+  miniDescribe,
+  setTitle,
+  setMiniDescribe,
+  files,
+  setFiles,
+}) => {
   // ** Hooks
   const {
     control,
@@ -29,30 +39,29 @@ const Global = ({ title, miniDescribe, data, files, setFiles }) => {
     formState: { errors },
   } = useForm({
     defaultValues,
-    resolver: yupResolver(createCourseStepOneFormSchema),
+    resolver: yupResolver(createBlogFormValidation),
   });
 
-  const onSubmit = async (e) => {
-    const convertBlog = e.blogs.map((blog) => ({
-      data: blog.id,
-    }));
+  const onSubmit = (e) => {
+    if (isObjEmpty(errors)) {
+      const { title, miniDescribe, googleTitle, googleDescribe } = e;
 
-    try {
-      const addBlog = await createBlogAPI(data, convertBlog);
+      setTitle(title);
+      setMiniDescribe(miniDescribe);
+      setGoogleTitle(googleTitle);
+      setGoogleDescribe(googleDescribe);
 
-      if (addBlog.success) {
-        toast.success("اطلاعات اخبار با موفقیت اضافه شد !");
-        navigate("/add-blog");
-      } else toast.error("مکشلی در افزودن اخبار به وجود آمد !");
-    } catch (error) {
-      toast.error("مکشلی در افزودن اخبار به وجود آمد !");
+      if (title && miniDescribe) {
+        stepper.next();
+      }
     }
   };
 
   useEffect(() => {
-    if (title && miniDescribe) {
+    if (title && miniDescribe && googleTitle && googleDescribe) {
+      stepper.next();
     }
-  }, [title, miniDescribe]);
+  }, [title, miniDescribe, googleTitle, googleDescribe]);
 
   return (
     <Fragment>
@@ -75,7 +84,7 @@ const Global = ({ title, miniDescribe, data, files, setFiles }) => {
               render={({ field }) => (
                 <Input
                   id="title"
-                  placeholder="موضوع اخبار"
+                  placeholder="عنوان اخبار"
                   invalid={errors.title && true}
                   {...field}
                 />
@@ -83,6 +92,27 @@ const Global = ({ title, miniDescribe, data, files, setFiles }) => {
             />
             {errors.title && (
               <FormFeedback>{errors.title.message}</FormFeedback>
+            )}
+          </Col>
+          <Col md="6" className="mb-1">
+            <Label className="form-label" for="googleTitle">
+              عنوان گوگل
+            </Label>
+            <Controller
+              id="googleTitle"
+              name="googleTitle"
+              control={control}
+              render={({ field }) => (
+                <Input
+                  id="googleTitle"
+                  placeholder="عنوان گوگل اخبار"
+                  invalid={errors.googleTitle && true}
+                  {...field}
+                />
+              )}
+            />
+            {errors.googleTitle && (
+              <FormFeedback>{errors.googleTitle.message}</FormFeedback>
             )}
           </Col>
         </Row>
@@ -107,6 +137,28 @@ const Global = ({ title, miniDescribe, data, files, setFiles }) => {
             />
             {errors.miniDescribe && (
               <FormFeedback>{errors.miniDescribe.message}</FormFeedback>
+            )}
+          </Col>
+          <Col md="6" className="mb-1">
+            <Label className="form-label" for="googleDescribe">
+              توضیحات گوگل
+            </Label>
+            <Controller
+              id="googleDescribe"
+              name="googleDescribe"
+              control={control}
+              render={({ field }) => (
+                <Input
+                  type="textarea"
+                  id="googleDescribe"
+                  placeholder="توضیحات گوگل اخبار"
+                  invalid={errors.googleDescribe && true}
+                  {...field}
+                />
+              )}
+            />
+            {errors.googleDescribe && (
+              <FormFeedback>{errors.googleDescribe.message}</FormFeedback>
             )}
           </Col>
         </Row>

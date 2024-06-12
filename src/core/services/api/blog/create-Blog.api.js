@@ -2,7 +2,7 @@ import http from "../../interceptor";
 
 export const createBlogAPI = async (data) => {
   try {
-    const response = await http.post("/News/CreateNewsCategory", data, {
+    const response = await http.post("/News/CreateNews", data, {
       headers: {
         "Content-Type": "multipart/form-data",
       },

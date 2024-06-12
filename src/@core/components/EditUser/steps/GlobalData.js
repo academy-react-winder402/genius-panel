@@ -61,7 +61,7 @@ const GlobalData = ({ stepper, user, setGlobalData }) => {
         gender,
         userAbout,
         homeAdderess,
-        birthDay: formattedBirthday || birthDay,
+        birthDay: formattedBirthday || user.birthDay,
       });
 
       stepper.next();

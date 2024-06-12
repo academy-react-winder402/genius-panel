@@ -176,6 +176,10 @@ body.dark-layout
   margin-right: 10px;
 }
 
+.user-details-roles-wrapper {
+  gap: 7px;
+}
+
 /* Responsive */
 @media (max-width: 1000px) {
   .course-reserve-filters {

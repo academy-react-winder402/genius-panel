@@ -12,12 +12,12 @@ import DataTable from "react-data-table-component";
 import { ChevronDown } from "react-feather";
 
 // ** Columns
-import { COURSE_RESERVED_PAGE_COLUMNS } from "../../course-columns/course-reserved-page-columns";
+import { USER_FAVORITE_COURSES_COLUMNS } from "./user-favorite-courses-columns";
 
 // ** Styles
 import "@styles/react/libs/tables/react-dataTable-component.scss";
 
-const UserCourseReserve = ({ courseReserve }) => {
+const UserFavoriteCourses = ({ favoriteCourses }) => {
   // ** States
   const [currentPage, setCurrentPage] = useState(0);
   const [itemOffset, setItemOffset] = useState(0);
@@ -26,7 +26,7 @@ const UserCourseReserve = ({ courseReserve }) => {
   const [filteredData, setFilteredData] = useState([]);
 
   const endOffset = itemOffset + rowsPerPage;
-  const currentItems = courseReserve?.slice(itemOffset, endOffset);
+  const currentItems = favoriteCourses?.slice(itemOffset, endOffset);
 
   // ** Function to handle filter
   const handleFilter = (e) => {
@@ -35,12 +35,12 @@ const UserCourseReserve = ({ courseReserve }) => {
     setSearchValue(value);
 
     if (value.length) {
-      updatedData = courseReserve.filter((reserve) => {
-        const startsWith = reserve.courseName
+      updatedData = favoriteCourses.filter((reserve) => {
+        const startsWith = reserve.title
           .toLowerCase()
           .startsWith(value.toLowerCase());
 
-        const includes = reserve.courseName
+        const includes = reserve.title
           .toLowerCase()
           .includes(value.toLowerCase());
 
@@ -58,7 +58,7 @@ const UserCourseReserve = ({ courseReserve }) => {
   // ** Function to handle Pagination
   const handlePagination = (event) => {
     setCurrentPage(event.selected + 1);
-    const newOffset = (event.selected * rowsPerPage) % courseReserve?.length;
+    const newOffset = (event.selected * rowsPerPage) % favoriteCourses?.length;
 
     setItemOffset(newOffset);
   };
@@ -90,7 +90,7 @@ const UserCourseReserve = ({ courseReserve }) => {
         pageCount={
           searchValue.length
             ? Math.ceil(filteredData.length / rowsPerPage)
-            : Math.ceil(courseReserve.length / rowsPerPage) || 1
+            : Math.ceil(favoriteCourses.length / rowsPerPage) || 1
         }
         onPageChange={(page) => handlePagination(page)}
         containerClassName="pagination react-paginate separated-pagination pagination-sm justify-content-end pe-1 mt-1"
@@ -102,7 +102,7 @@ const UserCourseReserve = ({ courseReserve }) => {
     <Card>
       <CardHeader tag="h4">دوره های رزرو شده</CardHeader>
       <div className="react-dataTable user-view-account-projects">
-        {courseReserve?.length === 0 ? (
+        {favoriteCourses?.length === 0 ? (
           <span className="no-user-course-reserve-found-text">
             دوره رزرو شده ای برای این کاربر پیدا نشد
           </span>
@@ -151,7 +151,7 @@ const UserCourseReserve = ({ courseReserve }) => {
               noHeader
               pagination
               data={searchValue.length ? filteredData : currentItems}
-              columns={COURSE_RESERVED_PAGE_COLUMNS(true)}
+              columns={USER_FAVORITE_COURSES_COLUMNS}
               className="react-dataTable"
               sortIcon={<ChevronDown size={10} />}
               paginationComponent={CustomPagination}
@@ -164,4 +164,4 @@ const UserCourseReserve = ({ courseReserve }) => {
   );
 };
 
-export default UserCourseReserve;
+export default UserFavoriteCourses;

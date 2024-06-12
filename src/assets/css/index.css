@@ -180,6 +180,13 @@ body.dark-layout
   gap: 7px;
 }
 
+.no-user-course-reserve-found-text {
+  display: block;
+  margin-bottom: 20px !important;
+  text-align: center;
+  font-weight: 500;
+}
+
 /* Responsive */
 @media (max-width: 1000px) {
   .course-reserve-filters {

@@ -12,11 +12,11 @@ import { getCourseByIdAPI } from "../../../core/services/api/course/get-course-b
 // ** Image Imports
 import blankThumbnail from "../../../assets/images/common/blank-thumbnail.jpg";
 
-export const COURSE_RESERVED_PAGE_COLUMNS = [
+export const COURSE_RESERVED_PAGE_COLUMNS = (isUserDetailsPage) => [
   {
     name: "نام دوره",
     reorder: true,
-    minWidth: "200px",
+    width: isUserDetailsPage ? "110px" : "200px",
     cell: (row) => {
       // ** States
       const [course, setCourse] = useState();
@@ -63,7 +63,7 @@ export const COURSE_RESERVED_PAGE_COLUMNS = [
       );
     },
   },
-  {
+  !isUserDetailsPage && {
     name: "نام رزرو کننده",
     reorder: true,
     minWidth: "200px",

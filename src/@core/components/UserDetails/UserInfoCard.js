@@ -228,6 +228,14 @@ const UserInfoCard = ({ user }) => {
                   <span className="fw-bolder me-25">کد ملی:</span>
                   <span>{user?.nationalCode}</span>
                 </li>
+                <li className="mb-75">
+                  <span className="fw-bolder me-25">آدرس تلگرام:</span>
+                  <span>{user?.telegramLink}</span>
+                </li>
+                <li className="mb-75">
+                  <span className="fw-bolder me-25">پروفایل لینکدین:</span>
+                  <span>{user?.linkdinProfile}</span>
+                </li>
               </ul>
             ) : null}
           </div>

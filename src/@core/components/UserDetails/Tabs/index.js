@@ -5,7 +5,7 @@ import { Fragment } from "react";
 import { Nav, NavItem, NavLink, TabContent, TabPane } from "reactstrap";
 
 // ** Icons Imports
-import { Bell, Bookmark, Heart, Link } from "react-feather";
+import { Bookmark, Heart } from "react-feather";
 
 // ** User Components
 import UserCourseReserve from "./UserCourseReserves";
@@ -25,18 +25,6 @@ const UserTabs = ({ active, toggleTab, user }) => {
           <NavLink active={active === "2"} onClick={() => toggleTab("2")}>
             <Heart className="font-medium-3 me-50" />
             <span className="fw-bold">دوره های مورد علاقه</span>
-          </NavLink>
-        </NavItem>
-        <NavItem>
-          <NavLink active={active === "3"} onClick={() => toggleTab("3")}>
-            <Bell className="font-medium-3 me-50" />
-            <span className="fw-bold">Notifications</span>
-          </NavLink>
-        </NavItem>
-        <NavItem>
-          <NavLink active={active === "4"} onClick={() => toggleTab("4")}>
-            <Link className="font-medium-3 me-50" />
-            <span className="fw-bold">Connections</span>
           </NavLink>
         </NavItem>
       </Nav>

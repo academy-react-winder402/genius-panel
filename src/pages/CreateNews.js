@@ -1,18 +1,21 @@
+// ** React Imports
 import { useRef, useState } from "react";
 import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 
+// ** Custom Components
 import BreadCrumbs from "@components/breadcrumbs";
 import Wizard from "@components/wizard";
 
-import Global from "../../../@core/components/create-blog/GlobalData";
+// ** Steps
+import Describe from "../@core/components/CreateNews/steps/Describe";
+import GlobalData from "../@core/components/CreateNews/steps/GlobalData";
 
-import { createBlogAPI } from "../../../core/services/api/blog/create-Blog.api";
-import { onFormData } from "../../../core/utils/form-data-helper.utils";
+// ** Core Imports
+import { createBlogAPI } from "../core/services/api/blog/create-Blog.api";
+import { onFormData } from "../core/utils/form-data-helper.utils";
 
-import Describe from "../../../@core/components/create-blog/Describe";
-import CheckBox from "../../../@core/components/create-blog/CheckBox";
-
-const CreateBlogPage = () => {
+const CreateNewsPage = () => {
   // ** Ref
   const ref = useRef(null);
 
@@ -24,8 +27,9 @@ const CreateBlogPage = () => {
   const [describe, setDescribe] = useState();
   const [googleTitle, setGoogleTitle] = useState();
   const [googleDescribe, setGoogleDescribe] = useState();
-  const [data, setDataId] = useState();
-  const [createBlogOptions] = useState();
+
+  // ** Hooks
+  const navigate = useNavigate();
 
   const onSubmit = async () => {
     const Data = {
@@ -44,22 +48,22 @@ const CreateBlogPage = () => {
       const createBlog = await createBlogAPI(formData);
 
       if (createBlog.success) {
-        toast.success("اخبار با موفقیت ثبت شد !");
-        setDataId(createBlog.id);
-        stepper.next();
+        toast.success("خبر با موفقیت ثبت شد !");
+
+        navigate("/blogs");
       } else toast.error(createBlog.message);
     } catch (error) {
-      toast.error("مشکلی در ارسال اخبار به وجود آمد !");
+      toast.error("مشکلی در ارسال خیر به وجود آمد !");
     }
   };
 
   const steps = [
     {
       id: "global-data",
-      title: "اطلاعات کلی ",
-      subtitle: "اطلاعات کلی اخبار",
+      title: "اطلاعات عمومی",
+      subtitle: "اطلاعات عمومی خبر",
       content: (
-        <Global
+        <GlobalData
           stepper={stepper}
           title={title}
           miniDescribe={miniDescribe}
@@ -81,19 +85,7 @@ const CreateBlogPage = () => {
           stepper={stepper}
           setDescribe={setDescribe}
           describe={describe}
-        />
-      ),
-    },
-    {
-      id: "check-box",
-      title: "اطلاعات نهایی اخبار",
-      subtitle: "اطلاعات اخبار",
-      content: (
-        <CheckBox
-          stepper={stepper}
-          handleSubmitFn={onSubmit}
-          data={data}
-          createBlogOptions={createBlogOptions}
+          onSubmit={onSubmit}
         />
       ),
     },
@@ -101,12 +93,15 @@ const CreateBlogPage = () => {
   return (
     <div className="horizontal-wizard">
       <BreadCrumbs
-        title="افزودن اخبار"
-        data={[{ title: "مدیریت اخبار" }, { title: "افزودن اخبار" }]}
+        title="افزودن خبر"
+        data={[
+          { title: "مدیریت اخبار", links: "/news" },
+          { title: "افزودن خبر" },
+        ]}
       />
       <Wizard instance={(el) => setStepper(el)} ref={ref} steps={steps} />
     </div>
   );
 };
 
-export default CreateBlogPage;
+export default CreateNewsPage;

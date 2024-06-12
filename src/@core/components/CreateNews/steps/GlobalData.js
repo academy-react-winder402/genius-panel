@@ -1,16 +1,22 @@
+// ** React Imports
 import { Fragment, useEffect } from "react";
 
+// ** Utils
 import { isObjEmpty } from "@utils";
 
+// ** Third Party Components
 import { useForm, Controller } from "react-hook-form";
-import { ArrowLeft, ArrowRight } from "react-feather";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { ArrowLeft, ArrowRight } from "react-feather";
 
+// ** Reactstrap Imports
 import { Form, Label, Input, Row, Col, Button, FormFeedback } from "reactstrap";
 
-import { createBlogFormValidation } from "../../../core/validations/create-blog/creat-blog";
+// ** Core Imports
+import { createBlogFormValidation } from "../../../../core/validations/create-blog/creat-blog";
 
-import FileUploaderSingle from "../FileUploaderSingle";
+// ** Custom Components
+import FileUploaderSingle from "../../FileUploaderSingle";
 
 const defaultValues = {
   title: "",
@@ -19,7 +25,7 @@ const defaultValues = {
   googleDescribe: "",
 };
 
-const Global = ({
+const GlobalData = ({
   stepper,
   title,
   googleTitle,
@@ -43,6 +49,8 @@ const Global = ({
   });
 
   const onSubmit = (e) => {
+    console.log(e);
+    console.log(errors);
     if (isObjEmpty(errors)) {
       const { title, miniDescribe, googleTitle, googleDescribe } = e;
 
@@ -51,24 +59,16 @@ const Global = ({
       setGoogleTitle(googleTitle);
       setGoogleDescribe(googleDescribe);
 
-      if (title && miniDescribe) {
-        stepper.next();
-      }
-    }
-  };
-
-  useEffect(() => {
-    if (title && miniDescribe && googleTitle && googleDescribe) {
       stepper.next();
     }
-  }, [title, miniDescribe, googleTitle, googleDescribe]);
+  };
 
   return (
     <Fragment>
       <div className="content-header">
-        <h5 className="mb-0">اطلاعات کلی اخبار</h5>
+        <h5 className="mb-0">اطلاعات عمومی خبر</h5>
         <small className="text-muted">
-          در این بخش باید اطلاعات اخبار را وارد کنید.
+          در این بخش باید اطلاعات عمومی خبر را وارد کنید.
         </small>
       </div>
       <Form onSubmit={handleSubmit(onSubmit)}>
@@ -84,7 +84,7 @@ const Global = ({
               render={({ field }) => (
                 <Input
                   id="title"
-                  placeholder="عنوان اخبار"
+                  placeholder="عنوان خبر"
                   invalid={errors.title && true}
                   {...field}
                 />
@@ -105,7 +105,7 @@ const Global = ({
               render={({ field }) => (
                 <Input
                   id="googleTitle"
-                  placeholder="عنوان گوگل اخبار"
+                  placeholder="عنوان گوگل"
                   invalid={errors.googleTitle && true}
                   {...field}
                 />
@@ -151,7 +151,7 @@ const Global = ({
                 <Input
                   type="textarea"
                   id="googleDescribe"
-                  placeholder="توضیحات گوگل اخبار"
+                  placeholder="توضیحات گوگل"
                   invalid={errors.googleDescribe && true}
                   {...field}
                 />
@@ -163,7 +163,7 @@ const Global = ({
           </Col>
         </Row>
         <div className="mt-4">
-          <h5>آپلود عکس اخبار</h5>
+          <h5>آپلود عکس خبر</h5>
           <FileUploaderSingle files={files} setFiles={setFiles} />
         </div>
         <div className="d-flex justify-content-between">
@@ -171,6 +171,7 @@ const Global = ({
             <ArrowLeft
               size={14}
               className="align-middle me-sm-25 me-0"
+              disabled
             ></ArrowLeft>
             <span className="align-middle d-sm-inline-block d-none">قبلی</span>
           </Button>
@@ -187,4 +188,4 @@ const Global = ({
   );
 };
 
-export default Global;
+export default GlobalData;

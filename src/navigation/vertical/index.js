@@ -1,9 +1,9 @@
 import { Circle, Code, Home, Users } from "react-feather";
 
-import AddBlog from "../../pages/Blog/Add-blog";
 import CourseReservedPage from "../../pages/CourseReserved";
 import CoursesPage from "../../pages/Courses";
 import CreateCoursePage from "../../pages/CreateCourse";
+import CreateNewsPage from "../../pages/CreateNews";
 import CreateUserPage from "../../pages/CreateUser";
 import UsersPage from "../../pages/Users";
 
@@ -65,14 +65,14 @@ export default [
     ],
   },
   {
-    id: "blog",
+    id: "news",
     title: "مدیریت اخبار",
     icon: <Code size={20} />,
     children: [
       {
-        title: "افزودن اخبار",
-        navLink: "/add-blog",
-        element: <AddBlog />,
+        title: "افزودن خبر",
+        navLink: "/create-news",
+        element: <CreateNewsPage />,
         icon: <Circle />,
       },
     ],

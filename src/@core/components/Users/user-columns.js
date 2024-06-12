@@ -1,36 +1,40 @@
 // ** React Imports
 import { useState } from "react";
+import toast from "react-hot-toast";
 import { Link, useNavigate } from "react-router-dom";
 
 // ** Custom Components
 import Avatar from "@components/avatar";
+import UserAddRole from "./UserAddRole";
 
 // ** Icons Imports
 import {
-  Slack,
-  User,
-  Settings,
+  Archive,
   Database,
   Edit2,
-  MoreVertical,
   FileText,
+  MoreVertical,
+  Settings,
+  Slack,
   Trash2,
-  Archive,
+  User,
 } from "react-feather";
 
 // ** Reactstrap Imports
 import {
   Badge,
-  UncontrolledDropdown,
-  DropdownToggle,
-  DropdownMenu,
-  DropdownItem,
   Button,
+  DropdownItem,
+  DropdownMenu,
+  DropdownToggle,
+  UncontrolledDropdown,
 } from "reactstrap";
-import { convertDateToPersian } from "../../../core/utils/date-helper.utils";
-import UserAddRole from "./UserAddRole";
-import toast from "react-hot-toast";
+
+// ** Core Imports
 import { deleteUserAPI } from "../../../core/services/api/user/delete-user.api";
+
+// ** Utils
+import { convertDateToPersian } from "../../../core/utils/date-helper.utils";
 
 // ** Renders Client Columns
 const renderClient = (row) => {

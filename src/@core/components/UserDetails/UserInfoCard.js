@@ -1,6 +1,7 @@
 // ** React Imports
 import { Fragment } from "react";
-import { Link, useParams } from "react-router-dom";
+import toast from "react-hot-toast";
+import { Link, useNavigate, useParams } from "react-router-dom";
 
 // ** Reactstrap Imports
 import { Badge, Button, Card, CardBody } from "reactstrap";
@@ -13,7 +14,8 @@ import withReactContent from "sweetalert2-react-content";
 // ** Custom Components
 import Avatar from "@components/avatar";
 
-// ** Utils
+// ** Core Imports
+import { deleteUserAPI } from "../../../core/services/api/user/delete-user.api";
 
 // ** Styles
 import "@styles/react/libs/react-select/_react-select.scss";
@@ -28,6 +30,7 @@ const MySwal = withReactContent(Swal);
 const UserInfoCard = ({ user }) => {
   // ** Hooks
   const { id } = useParams();
+  const navigate = useNavigate();
 
   // ** render user img
   const renderUserImg = () => {
@@ -64,38 +67,37 @@ const UserInfoCard = ({ user }) => {
   };
 
   const handleSuspendedClick = async () => {
-    return MySwal.fire({
+    MySwal.fire({
       title: "آیا از حذف کاربر مورد نظر مطمئن هستید؟",
       text: "در صورت مطمئن بودن از حذف کاربر مورد نظر این کار را انجام دهید.",
       icon: "warning",
+      customClass: {
+        confirmButton: "btn btn-primary",
+        cancelButton: "btn btn-danger ms-1",
+      },
+      buttonsStyling: false,
+      inputAttributes: {
+        autocapitalize: "off",
+      },
       showCancelButton: true,
       confirmButtonText: "بله، کاربر را حذف میکنم!",
       cancelButtonText: "انصراف",
-      customClass: {
-        confirmButton: "btn btn-primary",
-        cancelButton: "btn btn-outline-danger ms-1",
+      showLoaderOnConfirm: true,
+      async preConfirm() {
+        try {
+          const deleteUser = await deleteUserAPI(id);
+
+          if (deleteUser.success) {
+            toast.success("کاربر با موفقیت حذف شد !");
+
+            navigate("/users");
+          } else {
+            toast.error("مشکلی در حذف کاربر به وجود آمد !");
+          }
+        } catch (error) {
+          toast.error("مشکلی در حذف کاربر به وجود آمد !");
+        }
       },
-      buttonsStyling: false,
-    }).then(function (result) {
-      if (result.value) {
-        MySwal.fire({
-          icon: "success",
-          title: "Suspended!",
-          text: "User has been suspended.",
-          customClass: {
-            confirmButton: "btn btn-success",
-          },
-        });
-      } else if (result.dismiss === MySwal.DismissReason.cancel) {
-        MySwal.fire({
-          title: "Cancelled",
-          text: "Cancelled Suspension :)",
-          icon: "error",
-          customClass: {
-            confirmButton: "btn btn-success",
-          },
-        });
-      }
     });
   };
 

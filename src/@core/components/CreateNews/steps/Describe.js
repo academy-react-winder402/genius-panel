@@ -16,12 +16,12 @@ import toast from "react-hot-toast";
 import { Button } from "reactstrap";
 
 // ** Utils
-import Headline from "../../../core/utils/headline-class-helper.utils";
+import Headline from "../../../../core/utils/headline-class-helper.utils";
 
 // ** Icon Imports
 import { ArrowLeft, ArrowRight } from "react-feather";
 
-const Describe = ({ stepper, describe, setDescribe }) => {
+const Describe = ({ stepper, describe, setDescribe, onSubmit }) => {
   // ** Hooks
   const editorJsInstance = useRef(null);
   const editorRef = useRef(null);
@@ -30,7 +30,7 @@ const Describe = ({ stepper, describe, setDescribe }) => {
     if (editorJsInstance.current) {
       const savedData = await editorJsInstance.current.save();
 
-      setDescribe(savedData);
+      setDescribe(JSON.stringify(savedData));
     } else toast.error("لطفا توضیحات را وارد کنید !");
   };
 
@@ -115,7 +115,7 @@ const Describe = ({ stepper, describe, setDescribe }) => {
   }, []);
 
   useEffect(() => {
-    if (describe) stepper.next();
+    if (describe) onSubmit();
   }, [describe]);
 
   return (
@@ -141,7 +141,9 @@ const Describe = ({ stepper, describe, setDescribe }) => {
           <span className="align-middle d-sm-inline-block d-none">قبلی</span>
         </Button>
         <Button color="primary" className="btn-next" onClick={handleSaveData}>
-          <span className="align-middle d-sm-inline-block d-none">بعدی</span>
+          <span className="align-middle d-sm-inline-block d-none">
+            ایحاد خبر
+          </span>
           <ArrowRight
             size={14}
             className="align-middle ms-sm-25 ms-0"

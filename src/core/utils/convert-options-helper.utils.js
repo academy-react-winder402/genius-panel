@@ -7,7 +7,8 @@ export const convertOptions = (array) => {
       item.classRoomName ||
       item.fullName ||
       item.termName ||
-      item.techName,
+      item.techName ||
+      item.categoryName,
     value: item.id || item.teacherId,
   }));
 

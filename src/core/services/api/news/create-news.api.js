@@ -1,6 +1,6 @@
 import http from "../../interceptor";
 
-export const createBlogAPI = async (data) => {
+export const createNewsAPI = async (data) => {
   try {
     const response = await http.post("/News/CreateNews", data, {
       headers: {

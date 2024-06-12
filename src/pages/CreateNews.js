@@ -12,7 +12,7 @@ import Describe from "../@core/components/CreateNews/steps/Describe";
 import GlobalData from "../@core/components/CreateNews/steps/GlobalData";
 
 // ** Core Imports
-import { createNewsAPI } from "../core/services/api/blog/create-news.api";
+import { createNewsAPI } from "../core/services/api/news/create-news.api";
 import { onFormData } from "../core/utils/form-data-helper.utils";
 
 const CreateNewsPage = () => {
@@ -27,6 +27,8 @@ const CreateNewsPage = () => {
   const [describe, setDescribe] = useState();
   const [googleTitle, setGoogleTitle] = useState();
   const [googleDescribe, setGoogleDescribe] = useState();
+  const [newsCategoryId, setNewsCategoryId] = useState();
+  const [keyword, setKeyword] = useState();
 
   // ** Hooks
   const navigate = useNavigate();
@@ -41,6 +43,8 @@ const CreateNewsPage = () => {
       googleDescribe,
       miniDescribe,
       describe,
+      keyword,
+      newsCategoryId,
     };
 
     try {
@@ -65,12 +69,12 @@ const CreateNewsPage = () => {
       content: (
         <GlobalData
           stepper={stepper}
-          title={title}
-          miniDescribe={miniDescribe}
           setTitle={setTitle}
           setGoogleTitle={setGoogleTitle}
           setGoogleDescribe={setGoogleDescribe}
           setMiniDescribe={setMiniDescribe}
+          setKeyword={setKeyword}
+          setNewsCategoryId={setNewsCategoryId}
           files={files}
           setFiles={setFiles}
         />

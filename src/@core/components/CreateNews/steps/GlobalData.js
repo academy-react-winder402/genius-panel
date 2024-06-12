@@ -1,5 +1,8 @@
 // ** React Imports
-import { Fragment, useEffect } from "react";
+import { Fragment, useEffect, useState } from "react";
+import Select from "react-select";
+import makeAnimated from "react-select/animated";
+import toast from "react-hot-toast";
 
 // ** Utils
 import { isObjEmpty } from "@utils";
@@ -13,31 +16,38 @@ import { ArrowLeft, ArrowRight } from "react-feather";
 import { Form, Label, Input, Row, Col, Button, FormFeedback } from "reactstrap";
 
 // ** Core Imports
-import { createBlogFormValidation } from "../../../../core/validations/create-blog/creat-blog";
+import { createNewsFormSchema } from "../../../../core/validations/create-news/create-news-form.validation";
+import { getNewsCategoryListsAPI } from "../../../../core/services/api/news/get-news-category-lists";
 
 // ** Custom Components
 import FileUploaderSingle from "../../FileUploaderSingle";
+
+// ** Utils
+import { selectThemeColors } from "../../../../utility/Utils";
+import { convertOptions } from "../../../../core/utils/convert-options-helper.utils";
 
 const defaultValues = {
   title: "",
   miniDescribe: "",
   googleTitle: "",
   googleDescribe: "",
+  newsCategoryId: 0,
 };
 
 const GlobalData = ({
   stepper,
-  title,
-  googleTitle,
   setGoogleTitle,
-  googleDescribe,
   setGoogleDescribe,
-  miniDescribe,
   setTitle,
   setMiniDescribe,
+  setKeyword,
+  setNewsCategoryId,
   files,
   setFiles,
 }) => {
+  // ** States
+  const [newsCategoryLists, setNewsCategoryLists] = useState();
+
   // ** Hooks
   const {
     control,
@@ -45,23 +55,48 @@ const GlobalData = ({
     formState: { errors },
   } = useForm({
     defaultValues,
-    resolver: yupResolver(createBlogFormValidation),
+    resolver: yupResolver(createNewsFormSchema),
   });
 
   const onSubmit = (e) => {
-    console.log(e);
-    console.log(errors);
     if (isObjEmpty(errors)) {
-      const { title, miniDescribe, googleTitle, googleDescribe } = e;
+      const {
+        title,
+        miniDescribe,
+        googleTitle,
+        googleDescribe,
+        keyword,
+        newsCategoryId,
+      } = e;
 
       setTitle(title);
       setMiniDescribe(miniDescribe);
       setGoogleTitle(googleTitle);
       setGoogleDescribe(googleDescribe);
+      setKeyword(keyword);
+      setNewsCategoryId(+newsCategoryId.value);
 
       stepper.next();
     }
   };
+
+  const animatedComponents = makeAnimated();
+
+  useEffect(() => {
+    const fetchNewsCategoryLists = async () => {
+      try {
+        const getNewsCategoryLists = await getNewsCategoryListsAPI();
+
+        const convertNewsCategoryLists = convertOptions(getNewsCategoryLists);
+
+        setNewsCategoryLists(convertNewsCategoryLists);
+      } catch (error) {
+        toast.error("مشکلی در دریافت لیست بندی های اخبار  به وجود آمد !");
+      }
+    };
+
+    fetchNewsCategoryLists();
+  }, []);
 
   return (
     <Fragment>
@@ -115,6 +150,55 @@ const GlobalData = ({
               <FormFeedback>{errors.googleTitle.message}</FormFeedback>
             )}
           </Col>
+        </Row>
+        <Row>
+          <Col md="6" className="mb-1">
+            <Label className="form-label" for="keyword">
+              کلمات اصلی
+            </Label>
+            <Controller
+              id="keyword"
+              name="keyword"
+              control={control}
+              render={({ field }) => (
+                <Input
+                  id="keyword"
+                  placeholder="عنوان خبر"
+                  invalid={errors.keyword && true}
+                  {...field}
+                />
+              )}
+            />
+            {errors.keyword && (
+              <FormFeedback>{errors.keyword.message}</FormFeedback>
+            )}
+          </Col>
+          <Col md="6" className="mb-1">
+            <Label className="form-label" for="newsCategoryId">
+              انتخاب دسته بندی
+            </Label>
+            <Controller
+              id="newsCategoryId"
+              name="newsCategoryId"
+              control={control}
+              render={({ field }) => (
+                <Select
+                  theme={selectThemeColors}
+                  className="react-select"
+                  classNamePrefix="select"
+                  name="newsCategoryId"
+                  options={newsCategoryLists}
+                  isClearable
+                  isSearchable
+                  components={animatedComponents}
+                  {...field}
+                />
+              )}
+            />
+          </Col>
+          {errors.newsCategoryId && (
+            <FormFeedback>{errors.newsCategoryId.message}</FormFeedback>
+          )}
         </Row>
         <Row className="mb-1">
           <Col md="6">

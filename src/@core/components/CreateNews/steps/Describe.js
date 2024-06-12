@@ -30,7 +30,7 @@ const Describe = ({ stepper, describe, setDescribe, onSubmit }) => {
     if (editorJsInstance.current) {
       const savedData = await editorJsInstance.current.save();
 
-      setDescribe(savedData);
+      setDescribe(JSON.stringify(savedData));
     } else toast.error("لطفا توضیحات را وارد کنید !");
   };
 

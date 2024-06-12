@@ -17,6 +17,9 @@ import Avatar from "@components/avatar";
 // ** Core Imports
 import { deleteUserAPI } from "../../../core/services/api/user/delete-user.api";
 
+// ** Utils
+import { convertDateToPersian } from "../../../core/utils/date-helper.utils";
+
 // ** Styles
 import "@styles/react/libs/react-select/_react-select.scss";
 
@@ -113,6 +116,8 @@ const UserInfoCard = ({ user }) => {
     }
   };
 
+  const convertBirthday = convertDateToPersian(user?.birthDay);
+
   return (
     <Fragment>
       <Card>
@@ -173,6 +178,10 @@ const UserInfoCard = ({ user }) => {
                   }`}</span>
                 </li>
                 <li className="mb-75">
+                  <span className="fw-bolder me-25">نام کاربری:</span>
+                  <span>{user?.userName}</span>
+                </li>
+                <li className="mb-75">
                   <span className="fw-bolder me-25">ایمیل:</span>
                   <span>{user?.gmail}</span>
                 </li>
@@ -206,6 +215,10 @@ const UserInfoCard = ({ user }) => {
                 <li className="mb-75">
                   <span className="fw-bolder me-25">شماره تلفن:</span>
                   <span>{user?.phoneNumber}</span>
+                </li>
+                <li className="mb-75">
+                  <span className="fw-bolder me-25">تاریخ تولد:</span>
+                  <span>{convertBirthday}</span>
                 </li>
                 <li className="mb-75">
                   <span className="fw-bolder me-25">تایید دو مرحله ای:</span>

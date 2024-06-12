@@ -12,7 +12,7 @@ import Describe from "../@core/components/CreateNews/steps/Describe";
 import GlobalData from "../@core/components/CreateNews/steps/GlobalData";
 
 // ** Core Imports
-import { createBlogAPI } from "../core/services/api/blog/create-Blog.api";
+import { createNewsAPI } from "../core/services/api/blog/create-news.api";
 import { onFormData } from "../core/utils/form-data-helper.utils";
 
 const CreateNewsPage = () => {
@@ -45,7 +45,7 @@ const CreateNewsPage = () => {
 
     try {
       const formData = onFormData(Data);
-      const createBlog = await createBlogAPI(formData);
+      const createBlog = await createNewsAPI(formData);
 
       if (createBlog.success) {
         toast.success("خبر با موفقیت ثبت شد !");

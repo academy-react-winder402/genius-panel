@@ -199,6 +199,22 @@ body.dark-layout
   stroke: rgba(40, 199, 111) !important;
 }
 
+.news-details-picture {
+  height: 450px !important;
+}
+
+.news-details-paragraph {
+  line-height: 1.6rem;
+}
+
+.news-details-bold-text {
+  font-weight: 500;
+}
+
+.news-details-bold-text span {
+  font-weight: normal;
+}
+
 /* Responsive */
 @media (max-width: 1000px) {
   .course-reserve-filters {

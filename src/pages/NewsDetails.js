@@ -1,17 +1,15 @@
 // ** React Imports
 import { Fragment, useEffect, useState } from "react";
 import toast from "react-hot-toast";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 
 // ** Third Party Components
 import {
-  Bookmark,
   Facebook,
   GitHub,
   Gitlab,
   Linkedin,
   Mail,
-  MessageSquare,
   Share2,
   Twitter,
 } from "react-feather";
@@ -20,17 +18,16 @@ import {
 import { getNewsWithIdAPI } from "../core/services/api/news/get-news-with-id.api";
 import { convertDateToPersian } from "../core/utils/date-helper.utils";
 
-// ** Utils
-import { kFormatter } from "@utils";
-
 // ** Custom Components
 import Avatar from "@components/avatar";
 import Breadcrumbs from "@components/breadcrumbs";
+import CommentsTable from "../@core/components/NewsDetails/CommentsTable";
 import NewsSidebar from "../@core/components/NewsDetails/NewsSidebar";
 
 // ** Reactstrap Imports
 import {
   Badge,
+  Button,
   Card,
   CardBody,
   CardHeader,
@@ -49,7 +46,6 @@ import "@styles/base/pages/page-blog.scss";
 
 // ** Images
 import blankThumbnail from "../assets/images/common/blank-thumbnail.jpg";
-import CommentsTable from "../@core/components/NewsDetails/CommentsTable";
 
 const NewsDetails = () => {
   // ** States
@@ -192,38 +188,13 @@ const NewsDetails = () => {
                       <div className="d-flex align-items-center justify-content-between">
                         <div className="d-flex align-items-center">
                           <div className="d-flex align-items-center me-1">
-                            <a
-                              className="me-50"
-                              href="/"
-                              onClick={(e) => e.preventDefault()}
+                            <Button
+                              tag={Link}
+                              to={`/news/edit/${id}`}
+                              color="primary"
                             >
-                              <MessageSquare
-                                size={21}
-                                className="text-body align-middle"
-                              />
-                            </a>
-                            <a href="/" onClick={(e) => e.preventDefault()}>
-                              <div className="text-body align-middle">
-                                {kFormatter(news?.detailsNewsDto.comments)}
-                              </div>
-                            </a>
-                          </div>
-                          <div className="d-flex align-items-cente">
-                            <a
-                              className="me-50"
-                              href="/"
-                              onClick={(e) => e.preventDefault()}
-                            >
-                              <Bookmark
-                                size={21}
-                                className="text-body align-middle"
-                              />
-                            </a>
-                            <a href="/" onClick={(e) => e.preventDefault()}>
-                              <div className="text-body align-middle">
-                                {news?.detailsNewsDto.bookmarked}
-                              </div>
-                            </a>
+                              ویرایش خبر
+                            </Button>
                           </div>
                         </div>
                         <UncontrolledDropdown className="dropdown-icon-wrapper">
@@ -272,7 +243,7 @@ const NewsDetails = () => {
             ) : null}
           </div>
         </div>
-        {/* <NewsSidebar /> */}
+        <NewsSidebar />
       </div>
     </Fragment>
   );

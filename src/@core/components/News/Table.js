@@ -3,7 +3,7 @@ import { Fragment } from "react";
 import { Link } from "react-router-dom";
 
 // ** Table Columns
-import { COURSE_COLUMNS } from "../course-columns";
+import { NEWS_COLUMNS } from "./news-columns";
 
 // ** Third Party Components
 import DataTable from "react-data-table-component";
@@ -29,11 +29,11 @@ import "@styles/react/libs/tables/react-dataTable-component.scss";
 
 // ** Table Header
 const CustomHeader = ({
-  handlePerPage,
-  rowsOfPage,
-  handleFilter,
-  query,
   news,
+  handlePerPage,
+  rowsPerPage,
+  handleFilter,
+  searchText,
 }) => {
   // ** Converts table to CSV
   function convertArrayOfObjectsToCSV(array) {
@@ -47,7 +47,7 @@ const CustomHeader = ({
     result += keys.join(columnDelimiter);
     result += lineDelimiter;
 
-    array.news.forEach((item) => {
+    array.forEach((item) => {
       let ctr = 0;
       keys.forEach((key) => {
         if (ctr > 0) result += columnDelimiter;
@@ -68,7 +68,7 @@ const CustomHeader = ({
     let csv = convertArrayOfObjectsToCSV(array);
     if (csv === null) return;
 
-    const filename = "export.csv";
+    const filename = "genius-news.csv";
 
     if (!csv.match(/^data:text\/csv/i)) {
       csv = `data:text/csv;charset=utf-8,${csv}`;
@@ -78,25 +78,24 @@ const CustomHeader = ({
     link.setAttribute("download", filename);
     link.click();
   }
-
   return (
     <div className="invoice-list-table-header w-100 me-1 ms-50 mt-2 mb-75">
       <Row>
         <Col xl="6" className="d-flex align-items-center p-0">
           <div className="d-flex align-items-center w-100">
-            <label htmlFor="rows-per-page">تعداد تمایش در صفحه</label>
+            <label htmlFor="rows-per-page">تعداد نمایش در صفحه</label>
             <Input
               className="mx-50"
               type="select"
               id="rows-per-page"
-              value={rowsOfPage}
+              value={rowsPerPage}
               onChange={handlePerPage}
               style={{ width: "5rem" }}
             >
               <option value="10">10</option>
               <option value="25">25</option>
               <option value="50">50</option>
-              <option value="100">100</option>
+              <option value="50">100</option>
             </Input>
           </div>
         </Col>
@@ -112,7 +111,7 @@ const CustomHeader = ({
               id="search-invoice"
               className="ms-50 w-100"
               type="text"
-              value={query}
+              value={searchText}
               onChange={(e) => handleFilter(e.target.value)}
             />
           </div>
@@ -126,7 +125,7 @@ const CustomHeader = ({
               <DropdownMenu>
                 <DropdownItem
                   className="w-100"
-                  onClick={() => downloadCSV(news)}
+                  onClick={() => downloadCSV(news.news)}
                 >
                   <FileText className="font-small-4 me-50" />
                   <span className="align-middle">CSV</span>
@@ -137,7 +136,7 @@ const CustomHeader = ({
             <Button
               tag={Link}
               to="/create-news"
-              className="add-new-news"
+              className="add-new-user"
               color="primary"
             >
               افزودن خبر
@@ -151,14 +150,14 @@ const CustomHeader = ({
 
 const NewsListTable = ({
   news,
-  rowsOfPage,
+  rowsPerPage,
   currentPage,
-  query,
-  setRowsOfPage,
+  searchText,
+  setSortColumn,
+  setRowsPerPage,
   setCurrentPage,
-  setQuery,
-  setSortingCol,
-  setSortType,
+  setSort,
+  setSearchText,
 }) => {
   // ** Function in get data on page change
   const handlePagination = (page) => {
@@ -168,19 +167,19 @@ const NewsListTable = ({
   // ** Function in get data on rows per page
   const handlePerPage = (e) => {
     const value = parseInt(e.currentTarget.value);
-    setCurrentPage(1);
-    setRowsOfPage(value);
+
+    setRowsPerPage(value);
   };
 
   // ** Function in get data on search query change
   const handleFilter = (val) => {
     setCurrentPage(1);
-    setQuery(val);
+    setSearchText(val);
   };
 
   // ** Custom Pagination
   const CustomPagination = () => {
-    const count = Number(Math.ceil(news?.totalCount / rowsOfPage));
+    const count = Number(Math.ceil(news?.totalCount / rowsPerPage));
 
     return (
       <ReactPaginate
@@ -205,26 +204,18 @@ const NewsListTable = ({
 
   // ** Table data to render
   const dataToRender = () => {
-    const filters = {
-      query,
-    };
-
-    const isFiltered = Object.keys(filters).some(function (k) {
-      return filters[k]?.length > 0;
-    });
-
     if (news?.totalCount > 0) {
-      return news;
-    } else if (news?.totalCount === 0 && isFiltered) {
+      return news.news;
+    } else if (news?.totalCount === 0) {
       return [];
     } else {
-      return news?.news.slice(0, rowsOfPage);
+      return news?.news.slice(0, rowsPerPage);
     }
   };
 
   const handleSort = (column, sortDirection) => {
-    setSortType(column.sortField);
-    setSortingCol(sortDirection);
+    setSort(sortDirection);
+    setSortColumn(column.sortField);
   };
 
   return (
@@ -238,7 +229,7 @@ const NewsListTable = ({
             pagination
             responsive
             paginationServer
-            columns={COURSE_COLUMNS}
+            columns={NEWS_COLUMNS}
             onSort={handleSort}
             sortIcon={<ChevronDown />}
             className="react-dataTable"
@@ -246,14 +237,13 @@ const NewsListTable = ({
             data={dataToRender()}
             subHeaderComponent={
               <CustomHeader
-                query={query}
-                rowsOfPage={rowsOfPage}
+                news={news}
+                searchText={searchText}
+                rowsPerPage={rowsPerPage}
                 handleFilter={handleFilter}
                 handlePerPage={handlePerPage}
-                news={news}
               />
             }
-            noDataComponent={<span className="my-2">کاربری پیدا نشد !</span>}
           />
         </div>
       </Card>

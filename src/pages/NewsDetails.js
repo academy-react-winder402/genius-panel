@@ -10,6 +10,7 @@ import {
   GitHub,
   Gitlab,
   Linkedin,
+  Mail,
   MessageSquare,
   Share2,
   Twitter,
@@ -32,6 +33,7 @@ import {
   Badge,
   Card,
   CardBody,
+  CardHeader,
   CardImg,
   CardTitle,
   Col,
@@ -47,6 +49,7 @@ import "@styles/base/pages/page-blog.scss";
 
 // ** Images
 import blankThumbnail from "../assets/images/common/blank-thumbnail.jpg";
+import CommentsTable from "../@core/components/NewsDetails/CommentsTable";
 
 const NewsDetails = () => {
   // ** States
@@ -61,10 +64,15 @@ const NewsDetails = () => {
       try {
         const getNews = await getNewsWithIdAPI(id);
 
-        const convertDescribe = JSON.parse(getNews?.detailsNewsDto.describe);
+        try {
+          const convertDescribe = JSON.parse(getNews?.detailsNewsDto.describe);
+
+          setDescribe(convertDescribe);
+        } catch (error) {
+          setDescribe(getNews?.detailsNewsDto.describe);
+        }
 
         setNews(getNews);
-        setDescribe(convertDescribe);
       } catch (error) {
         toast.error("مشکلی در دریافت خبر به وجود آمد !");
       }
@@ -72,38 +80,6 @@ const NewsDetails = () => {
 
     fetchNews();
   }, []);
-
-  // const renderComments = () => {
-  //   return news.comments.map((comment) => {
-  //     return (
-  //       <Card className="mb-3" key={comment.userFullName}>
-  //         <CardBody>
-  //           <div className="d-flex">
-  //             <div>
-  //               <Avatar
-  //                 className="me-75"
-  //                 img={comment.avatar}
-  //                 imgHeight="38"
-  //                 imgWidth="38"
-  //               />
-  //             </div>
-  //             <div>
-  //               <h6 className="fw-bolder mb-25">{comment.userFullName}</h6>
-  //               <CardText>{comment.commentedAt}</CardText>
-  //               <CardText>{comment.commentText}</CardText>
-  //               <a href="/" onClick={(e) => e.preventDefault()}>
-  //                 <div className="d-inline-flex align-items-center">
-  //                   <CornerUpLeft size={18} className="me-50" />
-  //                   <span>Reply</span>
-  //                 </div>
-  //               </a>
-  //             </div>
-  //           </div>
-  //         </CardBody>
-  //       </Card>
-  //     );
-  //   });
-  // };
 
   const convertUpdateDate = convertDateToPersian(
     news?.detailsNewsDto.updateDate
@@ -145,7 +121,10 @@ const NewsDetails = () => {
                 <Col sm="12">
                   <Card className="mb-3">
                     <CardImg
-                      src={news?.detailsNewsDto.currentImageAddress}
+                      src={
+                        news?.detailsNewsDto.currentImageAddress ||
+                        blankThumbnail
+                      }
                       className="img-fluid news-details-picture"
                       top
                     />
@@ -168,7 +147,13 @@ const NewsDetails = () => {
                           </small>
                         </div>
                       </div>
-                      <div className="mt-3">{loadContent()}</div>
+                      <div className="my-2">
+                        {typeof describe == "object" ? (
+                          loadContent()
+                        ) : (
+                          <p className="news-details-paragraph">{describe}</p>
+                        )}
+                      </div>
                       <div className="d-flex align-items-center">
                         <div>
                           <Avatar
@@ -271,14 +256,23 @@ const NewsDetails = () => {
                   </Card>
                 </Col>
                 <Col sm="12" id="blogComment">
-                  <h6 className="section-label">نظرات</h6>
-                  {/* {renderComments()} */}
+                  <Card>
+                    <CardHeader className="d-flex justify-content-start align-items-center gap-1">
+                      <Mail />
+                      <h3 className="news-details-user-comment-section-text">
+                        نظرات کاربران
+                      </h3>
+                    </CardHeader>
+                    <CardBody>
+                      <CommentsTable id={id} />
+                    </CardBody>
+                  </Card>
                 </Col>
               </Row>
             ) : null}
           </div>
         </div>
-        <NewsSidebar />
+        {/* <NewsSidebar /> */}
       </div>
     </Fragment>
   );

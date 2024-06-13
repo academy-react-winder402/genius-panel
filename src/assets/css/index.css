@@ -205,6 +205,7 @@ body.dark-layout
 
 .news-details-paragraph {
   line-height: 1.6rem;
+  text-align: justify;
 }
 
 .news-details-bold-text {
@@ -213,6 +214,11 @@ body.dark-layout
 
 .news-details-bold-text span {
   font-weight: normal;
+}
+
+.news-details-user-comment-section-text {
+  margin-top: 5px;
+  margin-bottom: 0 !important;
 }
 
 /* Responsive */

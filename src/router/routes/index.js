@@ -40,7 +40,9 @@ const EditCourse = lazy(() => import("../../pages/EditCourse"));
 const CourseReserved = lazy(() => import("../../pages/CourseReserved"));
 const CourseDetails = lazy(() => import("../../pages/CourseDetails"));
 const News = lazy(() => import("../../pages/News"));
+const NewsDetails = lazy(() => import("../../pages/NewsDetails"));
 const CreateNews = lazy(() => import("../../pages/CreateNews"));
+const EditNews = lazy(() => import("../../pages/EditNews"));
 
 // ** Merge Routes
 const Routes = [
@@ -105,8 +107,16 @@ const Routes = [
     element: <News />,
   },
   {
+    path: "/news/:id",
+    element: <NewsDetails />,
+  },
+  {
     path: "/create-news",
     element: <CreateNews />,
+  },
+  {
+    path: "/news/edit/:id",
+    element: <EditNews />,
   },
   {
     path: "*",

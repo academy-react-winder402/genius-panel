@@ -59,6 +59,10 @@
   max-width: 118px;
 }
 
+.blog-column-truncate {
+  max-width: 180px;
+}
+
 .course-column-badge {
   margin-left: 20px !important;
 }
@@ -185,6 +189,36 @@ body.dark-layout
   margin-bottom: 20px !important;
   text-align: center;
   font-weight: 500;
+}
+
+.activeNewsIcon {
+  stroke: rgba(234, 84, 85) !important;
+}
+
+.inActiveNewsIcon {
+  stroke: rgba(40, 199, 111) !important;
+}
+
+.news-details-picture {
+  height: 450px !important;
+}
+
+.news-details-paragraph {
+  line-height: 1.6rem;
+  text-align: justify;
+}
+
+.news-details-bold-text {
+  font-weight: 500;
+}
+
+.news-details-bold-text span {
+  font-weight: normal;
+}
+
+.news-details-user-comment-section-text {
+  margin-top: 5px;
+  margin-bottom: 0 !important;
 }
 
 /* Responsive */

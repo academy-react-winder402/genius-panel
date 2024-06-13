@@ -36,6 +36,7 @@ const defaultValues = {
 
 const GlobalData = ({
   stepper,
+  news,
   setGoogleTitle,
   setGoogleDescribe,
   setTitle,
@@ -44,39 +45,46 @@ const GlobalData = ({
   setNewsCategoryId,
   files,
   setFiles,
+  setUpdatedData,
 }) => {
   // ** States
   const [newsCategoryLists, setNewsCategoryLists] = useState();
+  const [defaultNewsCategoryList, setDefaultNewsCategoryList] = useState();
 
   // ** Hooks
   const {
     control,
     handleSubmit,
     formState: { errors },
+    setValue,
   } = useForm({
     defaultValues,
-    resolver: yupResolver(createNewsFormSchema),
+    resolver: news ? undefined : yupResolver(createNewsFormSchema),
   });
 
   const onSubmit = (e) => {
-    if (isObjEmpty(errors)) {
-      const {
-        title,
-        miniDescribe,
-        googleTitle,
-        googleDescribe,
-        keyword,
-        newsCategoryId,
-      } = e;
-
-      setTitle(title);
-      setMiniDescribe(miniDescribe);
-      setGoogleTitle(googleTitle);
-      setGoogleDescribe(googleDescribe);
-      setKeyword(keyword);
-      setNewsCategoryId(+newsCategoryId.value);
-
+    if (news) {
       stepper.next();
+    } else {
+      if (isObjEmpty(errors)) {
+        const {
+          title,
+          miniDescribe,
+          googleTitle,
+          googleDescribe,
+          keyword,
+          newsCategoryId,
+        } = e;
+
+        setTitle(title);
+        setMiniDescribe(miniDescribe);
+        setGoogleTitle(googleTitle);
+        setGoogleDescribe(googleDescribe);
+        setKeyword(keyword);
+        setNewsCategoryId(+newsCategoryId.value);
+
+        stepper.next();
+      }
     }
   };
 
@@ -97,6 +105,41 @@ const GlobalData = ({
 
     fetchNewsCategoryLists();
   }, []);
+
+  useEffect(() => {
+    if (news) {
+      const findCategoryList = newsCategoryLists.find(
+        (category) => category.value === news.newsCatregoryId
+      );
+
+      setDefaultNewsCategoryList(findCategoryList);
+
+      const {
+        title,
+        googleTitle,
+        keyword,
+        miniDescribe,
+        googleDescribe,
+        newsCatregoryId,
+      } = news;
+
+      setValue("title", title);
+      setValue("googleTitle", googleTitle);
+      setValue("keyword", keyword);
+      setValue("miniDescribe", miniDescribe);
+      setValue("googleDescribe", googleDescribe);
+      setValue("newsCategoryId", findCategoryList);
+
+      setUpdatedData({
+        title,
+        googleTitle,
+        keyword,
+        miniDescribe,
+        googleDescribe,
+        newsCatregoryId,
+      });
+    }
+  }, [news]);
 
   return (
     <Fragment>
@@ -187,6 +230,7 @@ const GlobalData = ({
                   className="react-select"
                   classNamePrefix="select"
                   name="newsCategoryId"
+                  defaultInputValue={news && defaultNewsCategoryList?.label}
                   options={newsCategoryLists}
                   isClearable
                   isSearchable
@@ -248,7 +292,11 @@ const GlobalData = ({
         </Row>
         <div className="mt-4">
           <h5>آپلود عکس خبر</h5>
-          <FileUploaderSingle files={files} setFiles={setFiles} />
+          <FileUploaderSingle
+            files={files}
+            setFiles={setFiles}
+            image={news?.currentImageAddress}
+          />
         </div>
         <div className="d-flex justify-content-between">
           <Button type="button" color="primary" className="btn-prev" disabled>

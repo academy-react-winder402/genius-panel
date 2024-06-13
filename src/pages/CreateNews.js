@@ -36,15 +36,13 @@ const CreateNewsPage = () => {
   const onSubmit = async () => {
     const Data = {
       image: files[0],
-      tumbImage: files[0],
-      imageAddress: files[0],
       title,
       googleTitle,
       googleDescribe,
       miniDescribe,
       describe,
       keyword,
-      newsCategoryId,
+      newsCatregoryId: newsCategoryId,
     };
 
     try {
@@ -54,7 +52,7 @@ const CreateNewsPage = () => {
       if (createBlog.success) {
         toast.success("خبر با موفقیت ثبت شد !");
 
-        navigate("/blogs");
+        navigate("/news");
       } else toast.error(createBlog.message);
     } catch (error) {
       toast.error("مشکلی در ارسال خیر به وجود آمد !");
@@ -83,7 +81,7 @@ const CreateNewsPage = () => {
     {
       id: "describe",
       title: "توضیحات",
-      subtitle: "توضیحات اخبار",
+      subtitle: "توضیحات خبر",
       content: (
         <Describe
           stepper={stepper}

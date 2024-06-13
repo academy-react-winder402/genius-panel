@@ -1,31 +1,28 @@
 // ** React Imports
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
-import { useNavigate } from "react-router-dom";
 
 // ** Reactstrap Imports
 import { Card, Col, Row } from "reactstrap";
 
 // ** Icon Imports
-import { Book, BookOpen, CheckCircle, Trash2 } from "react-feather";
+import { Book, CheckCircle, Trash2 } from "react-feather";
 
 // ** Core Imports
 import { adminNewsFilterListAPI } from "../core/services/api/news/admin-news-filter-list.api";
 
 // ** Columns
-import { COURSE_COLUMNS } from "../@core/components/course-columns";
 
 // ** Utils
-import { handleDeleteCourse } from "../core/utils/delete-course.utils";
 
 // ** Custom Components
 import BreadCrumbs from "../@core/components/breadcrumbs";
 import StatsHorizontal from "../@core/components/StatsHorizontal";
-import TableServerSide from "../@core/components/TableServerSide";
 
 // ** Styles
 import "@styles/react/apps/app-invoice.scss";
 import "@styles/react/libs/tables/react-dataTable-component.scss";
+import NewsListTable from "../@core/components/News/Table";
 
 const NewsPage = () => {
   // ** States
@@ -35,40 +32,14 @@ const NewsPage = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [rowsPerPage, setRowsPerPage] = useState(7);
   const [searchText, setSearchText] = useState();
-  const [selectedRows, setSelectedRows] = useState();
-  const [activeNews, setActiveNews] = useState();
   const [deletedNews, setDeletedNews] = useState();
-  const [active, setActive] = useState(undefined);
-
-  // ** Hooks
-  const navigate = useNavigate();
-
-  const renderTitle = () => {
-    if (active === undefined) {
-      return "همه اخبار";
-    } else if (active === true) {
-      return "اخبار فعال";
-    } else if (active === false) {
-      return "اخبار حذف شده";
-    }
-  };
+  const [activeNews, setActiveNews] = useState();
+  const [active, setActive] = useState(true);
 
   useEffect(() => {
     const fetchCourses = async () => {
       try {
-        const getCourses = await adminNewsFilterListAPI(
-          currentPage,
-          rowsPerPage
-        );
-
-        const getActiveNews = await adminNewsFilterListAPI(
-          1,
-          10000,
-          undefined,
-          undefined,
-          undefined,
-          true
-        );
+        const getNews = await adminNewsFilterListAPI(currentPage, rowsPerPage);
 
         const getDeletedCourses = await adminNewsFilterListAPI(
           1,
@@ -79,8 +50,8 @@ const NewsPage = () => {
           false
         );
 
-        setAllNews(getCourses.news);
-        setActiveNews(getActiveNews);
+        setAllNews(getNews);
+        setActiveNews(getNews);
         setDeletedNews(getDeletedCourses);
       } catch (error) {
         toast.error("مشکلی در دریافت اخبار به وجود آمد !");
@@ -93,7 +64,7 @@ const NewsPage = () => {
   useEffect(() => {
     const fetchCourses = async () => {
       try {
-        const getCourses = await adminNewsFilterListAPI(
+        const getNews = await adminNewsFilterListAPI(
           currentPage,
           rowsPerPage,
           sortColumn,
@@ -102,15 +73,14 @@ const NewsPage = () => {
           active
         );
 
-        setAllNews(getCourses.news);
+        setAllNews(getNews);
       } catch (error) {
-        console.log(error);
         toast.error("مشکلی در دریافت اخبار به وجود آمد !");
       }
     };
 
     fetchCourses();
-  }, [searchText, sort, sortColumn, active]);
+  }, [searchText, sort, sortColumn, active, currentPage, rowsPerPage]);
 
   return (
     <div className="invoice-list-wrapper">
@@ -123,19 +93,6 @@ const NewsPage = () => {
       />
       <div className="app-user-list w-100">
         <Row>
-          <Col lg="3" sm="6">
-            <StatsHorizontal
-              color="primary"
-              statTitle="همه اخبار"
-              icon={<Book />}
-              renderStats={
-                <h3 className="fw-bolder mb-75">{allNews?.length || 0}</h3>
-              }
-              onClick={() => setActive(undefined)}
-              className="cursor-pointer"
-              backgroundColor={active === undefined && "rgb(0 0 0 / 23%)"}
-            />
-          </Col>
           <Col lg="3" sm="6">
             <StatsHorizontal
               color="success"
@@ -169,25 +126,16 @@ const NewsPage = () => {
         </Row>
       </div>
       <Card className="rounded">
-        <TableServerSide
-          data={allNews}
-          columns={COURSE_COLUMNS()}
-          renderTitle={renderTitle()}
+        <NewsListTable
+          news={allNews}
           currentPage={currentPage}
           rowsPerPage={rowsPerPage}
+          searchText={searchText}
           setCurrentPage={setCurrentPage}
           setRowsPerPage={setRowsPerPage}
-          setSearchValue={setSearchText}
+          setSearchText={setSearchText}
           setSort={setSort}
           setSortColumn={setSortColumn}
-          setSelectedRows={setSelectedRows}
-          selectableRows
-          handleDeleteData={() =>
-            handleDeleteCourse(selectedRows, navigate, "/news")
-          }
-          isCourseCreateButtonShow
-          notFoundText="خبری پیدا نشد !"
-          deleteSelectedRowsText="حذف یا بازگرادنی"
         />
       </Card>
     </div>

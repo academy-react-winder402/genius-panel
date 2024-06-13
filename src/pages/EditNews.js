@@ -1,7 +1,7 @@
 // ** React Imports
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import toast from "react-hot-toast";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 // ** Custom Components
 import BreadCrumbs from "@components/breadcrumbs";
@@ -12,52 +12,49 @@ import Describe from "../@core/components/CreateNews/steps/Describe";
 import GlobalData from "../@core/components/CreateNews/steps/GlobalData";
 
 // ** Core Imports
-import { createNewsAPI } from "../core/services/api/news/create-news.api";
+import { getNewsWithIdAPI } from "../core/services/api/news/get-news-with-id.api";
+
+// ** Utils
 import { onFormData } from "../core/utils/form-data-helper.utils";
+import { updateNewsAPI } from "../core/services/api/news/update-news.api";
 
 const EditNews = () => {
   // ** Ref
   const ref = useRef(null);
 
   // ** State
+  const [news, setNews] = useState();
   const [stepper, setStepper] = useState(null);
   const [files, setFiles] = useState([]);
-  const [title, setTitle] = useState();
-  const [miniDescribe, setMiniDescribe] = useState();
   const [describe, setDescribe] = useState();
-  const [googleTitle, setGoogleTitle] = useState();
-  const [googleDescribe, setGoogleDescribe] = useState();
-  const [newsCategoryId, setNewsCategoryId] = useState();
-  const [keyword, setKeyword] = useState();
+  const [updatedData, setUpdatedData] = useState();
 
   // ** Hooks
+  const { id } = useParams();
   const navigate = useNavigate();
 
   const onSubmit = async () => {
-    const Data = {
-      image: files[0],
-      tumbImage: files[0],
-      imageAddress: files[0],
-      title,
-      googleTitle,
-      googleDescribe,
-      miniDescribe,
-      describe,
-      keyword,
-      newsCategoryId,
+    const data = {
+      id,
+      image: (files && files[0]) || news.imageAddress,
+      tumbImage: (files && files[0]) || news.imageAddress,
+      imageAddress: (files && files[0]) || news.imageAddress,
+      describe: describe || news.describe,
+      active: true,
+      ...updatedData,
     };
 
     try {
-      const formData = onFormData(Data);
-      const createBlog = await createNewsAPI(formData);
+      const formData = onFormData(data);
+      const editBlog = await updateNewsAPI(formData);
 
-      if (createBlog.success) {
-        toast.success("خبر با موفقیت ثبت شد !");
+      if (editBlog.success) {
+        toast.success("خبر با موفقیت ویرایش شد !");
 
-        navigate("/blogs");
-      } else toast.error(createBlog.message);
+        navigate("/news");
+      } else toast.error(editBlog.message);
     } catch (error) {
-      toast.error("مشکلی در ارسال خیر به وجود آمد !");
+      toast.error("مشکلی در ویرایش خبر به وجود آمد !");
     }
   };
 
@@ -69,31 +66,43 @@ const EditNews = () => {
       content: (
         <GlobalData
           stepper={stepper}
-          setTitle={setTitle}
-          setGoogleTitle={setGoogleTitle}
-          setGoogleDescribe={setGoogleDescribe}
-          setMiniDescribe={setMiniDescribe}
-          setKeyword={setKeyword}
-          setNewsCategoryId={setNewsCategoryId}
+          news={news}
           files={files}
           setFiles={setFiles}
+          setUpdatedData={setUpdatedData}
         />
       ),
     },
     {
       id: "describe",
       title: "توضیحات",
-      subtitle: "توضیحات اخبار",
+      subtitle: "توضیحات خبر",
       content: (
         <Describe
           stepper={stepper}
           setDescribe={setDescribe}
           describe={describe}
           onSubmit={onSubmit}
+          defaultValue={news?.describe}
         />
       ),
     },
   ];
+
+  useEffect(() => {
+    const fetchNews = async () => {
+      try {
+        const getNews = await getNewsWithIdAPI(id);
+
+        setNews(getNews.detailsNewsDto);
+      } catch (error) {
+        toast.error("مشکلی در دریافت اطلاعات خبر به وجود آمد !");
+      }
+    };
+
+    fetchNews();
+  }, []);
+
   return (
     <div className="horizontal-wizard">
       <BreadCrumbs

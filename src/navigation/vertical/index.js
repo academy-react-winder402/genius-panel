@@ -1,5 +1,6 @@
 import { Circle, Code, FileText, Home, Users } from "react-feather";
 
+import CategoriesPage from "../../pages/Categories";
 import CourseReservedPage from "../../pages/CourseReserved";
 import CoursesPage from "../../pages/Courses";
 import CreateCoursePage from "../../pages/CreateCourse";
@@ -80,6 +81,12 @@ export default [
         title: "افزودن خبر",
         navLink: "/create-news",
         element: <CreateNewsPage />,
+        icon: <Circle />,
+      },
+      {
+        title: "لیست دسته بندی ها",
+        navLink: "/categories",
+        element: <CategoriesPage />,
         icon: <Circle />,
       },
     ],

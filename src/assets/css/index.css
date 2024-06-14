@@ -221,6 +221,11 @@ body.dark-layout
   margin-bottom: 0 !important;
 }
 
+.recent-news-title {
+  display: block;
+  width: 155px;
+}
+
 /* Responsive */
 @media (max-width: 1000px) {
   .course-reserve-filters {

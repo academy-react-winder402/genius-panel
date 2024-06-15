@@ -44,6 +44,9 @@ const NewsDetails = lazy(() => import("../../pages/NewsDetails"));
 const CreateNews = lazy(() => import("../../pages/CreateNews"));
 const EditNews = lazy(() => import("../../pages/EditNews"));
 const Categories = lazy(() => import("../../pages/Categories"));
+const EditCategory = lazy(() => import("../../pages/EditCategory"));
+const CreateCategory = lazy(() => import("../../pages/CreateCategory"));
+const Comments = lazy(() => import("../../pages/Comments"));
 
 // ** Merge Routes
 const Routes = [
@@ -122,6 +125,42 @@ const Routes = [
   {
     path: "/categories",
     element: <Categories />,
+  },
+  {
+    path: "/categories/edit/:id",
+    element: <EditCategory />,
+  },
+  {
+    path: "/create-category",
+    element: <CreateCategory />,
+  },
+  {
+    element: <Comments />,
+    path: "/comments",
+    meta: {
+      appLayout: true,
+      className: "email-application",
+    },
+  },
+  {
+    element: <Comments />,
+    path: "/comments/:folder",
+    meta: {
+      appLayout: true,
+      className: "email-application",
+    },
+  },
+  {
+    element: <Comments />,
+    path: "/comments/label/:label",
+    meta: {
+      appLayout: true,
+      className: "email-application",
+    },
+  },
+  {
+    element: <Comments />,
+    path: "/comments/:filter",
   },
   {
     path: "*",

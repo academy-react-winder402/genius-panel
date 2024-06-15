@@ -247,6 +247,19 @@ body.dark-layout
 .edit-category-icon {
   margin-left: 5px;
 }
+
+.category-name-truncate {
+  max-width: 100px;
+}
+
+.comments-users-text {
+  margin-left: 13px;
+}
+
+.select-comment-input-wrapper {
+  margin-left: 4px;
+}
+
 /* Responsive */
 @media (max-width: 1000px) {
   .course-reserve-filters {
@@ -256,10 +269,6 @@ body.dark-layout
     justify-content: start !important;
     margin: 10px 0;
   }
-}
-
-.category-name-truncate {
-  max-width: 100px;
 }
 
 @media (min-width: 1000px) {

@@ -1,5 +1,5 @@
 // ** React Imports
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { Link, useNavigate } from "react-router-dom";
 
@@ -13,7 +13,8 @@ import FileUploaderSingle from "../FileUploaderSingle";
 
 // ** Core Imports
 import { createNewsCategoryAPI } from "../../../core/services/api/news/create-news-category.api";
-import { createCategoryFormSchema } from "../../../core/validations/create-category-form.validation";
+import { updateNewsCategoryAPI } from "../../../core/services/api/news/update-news-category.api";
+import { categoryFormSchema } from "../../../core/validations/create-category-form.validation";
 
 // ** Utils
 import { onFormData } from "../../../core/utils/form-data-helper.utils";
@@ -37,7 +38,7 @@ import "@styles/base/plugins/forms/form-quill-editor.scss";
 import "@styles/react/libs/editor/editor.scss";
 import "@styles/react/libs/react-select/_react-select.scss";
 
-const CategoryForm = () => {
+const CategoryForm = ({ category }) => {
   // ** States
   const [files, setFiles] = useState([]);
 
@@ -46,6 +47,7 @@ const CategoryForm = () => {
     control,
     handleSubmit,
     formState: { errors },
+    setValue,
   } = useForm({
     defaultValues: {
       categoryName: "",
@@ -53,31 +55,51 @@ const CategoryForm = () => {
       iconName: "",
       googleDescribe: "",
     },
-    resolver: yupResolver(createCategoryFormSchema),
+    resolver: yupResolver(categoryFormSchema),
   });
   const navigate = useNavigate();
 
   const onSubmit = async (values) => {
     try {
       const data = onFormData({
+        id: category.id || undefined,
         ...values,
-        image: files[0],
-        iconAddress: files[0],
+        image: category ? (files && files[0]) || category.image : files[0],
+        iconAddress: category
+          ? (files && files[0]) || category.iconAddress
+          : files[0],
       });
 
-      const createCategory = await createNewsCategoryAPI(data);
+      const sendCategory = category
+        ? await createNewsCategoryAPI(data)
+        : await updateNewsCategoryAPI(data);
 
-      if (createCategory.success) {
-        toast.success("دسته بندی با موفقیت ایجاد شد !");
+      if (sendCategory.success) {
+        toast.success(
+          `دسته بندی با موفقیت ${category ? "ویرایش" : "ایجاد"} شد !`
+        );
 
         navigate("/categories");
       } else {
-        toast.error("مشکلی در ایجاد دسته بندی به وجود آمد !");
+        toast.error(
+          `مشکلی در ${category ? "ویرایش" : "ایجاد"} دسته بندی به وجود آمد !`
+        );
       }
     } catch (error) {
-      toast.error("مشکلی در ایجاد دسته بندی به وجود آمد !");
+      toast.error(
+        `مشکلی در ${category ? "ویرایش" : "ایجاد"} دسته بندی به وجود آمد !`
+      );
     }
   };
+
+  useEffect(() => {
+    if (category) {
+      setValue("categoryName", category.categoryName);
+      setValue("iconName", category.iconName);
+      setValue("googleTitle", category.googleTitle);
+      setValue("googleDescribe", category.googleDescribe);
+    }
+  }, [category]);
 
   return (
     <div className="blog-edit-wrapper">
@@ -183,12 +205,16 @@ const CategoryForm = () => {
                   <Col md="12" className="mb-2">
                     <div className="border rounded p-2">
                       <h4 className="mb-1">عکس دسته بندی</h4>
-                      <FileUploaderSingle files={files} setFiles={setFiles} />
+                      <FileUploaderSingle
+                        files={files}
+                        setFiles={setFiles}
+                        image={category && category.image}
+                      />
                     </div>
                   </Col>
                   <Col md="12" className="mt-50">
                     <Button type="submit" color="primary" className="me-1">
-                      ایجاد دسته بندی
+                      {category ? "ویرایش" : "ایجاد"} دسته بندی
                     </Button>
                     <Button
                       tag={Link}

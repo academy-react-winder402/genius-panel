@@ -44,6 +44,7 @@ const NewsDetails = lazy(() => import("../../pages/NewsDetails"));
 const CreateNews = lazy(() => import("../../pages/CreateNews"));
 const EditNews = lazy(() => import("../../pages/EditNews"));
 const Categories = lazy(() => import("../../pages/Categories"));
+const EditCategory = lazy(() => import("../../pages/EditCategory"));
 const CreateCategory = lazy(() => import("../../pages/CreateCategory"));
 
 // ** Merge Routes
@@ -123,6 +124,10 @@ const Routes = [
   {
     path: "/categories",
     element: <Categories />,
+  },
+  {
+    path: "/categories/edit/:id",
+    element: <EditCategory />,
   },
   {
     path: "/create-category",

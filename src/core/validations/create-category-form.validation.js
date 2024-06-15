@@ -1,6 +1,6 @@
 import * as yup from "yup";
 
-export const createCategoryFormSchema = yup.object().shape({
+export const categoryFormSchema = yup.object().shape({
   categoryName: yup.string().required("این فیلد الزامی می باشد !"),
   googleTitle: yup
     .string()

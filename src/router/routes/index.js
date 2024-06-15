@@ -135,8 +135,32 @@ const Routes = [
     element: <CreateCategory />,
   },
   {
-    path: "/comments",
     element: <Comments />,
+    path: "/comments",
+    meta: {
+      appLayout: true,
+      className: "email-application",
+    },
+  },
+  {
+    element: <Comments />,
+    path: "/comments/:folder",
+    meta: {
+      appLayout: true,
+      className: "email-application",
+    },
+  },
+  {
+    element: <Comments />,
+    path: "/comments/label/:label",
+    meta: {
+      appLayout: true,
+      className: "email-application",
+    },
+  },
+  {
+    element: <Comments />,
+    path: "/comments/:filter",
   },
   {
     path: "*",

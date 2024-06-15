@@ -252,6 +252,14 @@ body.dark-layout
   max-width: 100px;
 }
 
+.comments-users-text {
+  margin-left: 13px;
+}
+
+.select-comment-input-wrapper {
+  margin-left: 4px;
+}
+
 /* Responsive */
 @media (max-width: 1000px) {
   .course-reserve-filters {

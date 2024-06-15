@@ -3,6 +3,7 @@ import { Circle, Code, FileText, Home, Users } from "react-feather";
 import CategoriesPage from "../../pages/Categories";
 import CourseReservedPage from "../../pages/CourseReserved";
 import CoursesPage from "../../pages/Courses";
+import CreateCategoryPage from "../../pages/CreateCategory";
 import CreateCoursePage from "../../pages/CreateCourse";
 import CreateNewsPage from "../../pages/CreateNews";
 import CreateUserPage from "../../pages/CreateUser";
@@ -87,6 +88,12 @@ export default [
         title: "لیست دسته بندی ها",
         navLink: "/categories",
         element: <CategoriesPage />,
+        icon: <Circle />,
+      },
+      {
+        title: "افزودن دسته بندی",
+        navLink: "/create-category",
+        element: <CreateCategoryPage />,
         icon: <Circle />,
       },
     ],

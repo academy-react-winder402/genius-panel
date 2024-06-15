@@ -1,6 +1,7 @@
-import { Circle, Code, FileText, Home, Users } from "react-feather";
+import { Bookmark, Circle, Code, FileText, Home, Users } from "react-feather";
 
 import CategoriesPage from "../../pages/Categories";
+import CommentsPage from "../../pages/Comments";
 import CourseReservedPage from "../../pages/CourseReserved";
 import CoursesPage from "../../pages/Courses";
 import CreateCategoryPage from "../../pages/CreateCategory";
@@ -97,5 +98,12 @@ export default [
         icon: <Circle />,
       },
     ],
+  },
+  {
+    id: "comments",
+    title: "مدیریت نظرات",
+    navLink: "/comments",
+    element: <CommentsPage />,
+    icon: <Bookmark size={20} />,
   },
 ];

@@ -52,7 +52,7 @@ const Comments = ({
 
   // Handle Select All
   const handleSelectAll = () => {
-    if (selectedRows.length === comments.comments.length) {
+    if (selectedRows.length === comments.totalCount) {
       setSelectedRows([]);
     } else {
       setSelectedRows(comments.comments);
@@ -202,7 +202,7 @@ const Comments = ({
               onChange={handleSelectAll}
               checked={
                 selectedRows.length &&
-                selectedRows.length === comments.comments.length
+                selectedRows.length === comments.totalCount
               }
             />
             <Label
@@ -241,16 +241,7 @@ const Comments = ({
           )}
         </PerfectScrollbar>
       </div>
-      <CommentDetails
-        comment={comment}
-        labelColors={labelColors}
-        handleCommentToTrash={handleCommentToTrash}
-        handleFolderUpdate={handleFolderUpdate}
-        handleLabelsUpdate={handleLabelsUpdate}
-        handleCommentReadUpdate={handleCommentReadUpdate}
-        setOpenComment={setOpenComment}
-        openComment={openComment}
-      />
+      <CommentDetails comment={comment} openComment={openComment} />
     </Fragment>
   );
 };

@@ -1,6 +1,7 @@
 export const convertOptions = (array) => {
   const mappedArray = array.map((item) => ({
     label:
+      item.title ||
       item.typeName ||
       item.levelName ||
       item.statusName ||
@@ -9,7 +10,7 @@ export const convertOptions = (array) => {
       item.termName ||
       item.techName ||
       item.categoryName,
-    value: item.id || item.teacherId,
+    value: item.id || item.teacherId || item.courseId,
   }));
 
   return mappedArray;

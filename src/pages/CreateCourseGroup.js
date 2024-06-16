@@ -1,5 +1,7 @@
+import CourseGroupForm from "../@core/components/CourseGroupForm";
+
 const CreateCourseGroupPage = () => {
-  return <div>CreateCourseGroupPage</div>;
+  return <CourseGroupForm />;
 };
 
 export default CreateCourseGroupPage;

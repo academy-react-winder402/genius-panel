@@ -38,6 +38,8 @@ import "@styles/react/libs/editor/editor.scss";
 import "@styles/react/libs/react-select/_react-select.scss";
 import { getCourseListAPI } from "../../../core/services/api/course/get-course-list.api";
 import { convertOptions } from "../../../core/utils/convert-options-helper.utils";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { courseGroupFormSchema } from "../../../core/validations/course-group-form.validation";
 
 const CourseGroupForm = ({ group }) => {
   // ** States
@@ -55,6 +57,7 @@ const CourseGroupForm = ({ group }) => {
       groupCapacity: "",
       courseId: "",
     },
+    resolver: yupResolver(courseGroupFormSchema),
   });
   const navigate = useNavigate();
 

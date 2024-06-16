@@ -47,6 +47,7 @@ const Categories = lazy(() => import("../../pages/Categories"));
 const EditCategory = lazy(() => import("../../pages/EditCategory"));
 const CreateCategory = lazy(() => import("../../pages/CreateCategory"));
 const Comments = lazy(() => import("../../pages/Comments"));
+const TeacherComments = lazy(() => import("../../pages/TeacherComments"));
 
 // ** Merge Routes
 const Routes = [
@@ -161,6 +162,34 @@ const Routes = [
   {
     element: <Comments />,
     path: "/comments/:filter",
+  },
+  {
+    element: <TeacherComments />,
+    path: "/teacher-comments",
+    meta: {
+      appLayout: true,
+      className: "email-application",
+    },
+  },
+  {
+    element: <TeacherComments />,
+    path: "/teacher-comments/:folder",
+    meta: {
+      appLayout: true,
+      className: "email-application",
+    },
+  },
+  {
+    element: <TeacherComments />,
+    path: "/teacher-comments/label/:label",
+    meta: {
+      appLayout: true,
+      className: "email-application",
+    },
+  },
+  {
+    element: <TeacherComments />,
+    path: "/teacher-comments/:filter",
   },
   {
     path: "*",

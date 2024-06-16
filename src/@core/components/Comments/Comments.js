@@ -1,7 +1,9 @@
 // ** React Imports
 import { Fragment, useState } from "react";
+import toast from "react-hot-toast";
 import ReactPaginate from "react-paginate";
 import PerfectScrollbar from "react-perfect-scrollbar";
+import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
 
@@ -33,6 +35,9 @@ const Comments = ({
   // ** States
   const [comment, setComment] = useState();
   const [selectedRows, setSelectedRows] = useState([]);
+
+  // ** Hooks
+  const navigate = useNavigate();
 
   // ** Variables
   const labelColors = {

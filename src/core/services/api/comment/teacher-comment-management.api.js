@@ -1,6 +1,6 @@
 import http from "../../interceptor";
 
-export const adminCommentManagementAPI = async (
+export const teacherCommentManagementAPI = async (
   pageNumber,
   rowsOfPage,
   sortingCol,

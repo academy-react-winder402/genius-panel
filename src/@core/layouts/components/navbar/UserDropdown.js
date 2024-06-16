@@ -3,6 +3,10 @@ import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { Link } from "react-router-dom";
 
+// ** Redux Imports
+import { useDispatch } from "react-redux";
+import { onUserChange } from "../../../../redux/user";
+
 // ** Custom Components
 import Avatar from "@components/avatar";
 
@@ -32,6 +36,9 @@ const UserDropdown = () => {
     currentPictureAddress: defaultAvatar,
   });
 
+  // ** Hooks
+  const dispatch = useDispatch();
+
   // ** Function for handle logout
   const handleLogout = async () => {
     removeItem("token");
@@ -43,6 +50,7 @@ const UserDropdown = () => {
         const getProfileInfo = await getProfileInfoAPI();
 
         setProfileInfo(getProfileInfo);
+        dispatch(onUserChange(getProfileInfo));
       } catch (error) {
         toast.error("مشکلی در دریافت اطلاعات شما به وجود آمد !");
       }

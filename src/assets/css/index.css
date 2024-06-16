@@ -264,6 +264,14 @@ body.dark-layout
   z-index: 9999 !important;
 }
 
+.dashboard-chart-box {
+  width: 34.2%;
+}
+
+.dashboard-card-section {
+  gap: 4px;
+}
+
 /* Responsive */
 @media (max-width: 1000px) {
   .course-reserve-filters {

@@ -18,7 +18,8 @@ const CardMedal = ({ dashboardData }) => {
     <Card className="card-congratulations-medal">
       <CardBody>
         <h5>
-          تبریک میگویم 🎉 {`${user?.fName || "کاربر"} ${user.lName || "عزیز"}`}!
+          تبریک میگویم 🎉 {`${user?.fName || "کاربر"} ${user?.lName || "عزیز"}`}
+          !
         </h5>
         <CardText className="font-small-3">شما مدال طلایی دارید !</CardText>
         <h3 className="mb-75 mt-2 pt-50">

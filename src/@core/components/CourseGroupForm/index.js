@@ -6,6 +6,7 @@ import Select from "react-select";
 import makeAnimated from "react-select/animated";
 
 // ** Third Party Components
+import { yupResolver } from "@hookform/resolvers/yup";
 import { Controller, useForm } from "react-hook-form";
 
 // ** Custom Components
@@ -13,8 +14,11 @@ import Breadcrumbs from "@components/breadcrumbs";
 
 // ** Core Imports
 import { addCourseGroupAPI } from "../../../core/services/api/course/course-group/add-course-group.api";
+import { getCourseListAPI } from "../../../core/services/api/course/get-course-list.api";
+import { courseGroupFormSchema } from "../../../core/validations/course-group-form.validation";
 
 // ** Utils
+import { convertOptions } from "../../../core/utils/convert-options-helper.utils";
 import { onFormData } from "../../../core/utils/form-data-helper.utils";
 import { selectThemeColors } from "../../../utility/Utils";
 
@@ -36,14 +40,13 @@ import "@styles/base/pages/page-blog.scss";
 import "@styles/base/plugins/forms/form-quill-editor.scss";
 import "@styles/react/libs/editor/editor.scss";
 import "@styles/react/libs/react-select/_react-select.scss";
-import { getCourseListAPI } from "../../../core/services/api/course/get-course-list.api";
-import { convertOptions } from "../../../core/utils/convert-options-helper.utils";
-import { yupResolver } from "@hookform/resolvers/yup";
-import { courseGroupFormSchema } from "../../../core/validations/course-group-form.validation";
+import { findDefaultOption } from "../../../core/utils/default-option-helper.utils";
+import { updateCourseGroupAPI } from "../../../core/services/api/course/course-group/update-course-group.api";
 
 const CourseGroupForm = ({ group }) => {
   // ** States
-  const [courses, setCourses] = useState();
+  const [courses, setCourses] = useState([]);
+  const [defaultCourse, setDefaultCourse] = useState();
 
   // ** Hooks
   const {
@@ -66,13 +69,14 @@ const CourseGroupForm = ({ group }) => {
       const { groupName, groupCapacity, courseId } = values;
 
       const data = onFormData({
+        id: group ? group.groupId : undefined,
         groupName,
         groupCapacity,
         courseId: courseId.value,
       });
 
       const sendCourseGroup = group
-        ? await addCourseGroupAPI(data)
+        ? await updateCourseGroupAPI(data)
         : await addCourseGroupAPI(data);
 
       if (sendCourseGroup.success) {
@@ -85,7 +89,6 @@ const CourseGroupForm = ({ group }) => {
         );
       }
     } catch (error) {
-      console.log(error);
       toast.error(`مشکلی در ${group ? "ویرایش" : "ایجاد"} گروه به وجود آمد !`);
     }
   };
@@ -110,21 +113,27 @@ const CourseGroupForm = ({ group }) => {
 
   useEffect(() => {
     if (group) {
-      setValue("categoryName", group.categoryName);
-      setValue("iconName", group.iconName);
-      setValue("googleTitle", group.googleTitle);
-      setValue("googleDescribe", group.googleDescribe);
+      if (courses.length > 0) {
+        const findCourseId = findDefaultOption(courses, group.courseId);
+
+        setValue("courseId", findCourseId);
+
+        setDefaultCourse(findCourseId);
+      }
+
+      setValue("groupName", group.groupName);
+      setValue("groupCapacity", group.groupCapacity);
     }
-  }, [group]);
+  }, [group, courses]);
 
   return (
     <div className="blog-edit-wrapper">
       <Breadcrumbs
-        title="ایجاد گروه"
+        title={`${group ? "ویرایش" : "ایجاد"} گروه`}
         data={[
           { title: "مدیریت دوره ها", link: "/courses" },
           { title: "گروه ها", link: "/course-groups" },
-          { title: "ایجاد گروه" },
+          { title: `${group ? "ویرایش" : "ایجاد"} گروه` },
         ]}
       />
       <Row>
@@ -132,7 +141,7 @@ const CourseGroupForm = ({ group }) => {
           <Card>
             <CardBody>
               <div>
-                <h2 className="mb-25">ایجاد گروه</h2>
+                <h2 className="mb-25">{group ? "ویرایش" : "ایجاد"} گروه</h2>
               </div>
               <Form
                 className="mt-2"
@@ -194,6 +203,7 @@ const CourseGroupForm = ({ group }) => {
                           classNamePrefix="select"
                           name="courseId"
                           options={courses}
+                          defaultInputValue={group && defaultCourse?.label}
                           isClearable
                           components={animatedComponents}
                           {...field}

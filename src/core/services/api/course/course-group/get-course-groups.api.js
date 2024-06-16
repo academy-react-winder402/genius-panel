@@ -9,11 +9,13 @@ export const getCourseGroupsAPI = async (
 ) => {
   try {
     const response = await http.get("/CourseGroup", {
-      pageNumber,
-      rowsOfPage,
-      sortingCol,
-      sortType,
-      query,
+      params: {
+        pageNumber,
+        rowsOfPage,
+        sortingCol,
+        sortType,
+        query,
+      },
     });
 
     return response;

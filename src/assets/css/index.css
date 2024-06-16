@@ -272,6 +272,10 @@ body.dark-layout
   gap: 4px;
 }
 
+.course-group-not-found-text-wrapper {
+  margin-top: 20px;
+}
+
 /* Responsive */
 @media (max-width: 1000px) {
   .course-reserve-filters {

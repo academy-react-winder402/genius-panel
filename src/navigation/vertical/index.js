@@ -2,6 +2,7 @@ import { Circle, Code, FileText, Home, Mail, Users } from "react-feather";
 
 import CategoriesPage from "../../pages/Categories";
 import CommentsPage from "../../pages/Comments";
+import CourseGroupsPage from "../../pages/CourseGroups";
 import CourseReservedPage from "../../pages/CourseReserved";
 import CoursesPage from "../../pages/Courses";
 import CreateCategoryPage from "../../pages/CreateCategory";
@@ -65,6 +66,12 @@ export default [
         title: "افزودن دوره",
         navLink: "/create-course",
         element: <CreateCoursePage />,
+        icon: <Circle />,
+      },
+      {
+        title: "گروه های دوره",
+        navLink: "/course-groups",
+        element: <CourseGroupsPage />,
         icon: <Circle />,
       },
     ],

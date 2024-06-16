@@ -12,6 +12,7 @@ import CreateUserPage from "../../pages/CreateUser";
 import NewsPage from "../../pages/News";
 import TeacherCommentsPage from "../../pages/TeacherComments";
 import UsersPage from "../../pages/Users";
+import CreateCourseGroupPage from "../../pages/CreateCourseGroup";
 
 export default [
   {
@@ -72,6 +73,12 @@ export default [
         title: "گروه های دوره",
         navLink: "/course-groups",
         element: <CourseGroupsPage />,
+        icon: <Circle />,
+      },
+      {
+        title: "افزودن گروه دوره",
+        navLink: "/create-course-group",
+        element: <CreateCourseGroupPage />,
         icon: <Circle />,
       },
     ],

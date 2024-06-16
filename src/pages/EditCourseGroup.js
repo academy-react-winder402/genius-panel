@@ -20,8 +20,6 @@ const EditCourseGroupPage = () => {
       try {
         const getCourseGroup = await getCourseGroupDetailsAPI(id);
 
-        console.log(getCourseGroup.courseGroupDto);
-
         setCourseGroup(getCourseGroup.courseGroupDto);
       } catch (error) {
         return false;

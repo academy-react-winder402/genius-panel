@@ -1,4 +1,4 @@
-import { Bookmark, Circle, Code, FileText, Home, Users } from "react-feather";
+import { Circle, Code, FileText, Home, Mail, Users } from "react-feather";
 
 import CategoriesPage from "../../pages/Categories";
 import CommentsPage from "../../pages/Comments";
@@ -103,7 +103,7 @@ export default [
   {
     id: "comments",
     title: "مدیریت نظرات",
-    icon: <Bookmark size={20} />,
+    icon: <Mail size={20} />,
     children: [
       {
         id: "comments",

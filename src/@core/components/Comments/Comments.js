@@ -44,7 +44,7 @@ const Comments = ({
 
   const rowsPerPage = 10;
 
-  const count = Math.ceil(comments.totalCount / rowsPerPage);
+  const count = Math.ceil(comments?.totalCount / rowsPerPage);
 
   const handlePageClick = (event) => {
     setCurrentPage(event.selected + 1);
@@ -52,10 +52,10 @@ const Comments = ({
 
   // Handle Select All
   const handleSelectAll = () => {
-    if (selectedRows.length === comments.totalCount) {
+    if (selectedRows.length === comments?.comments.length) {
       setSelectedRows([]);
     } else {
-      setSelectedRows(comments.comments);
+      setSelectedRows([...comments.comments]);
     }
   };
 
@@ -201,8 +201,8 @@ const Comments = ({
               id="select-all"
               onChange={handleSelectAll}
               checked={
-                selectedRows.length &&
-                selectedRows.length === comments.totalCount
+                selectedRows &&
+                selectedRows?.length === comments?.comments?.length
               }
             />
             <Label
@@ -241,7 +241,11 @@ const Comments = ({
           )}
         </PerfectScrollbar>
       </div>
-      <CommentDetails comment={comment} openComment={openComment} />
+      <CommentDetails
+        comment={comment}
+        openComment={openComment}
+        setOpenComment={setOpenComment}
+      />
     </Fragment>
   );
 };

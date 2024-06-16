@@ -19,7 +19,7 @@ import Avatar from "@components/avatar";
 // ** Third Party Components
 import classnames from "classnames";
 
-import { MoreVertical, Trash, Trash2 } from "react-feather";
+import { ChevronLeft, MoreVertical, Trash, Trash2 } from "react-feather";
 
 // ** Reactstrap Imports
 import {
@@ -37,7 +37,7 @@ import {
   UncontrolledDropdown,
 } from "reactstrap";
 
-const CommentDetails = ({ comment, openComment }) => {
+const CommentDetails = ({ comment, openComment, setOpenComment }) => {
   // ** States
   const [commentTitle, setCommentTitle] = useState();
   const [commentText, setCommentText] = useState();
@@ -70,6 +70,11 @@ const CommentDetails = ({ comment, openComment }) => {
     } catch (error) {
       toast.error("مشکلی در ارسال ریپلای شما به وجود آمد !");
     }
+  };
+
+  // ** Handle go back
+  const handleGoBack = () => {
+    setOpenComment(false);
   };
 
   const MySwal = withReactContent(Swal);
@@ -159,7 +164,7 @@ const CommentDetails = ({ comment, openComment }) => {
 
   return (
     <div
-      className={classnames("email-app-details", {
+      className={classnames("email-app-details comment-details", {
         show: openComment,
       })}
     >
@@ -167,6 +172,9 @@ const CommentDetails = ({ comment, openComment }) => {
         <Fragment>
           <div className="email-detail-header">
             <div className="email-header-left d-flex align-items-center">
+              <span className="go-back me-1" onClick={handleGoBack}>
+                <ChevronLeft size={20} />
+              </span>
               <h4 className="email-subject mb-0">{comment.commentTitle}</h4>
             </div>
           </div>

@@ -260,6 +260,10 @@ body.dark-layout
   margin-left: 4px;
 }
 
+.comment-details {
+  z-index: 9999 !important;
+}
+
 /* Responsive */
 @media (max-width: 1000px) {
   .course-reserve-filters {

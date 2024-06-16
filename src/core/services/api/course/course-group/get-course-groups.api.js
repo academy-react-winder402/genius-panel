@@ -1,24 +1,20 @@
-import http from "../../interceptor";
+import http from "../../../interceptor";
 
-export const teacherCommentManagementAPI = async (
+export const getCourseGroupsAPI = async (
   pageNumber,
   rowsOfPage,
   sortingCol,
   sortType,
-  query,
-  accept,
-  userId
+  query
 ) => {
   try {
-    const response = await http.get("/Course/CommentManagmentTeacher", {
+    const response = await http.get("/CourseGroup", {
       params: {
         pageNumber,
         rowsOfPage,
         sortingCol,
         sortType,
         query,
-        accept,
-        userId,
       },
     });
 

@@ -1,7 +1,8 @@
-import { Bookmark, Circle, Code, FileText, Home, Users } from "react-feather";
+import { Circle, Code, FileText, Home, Mail, Users } from "react-feather";
 
 import CategoriesPage from "../../pages/Categories";
 import CommentsPage from "../../pages/Comments";
+import CourseGroupsPage from "../../pages/CourseGroups";
 import CourseReservedPage from "../../pages/CourseReserved";
 import CoursesPage from "../../pages/Courses";
 import CreateCategoryPage from "../../pages/CreateCategory";
@@ -9,7 +10,9 @@ import CreateCoursePage from "../../pages/CreateCourse";
 import CreateNewsPage from "../../pages/CreateNews";
 import CreateUserPage from "../../pages/CreateUser";
 import NewsPage from "../../pages/News";
+import TeacherCommentsPage from "../../pages/TeacherComments";
 import UsersPage from "../../pages/Users";
+import CreateCourseGroupPage from "../../pages/CreateCourseGroup";
 
 export default [
   {
@@ -66,6 +69,18 @@ export default [
         element: <CreateCoursePage />,
         icon: <Circle />,
       },
+      {
+        title: "گروه های دوره",
+        navLink: "/course-groups",
+        element: <CourseGroupsPage />,
+        icon: <Circle />,
+      },
+      {
+        title: "افزودن گروه دوره",
+        navLink: "/create-course-group",
+        element: <CreateCourseGroupPage />,
+        icon: <Circle />,
+      },
     ],
   },
   {
@@ -102,8 +117,22 @@ export default [
   {
     id: "comments",
     title: "مدیریت نظرات",
-    navLink: "/comments",
-    element: <CommentsPage />,
-    icon: <Bookmark size={20} />,
+    icon: <Mail size={20} />,
+    children: [
+      {
+        id: "comments",
+        title: "مدیریت نظرات",
+        navLink: "/comments",
+        element: <CommentsPage />,
+        icon: <Circle size={20} />,
+      },
+      {
+        id: "teacher-comment",
+        title: "نظرات ثبت شده برای شما",
+        navLink: "/teacher-comments",
+        element: <TeacherCommentsPage />,
+        icon: <Circle size={20} />,
+      },
+    ],
   },
 ];

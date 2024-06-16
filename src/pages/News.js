@@ -6,14 +6,10 @@ import toast from "react-hot-toast";
 import { Card, Col, Row } from "reactstrap";
 
 // ** Icon Imports
-import { Book, CheckCircle, Trash2 } from "react-feather";
+import { CheckCircle, Trash2 } from "react-feather";
 
 // ** Core Imports
 import { adminNewsFilterListAPI } from "../core/services/api/news/admin-news-filter-list.api";
-
-// ** Columns
-
-// ** Utils
 
 // ** Custom Components
 import BreadCrumbs from "../@core/components/breadcrumbs";

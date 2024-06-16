@@ -39,6 +39,8 @@ const CreateCourse = lazy(() => import("../../pages/CreateCourse"));
 const EditCourse = lazy(() => import("../../pages/EditCourse"));
 const CourseReserved = lazy(() => import("../../pages/CourseReserved"));
 const CourseDetails = lazy(() => import("../../pages/CourseDetails"));
+const CourseGroups = lazy(() => import("../../pages/CourseGroups"));
+const CreateCourseGroup = lazy(() => import("../../pages/CreateCourseGroup"));
 const News = lazy(() => import("../../pages/News"));
 const NewsDetails = lazy(() => import("../../pages/NewsDetails"));
 const CreateNews = lazy(() => import("../../pages/CreateNews"));
@@ -47,6 +49,7 @@ const Categories = lazy(() => import("../../pages/Categories"));
 const EditCategory = lazy(() => import("../../pages/EditCategory"));
 const CreateCategory = lazy(() => import("../../pages/CreateCategory"));
 const Comments = lazy(() => import("../../pages/Comments"));
+const TeacherComments = lazy(() => import("../../pages/TeacherComments"));
 
 // ** Merge Routes
 const Routes = [
@@ -107,6 +110,14 @@ const Routes = [
     element: <EditCourse />,
   },
   {
+    path: "/course-groups",
+    element: <CourseGroups />,
+  },
+  {
+    path: "/create-course-group",
+    element: <CreateCourseGroup />,
+  },
+  {
     path: "/news",
     element: <News />,
   },
@@ -161,6 +172,34 @@ const Routes = [
   {
     element: <Comments />,
     path: "/comments/:filter",
+  },
+  {
+    element: <TeacherComments />,
+    path: "/teacher-comments",
+    meta: {
+      appLayout: true,
+      className: "email-application",
+    },
+  },
+  {
+    element: <TeacherComments />,
+    path: "/teacher-comments/:folder",
+    meta: {
+      appLayout: true,
+      className: "email-application",
+    },
+  },
+  {
+    element: <TeacherComments />,
+    path: "/teacher-comments/label/:label",
+    meta: {
+      appLayout: true,
+      className: "email-application",
+    },
+  },
+  {
+    element: <TeacherComments />,
+    path: "/teacher-comments/:filter",
   },
   {
     path: "*",

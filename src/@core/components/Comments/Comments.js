@@ -1,7 +1,9 @@
 // ** React Imports
 import { Fragment, useState } from "react";
+import toast from "react-hot-toast";
 import ReactPaginate from "react-paginate";
 import PerfectScrollbar from "react-perfect-scrollbar";
+import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
 
@@ -34,6 +36,9 @@ const Comments = ({
   const [comment, setComment] = useState();
   const [selectedRows, setSelectedRows] = useState([]);
 
+  // ** Hooks
+  const navigate = useNavigate();
+
   // ** Variables
   const labelColors = {
     personal: "success",
@@ -44,7 +49,7 @@ const Comments = ({
 
   const rowsPerPage = 10;
 
-  const count = Math.ceil(comments.totalCount / rowsPerPage);
+  const count = Math.ceil(comments?.totalCount / rowsPerPage);
 
   const handlePageClick = (event) => {
     setCurrentPage(event.selected + 1);
@@ -52,10 +57,10 @@ const Comments = ({
 
   // Handle Select All
   const handleSelectAll = () => {
-    if (selectedRows.length === comments.totalCount) {
+    if (selectedRows.length === comments?.comments.length) {
       setSelectedRows([]);
     } else {
-      setSelectedRows(comments.comments);
+      setSelectedRows([...comments.comments]);
     }
   };
 
@@ -201,8 +206,8 @@ const Comments = ({
               id="select-all"
               onChange={handleSelectAll}
               checked={
-                selectedRows.length &&
-                selectedRows.length === comments.totalCount
+                selectedRows &&
+                selectedRows?.length === comments?.comments?.length
               }
             />
             <Label
@@ -241,7 +246,11 @@ const Comments = ({
           )}
         </PerfectScrollbar>
       </div>
-      <CommentDetails comment={comment} openComment={openComment} />
+      <CommentDetails
+        comment={comment}
+        openComment={openComment}
+        setOpenComment={setOpenComment}
+      />
     </Fragment>
   );
 };

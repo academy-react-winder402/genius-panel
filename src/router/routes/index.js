@@ -41,6 +41,8 @@ const CourseReserved = lazy(() => import("../../pages/CourseReserved"));
 const CourseDetails = lazy(() => import("../../pages/CourseDetails"));
 const CourseGroups = lazy(() => import("../../pages/CourseGroups"));
 const CreateCourseGroup = lazy(() => import("../../pages/CreateCourseGroup"));
+const CourseGroupDetails = lazy(() => import("../../pages/CourseGroupDetails"));
+const EditCourseGroup = lazy(() => import("../../pages/EditCourseGroup"));
 const News = lazy(() => import("../../pages/News"));
 const NewsDetails = lazy(() => import("../../pages/NewsDetails"));
 const CreateNews = lazy(() => import("../../pages/CreateNews"));
@@ -116,6 +118,14 @@ const Routes = [
   {
     path: "/create-course-group",
     element: <CreateCourseGroup />,
+  },
+  {
+    path: "/course-groups/:id",
+    element: <CourseGroupDetails />,
+  },
+  {
+    path: "/course-groups/edit/:id",
+    element: <EditCourseGroup />,
   },
   {
     path: "/news",
@@ -225,7 +235,8 @@ const MergeLayoutRoutes = (layout, defaultLayout) => {
   const LayoutRoutes = [];
 
   if (Routes) {
-    Routes.filter((route) => {
+    Routes.filter((routes) => {
+      const route = { ...routes };
       let isBlank = false;
       // ** Checks if Route layout or Default layout matches current layout
       if (

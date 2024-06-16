@@ -37,81 +37,86 @@ const Describe = ({ stepper, describe, setDescribe, defaultValue }) => {
   };
 
   useEffect(() => {
-    if (!editorRef.current) return;
-
-    editorJsInstance.current = new EditorJS({
-      holder: editorRef.current,
-      autofocus: true,
-      tools: {
-        header: Header,
-        linkTool: {
-          class: LinkTool,
-          config: {
-            endpoint: "http://localhost:3000/fetchUrl", // Your backend endpoint for url data fetching
-          },
-        },
-        raw: RawTool,
-        image: {
-          class: ImageTool,
-          config: {
-            endpoints: {
-              byFile: "http://localhost:8008/uploadFile", // Your backend file uploader endpoint
-              byUrl: "http://localhost:8008/fetchUrl", // Your endpoint that provides uploading by Url
+    if (!editorRef.current) {
+    } else {
+      editorJsInstance.current = new EditorJS({
+        holder: editorRef.current,
+        autofocus: true,
+        tools: {
+          header: Header,
+          linkTool: {
+            class: LinkTool,
+            config: {
+              endpoint: "http://localhost:3000/fetchUrl", // Your backend endpoint for url data fetching
             },
           },
-        },
-        checklist: {
-          class: Checklist,
-          inlineToolbar: true,
-        },
-        list: {
-          class: List,
-          inlineToolbar: true,
-          config: {
-            defaultStyle: "unordered",
-          },
-        },
-        embed: {
-          class: Embed,
-          config: {
-            services: {
-              youtube: true,
-              coub: true,
+          raw: RawTool,
+          image: {
+            class: ImageTool,
+            config: {
+              endpoints: {
+                byFile: "http://localhost:8008/uploadFile", // Your backend file uploader endpoint
+                byUrl: "http://localhost:8008/fetchUrl", // Your endpoint that provides uploading by Url
+              },
             },
           },
-        },
-        quote: {
-          class: Quote,
-          inlineToolbar: true,
-          shortcut: "CMD+SHIFT+O",
-          config: {
-            quotePlaceholder: "Enter a quote",
-            captionPlaceholder: "Quote's author",
+          checklist: {
+            class: Checklist,
+            inlineToolbar: true,
+          },
+          list: {
+            class: List,
+            inlineToolbar: true,
+            config: {
+              defaultStyle: "unordered",
+            },
+          },
+          embed: {
+            class: Embed,
+            config: {
+              services: {
+                youtube: true,
+                coub: true,
+              },
+            },
+          },
+          quote: {
+            class: Quote,
+            inlineToolbar: true,
+            shortcut: "CMD+SHIFT+O",
+            config: {
+              quotePlaceholder: "Enter a quote",
+              captionPlaceholder: "Quote's author",
+            },
+          },
+          delimiter: Delimiter,
+          warning: {
+            class: Warning,
+            inlineToolbar: true,
+            shortcut: "CMD+SHIFT+W",
+            config: {
+              titlePlaceholder: "عنوان",
+              messagePlaceholder: "پیام",
+            },
+          },
+          table: {
+            class: Table,
+          },
+          headline: {
+            class: Headline,
           },
         },
-        delimiter: Delimiter,
-        warning: {
-          class: Warning,
-          inlineToolbar: true,
-          shortcut: "CMD+SHIFT+W",
-          config: {
-            titlePlaceholder: "عنوان",
-            messagePlaceholder: "پیام",
-          },
-        },
-        table: {
-          class: Table,
-        },
-        headline: {
-          class: Headline,
-        },
-      },
-    });
+      });
+    }
 
     return () => {
       if (editorJsInstance.current) {
-        editorJsInstance.current.destroy();
-        editorJsInstance.current = null;
+        try {
+          editorJsInstance.current?.destroy();
+          editorJsInstance.current = null;
+        } catch (error) {
+          editorJsInstance.current = null;
+        }
       }
     };
   }, []);
@@ -190,7 +195,7 @@ const Describe = ({ stepper, describe, setDescribe, defaultValue }) => {
           },
         });
       } catch (error) {
-        return null;
+        // return null;
       }
     }
   }, [defaultValue]);

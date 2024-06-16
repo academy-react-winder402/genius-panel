@@ -61,7 +61,7 @@ export const COURSE_GROUPS_COLUMNS = [
           />
           <div className="d-flex flex-column">
             <Link
-              to={`/news/${row.groupId}`}
+              to={`/course-groups/${row.groupId}`}
               className="course-column-truncate blog-column-truncate text-body"
             >
               <span className="fw-bolder text-primary">{row.groupName}</span>
@@ -121,7 +121,7 @@ export const COURSE_GROUPS_COLUMNS = [
             <DropdownMenu end>
               <DropdownItem
                 tag={Link}
-                to={`/course-group/${row.groupId}`}
+                to={`/course-groups/edit/${row.groupId}`}
                 className="w-100"
               >
                 <Eye size={14} className="me-50" />
@@ -129,7 +129,7 @@ export const COURSE_GROUPS_COLUMNS = [
               </DropdownItem>
               <DropdownItem
                 tag={Link}
-                to={`/course-group/edit/${row.groupId}`}
+                to={`/course-groups/edit/${row.groupId}`}
                 className="w-100"
               >
                 <Edit size={14} className="me-50" />

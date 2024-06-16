@@ -6,6 +6,6 @@ export const addCourseGroupAPI = async (data) => {
 
     return response;
   } catch (error) {
-    return fasle;
+    return false;
   }
 };

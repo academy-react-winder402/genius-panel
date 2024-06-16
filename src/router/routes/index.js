@@ -225,7 +225,8 @@ const MergeLayoutRoutes = (layout, defaultLayout) => {
   const LayoutRoutes = [];
 
   if (Routes) {
-    Routes.filter((route) => {
+    Routes.filter((routes) => {
+      const route = { ...routes };
       let isBlank = false;
       // ** Checks if Route layout or Default layout matches current layout
       if (

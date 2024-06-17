@@ -1,7 +1,8 @@
 // ** React Imports
-import { useSkin } from "@hooks/useSkin";
-import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { useSkin } from "@hooks/useSkin";
+import { useEffect } from "react";
+import { Controller, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { Link, useNavigate } from "react-router-dom";
 
@@ -10,8 +11,8 @@ import { Facebook, GitHub, Mail, Twitter } from "react-feather";
 
 // Core Imports
 import { loginAPI } from "../core/services/api/auth/login.api";
-import { loginFormSchema } from "../core/validations/login-form.validation";
 import { getItem, setItem } from "../core/services/common/storage.services";
+import { loginFormSchema } from "../core/validations/login-form.validation";
 
 // ** Custom Components
 import InputPasswordToggle from "@components/input-password-toggle";
@@ -35,9 +36,9 @@ import illustrationsLight from "@src/assets/images/pages/login-v2.svg";
 
 // ** Styles
 import "@styles/react/pages/page-authentication.scss";
-import { useEffect } from "react";
 
 const Login = () => {
+  // ** Hooks
   const navigate = useNavigate();
 
   const { skin } = useSkin();
@@ -58,9 +59,18 @@ const Login = () => {
       const loginUser = await loginAPI(data);
 
       if (loginUser.success === true) {
-        toast.success("با موفقیت وارد شدید !");
-        setItem("token", loginUser.token);
-        navigate("/");
+        if (
+          loginUser.roles.includes("Administrator") ||
+          loginUser.roles.includes("Teacher")
+        ) {
+          toast.success("با موفقیت وارد شدید !");
+
+          setItem("token", loginUser.token);
+          setItem("userId", loginUser.id);
+          navigate("/");
+        } else {
+          toast.error("شما دسترسی ورود به پنل ادمین را ندارید !");
+        }
       } else {
         toast.error("کاربری با اطلاعات شما وجود ندارد !");
       }
@@ -196,10 +206,13 @@ const Login = () => {
                 <ErrorMessage>{errors?.password?.message}</ErrorMessage>
               </div>
               <div className="form-check mb-1">
-                <Input
-                  type="checkbox"
+                <Controller
                   id="rememberMe"
-                  {...register("rememberMe")}
+                  name="rememberMe"
+                  control={control}
+                  render={({ field }) => (
+                    <Input type="checkbox" id="rememberMe" {...field} />
+                  )}
                 />
                 <Label className="form-check-label" for="rememberMe">
                   مرا به خاطر بسپار

@@ -13,7 +13,6 @@ const Sidebar = ({
   sidebarOpen,
   setOpenMail,
   allComments,
-  isAcceptedComments,
   setIsAcceptedComments,
   acceptedComments,
   notAcceptedComments,
@@ -25,7 +24,6 @@ const Sidebar = ({
   const handleFolder = () => {
     setOpenMail(false);
     setIsAcceptedComments(true);
-    console.log(isAcceptedComments);
   };
 
   // ** Functions To Active List Item

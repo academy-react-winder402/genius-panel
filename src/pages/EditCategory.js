@@ -23,7 +23,7 @@ const EditCategoryPage = () => {
 
         setCategory(getCategory);
       } catch (error) {
-        toast.error("مکشلی در دریافت دسته بندی به وجود آمد !");
+        toast.error("مشکلی در دریافت دسته بندی به وجود آمد !");
       }
     };
 

@@ -176,7 +176,7 @@ const EditCourse = () => {
 
         setCourseData(response);
       } catch (error) {
-        toast.error("مکشلی در دریافت داده ها به وجود آمد !");
+        toast.error("مشکلی در دریافت داده ها به وجود آمد !");
       }
     };
 

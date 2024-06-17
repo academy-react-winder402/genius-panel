@@ -62,7 +62,7 @@ const CategoryForm = ({ category }) => {
   const onSubmit = async (values) => {
     try {
       const data = onFormData({
-        id: category.id || undefined,
+        id: category ? category.id : undefined,
         ...values,
         image: category ? (files && files[0]) || category.image : files[0],
         iconAddress: category
@@ -71,8 +71,8 @@ const CategoryForm = ({ category }) => {
       });
 
       const sendCategory = category
-        ? await createNewsCategoryAPI(data)
-        : await updateNewsCategoryAPI(data);
+        ? await updateNewsCategoryAPI(data)
+        : await createNewsCategoryAPI(data);
 
       if (sendCategory.success) {
         toast.success(

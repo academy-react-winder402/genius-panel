@@ -4,6 +4,7 @@ import toast from "react-hot-toast";
 import { getItem, removeItem } from "../common/storage.services";
 
 const baseURL = import.meta.env.VITE_BASE_URL;
+
 const instance = axios.create({
   baseURL,
 });
@@ -13,12 +14,18 @@ const onSuccess = (response) => {
 };
 
 const onError = (err) => {
-  if (err.response.status == 401) {
+  if (err.response.status === 401) {
     toast.error("لطفا وارد شوید !");
 
     removeItem("token");
 
     window.location.pathname = "/login";
+  }
+
+  if (err.response.status === 422) {
+    err.response.data.ErrorMessage.map((errorMessage) => {
+      toast.error(errorMessage);
+    });
   }
 
   Promise.reject(err);

@@ -79,7 +79,6 @@ const Comments = ({
 
   // ** Handles Label Update
   const handleLabelsUpdate = (e) => {
-    console.log(e);
     e.preventDefault();
   };
 

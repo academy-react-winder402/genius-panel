@@ -11,13 +11,21 @@ import { getCourseGroupDetailsAPI } from "../core/services/api/course/course-gro
 
 // ** Custom Components
 import CourseGroupInfoCard from "../@core/components/CourseGroupDetails/CourseGroupInfoCard";
+import CourseGroupDetailsTab from "../@core/components/CourseGroupDetails/Tabs";
 
 const CourseGroupDetailsPage = () => {
   // ** States
   const [courseGroup, setCourseGroup] = useState();
+  const [active, setActive] = useState("1");
 
   // ** Hooks
   const { id } = useParams();
+
+  const toggleTab = (tab) => {
+    if (active !== tab) {
+      setActive(tab);
+    }
+  };
 
   useEffect(() => {
     const fetchCourseGroup = async () => {
@@ -40,7 +48,11 @@ const CourseGroupDetailsPage = () => {
           <CourseGroupInfoCard group={courseGroup} />
         </Col>
         <Col xl="8" lg="7" xs={{ order: 0 }} md={{ order: 1, size: 7 }}>
-          {/* <UserTabs active={active} toggleTab={toggleTab} user={user} /> */}
+          <CourseGroupDetailsTab
+            active={active}
+            toggleTab={toggleTab}
+            group={courseGroup}
+          />
         </Col>
       </Row>
     </div>

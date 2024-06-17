@@ -48,7 +48,7 @@ const Home = () => {
           />
         </Col>
       </Row>
-      <Row>
+      <Row className="match-height dashboard-chart-box-wrapper">
         <ChartJS />
       </Row>
     </div>

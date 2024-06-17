@@ -294,8 +294,16 @@ body.dark-layout
   .save-editor-js-data {
     margin-left: 120px !important;
   }
-
   .course-info-card {
     width: 110%;
+  }
+  .dashboard-chart-box-wrapper {
+    gap: 3.1px;
+  }
+  .dashboard-first-chart-box {
+    width: 33.2%;
+  }
+  .dashboard-second-chart-box {
+    width: 66.3%;
   }
 }

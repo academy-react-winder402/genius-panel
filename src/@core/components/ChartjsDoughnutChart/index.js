@@ -30,41 +30,39 @@ const ChartJS = () => {
 
   return (
     <Fragment>
-      <Row className="match-height dashboard-card-section">
-        <Col xl="4" md="6" xs="12" className="dashboard-chart-box">
-          <DoughnutChart
-            tooltipShadow={tooltipShadow}
-            successColorShade={successColorShade}
-            lineChartDanger={lineChartDanger}
-            primary={colors.primary.main}
-            labels={["کاربران فعال", "کاربران غیرفعال"]}
-            chartData={[
-              report?.activeUserPercent,
-              report?.interActiveUserPercent,
-            ]}
-            activePresent={report?.activeUserPercent || "0"}
-            inActivePresent={report?.interActiveUserPercent || "0"}
-            activeDataLabel="کاربران فعال"
-            inactiveDataLabel="کاربران غیرفعال"
-            dataLabel="اطلاعات کاربران"
-          />
-        </Col>
-        <Col xl="4" md="6" xs="12" className="dashboard-chart-box mr-1">
-          <DoughnutChart
-            tooltipShadow={tooltipShadow}
-            successColorShade={successColorShade}
-            lineChartDanger={lineChartDanger}
-            primary={colors.primary.main}
-            labels={["رزرو های تایید شده", "رزرو های تایید شده"]}
-            chartData={[report?.allReserveAccept, report?.allReserveNotAccept]}
-            activePresent={report?.allReserveAccept || "0"}
-            inActivePresent={report?.allReserveNotAccept || "0"}
-            activeDataLabel="رزرو های تایید شده"
-            inactiveDataLabel="رزرو های تایید نشده"
-            dataLabel="اطلاعات دوره های رزرو شده"
-          />
-        </Col>
-      </Row>
+      <Col md="6" xs="12" className="dashboard-first-chart-box">
+        <DoughnutChart
+          tooltipShadow={tooltipShadow}
+          successColorShade={successColorShade}
+          lineChartDanger={lineChartDanger}
+          primary={colors.primary.main}
+          labels={["کاربران فعال", "کاربران غیرفعال"]}
+          chartData={[
+            report?.activeUserPercent,
+            report?.interActiveUserPercent,
+          ]}
+          activePresent={Math.trunc(report?.activeUserPercent) || "0"}
+          inActivePresent={Math.trunc(report?.interActiveUserPercent) || "0"}
+          activeDataLabel="کاربران فعال"
+          inactiveDataLabel="کاربران غیرفعال"
+          dataLabel="اطلاعات کاربران"
+        />
+      </Col>
+      <Col md="6" xs="12" className="dashboard-second-chart-box">
+        <DoughnutChart
+          tooltipShadow={tooltipShadow}
+          successColorShade={successColorShade}
+          lineChartDanger={lineChartDanger}
+          primary={colors.primary.main}
+          labels={["رزرو های تایید شده", "رزرو های تایید شده"]}
+          chartData={[report?.allReserveAccept, report?.allReserveNotAccept]}
+          activePresent={Math.trunc(report?.allReserveAccept) || "0"}
+          inActivePresent={Math.trunc(report?.allReserveNotAccept) || "0"}
+          activeDataLabel="رزرو های تایید شده"
+          inactiveDataLabel="رزرو های تایید نشده"
+          dataLabel="اطلاعات دوره های رزرو شده"
+        />
+      </Col>
     </Fragment>
   );
 };

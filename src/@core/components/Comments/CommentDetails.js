@@ -2,7 +2,7 @@
 import { Fragment, useState } from "react";
 import toast from "react-hot-toast";
 import PerfectScrollbar from "react-perfect-scrollbar";
-import { useNavigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
 
@@ -19,7 +19,14 @@ import Avatar from "@components/avatar";
 // ** Third Party Components
 import classnames from "classnames";
 
-import { ChevronLeft, MoreVertical, Trash, Trash2 } from "react-feather";
+import {
+  CheckCircle,
+  ChevronLeft,
+  MoreVertical,
+  Trash,
+  Trash2,
+  XCircle,
+} from "react-feather";
 
 // ** Reactstrap Imports
 import {
@@ -36,6 +43,8 @@ import {
   Row,
   UncontrolledDropdown,
 } from "reactstrap";
+import { rejectCourseCommentAPI } from "../../../core/services/api/course/course-comments/reject-course-comment.api";
+import { acceptCourseCommentAPI } from "../../../core/services/api/course/course-comments/accept-course-comment.api";
 
 const CommentDetails = ({ comment, openComment, setOpenComment }) => {
   // ** States
@@ -104,7 +113,52 @@ const CommentDetails = ({ comment, openComment, setOpenComment }) => {
         if (deleteCourseComment.success) {
           toast.success("نظر با موفقیت حذف شد !");
 
+          setOpenComment(false);
+
           navigate("/comments");
+        }
+      },
+    });
+  };
+
+  const handleAcceptRejectComment = async () => {
+    MySwal.fire({
+      title: `آیا از ${
+        comment?.accept ? "لغو" : "تایید"
+      } کردن نظر مطمئن هستید؟`,
+      text: comment?.accept
+        ? "در صورت لغو نظر، نظر برای کاربران قابل نمایش نخواهد بود ."
+        : "در صورت تایید نظر، نظر برای کاربران قابل رویت خواهد بود.",
+      icon: "warning",
+      customClass: {
+        confirmButton: "btn btn-primary",
+        cancelButton: "btn btn-danger ms-1",
+      },
+      buttonsStyling: false,
+      inputAttributes: {
+        autocapitalize: "off",
+      },
+      showCancelButton: true,
+      confirmButtonText: comment?.accept
+        ? "بله، میخوام نظر را لغو کنم"
+        : "بله، میخواهم نظر را تایید کنم",
+      cancelButtonText: "انصراف",
+      showLoaderOnConfirm: true,
+      async preConfirm() {
+        const acceptRejectComment = comment?.accept
+          ? await rejectCourseCommentAPI(comment.commentId)
+          : await acceptCourseCommentAPI(comment?.commentId);
+
+        if (acceptRejectComment.success) {
+          toast.success(
+            `نظر با موفقیت ${comment.accept ? "لغو" : "تایید"} شد !`
+          );
+
+          navigate("/comments");
+        } else {
+          toast.error(
+            `مشکلی در ${comment.accept ? "لغو" : "تایید"} نظر به وجود آمد !`
+          );
         }
       },
     });
@@ -147,6 +201,17 @@ const CommentDetails = ({ comment, openComment, setOpenComment }) => {
                 >
                   <Trash2 className="me-50" size={14} />
                   حذف
+                </DropdownItem>
+                <DropdownItem
+                  className="d-flex align-items-center w-100"
+                  onClick={handleAcceptRejectComment}
+                >
+                  {comment?.accept ? (
+                    <XCircle className="me-50" size={14} />
+                  ) : (
+                    <CheckCircle className="me-50" size={14} />
+                  )}
+                  {comment?.accept ? "غیر فعال کردن" : "فعال کردن"}
                 </DropdownItem>
               </DropdownMenu>
             </UncontrolledDropdown>

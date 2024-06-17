@@ -35,7 +35,6 @@ const CourseGroupsPage = () => {
 
         setCourseGroups(getCourseGroups);
       } catch (error) {
-        console.log(error);
         toast.error("مشکلی در دریافت گروه های دوره به وجود آمد !");
       }
     };
@@ -56,7 +55,6 @@ const CourseGroupsPage = () => {
 
         setCourseGroups(getCourseGroups);
       } catch (error) {
-        console.log(error);
         toast.error("مشکلی در دریافت گروه های دوره به وجود آمد !");
       }
     };

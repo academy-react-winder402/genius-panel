@@ -68,7 +68,6 @@ const CommentsTable = ({ id }) => {
 
         setComments(getComments);
       } catch (error) {
-        console.log(error);
         toast.error("مشکلی در دریافت نظرات به وجود آمد !");
       }
     };

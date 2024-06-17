@@ -1,5 +1,5 @@
 // ** React Imports
-import { Fragment } from "react";
+import { useState, Fragment } from "react";
 import toast from "react-hot-toast";
 import { Link, useNavigate, useParams } from "react-router-dom";
 
@@ -13,6 +13,7 @@ import withReactContent from "sweetalert2-react-content";
 
 // ** Custom Components
 import Avatar from "@components/avatar";
+import UserAddRole from "../UserAddRole";
 
 // ** Core Imports
 import { deleteUserAPI } from "../../../core/services/api/user/delete-user.api";
@@ -31,6 +32,9 @@ const statusColors = {
 const MySwal = withReactContent(Swal);
 
 const UserInfoCard = ({ user }) => {
+  // ** States
+  const [modal, setModal] = useState(null);
+
   // ** Hooks
   const { id } = useParams();
   const navigate = useNavigate();
@@ -114,6 +118,19 @@ const UserInfoCard = ({ user }) => {
     } else if (roleName === "Employee.Admin") {
       return "کارمند.ادمین";
     }
+  };
+
+  // ** Toggle modal function
+  const toggleModal = (id) => {
+    if (modal !== id) {
+      setModal(id);
+    } else {
+      setModal(null);
+    }
+  };
+
+  const handleAddRoleClick = () => {
+    toggleModal(id);
   };
 
   const convertBirthday = convertDateToPersian(user?.birthDay);
@@ -239,18 +256,29 @@ const UserInfoCard = ({ user }) => {
               </ul>
             ) : null}
           </div>
-          <div className="d-flex justify-content-center pt-2">
-            <Button tag={Link} to={`/users/edit/${id}`} color="primary">
-              ویرایش
+          <div className="d-flex flex-column justify-content-center align-items-center gap-1 pt-2">
+            <div>
+              <Button tag={Link} to={`/users/edit/${id}`} color="primary">
+                ویرایش
+              </Button>
+              <Button
+                className="ms-1"
+                color="danger"
+                outline
+                onClick={handleSuspendedClick}
+              >
+                حذف
+              </Button>
+            </div>
+            <Button color="success" outline onClick={handleAddRoleClick}>
+              افزودن نقش
             </Button>
-            <Button
-              className="ms-1"
-              color="danger"
-              outline
-              onClick={handleSuspendedClick}
-            >
-              حذف
-            </Button>
+            <UserAddRole
+              modal={modal}
+              id={id}
+              toggleModal={toggleModal}
+              redirectUrl={`/users/${id}`}
+            />
           </div>
         </CardBody>
       </Card>

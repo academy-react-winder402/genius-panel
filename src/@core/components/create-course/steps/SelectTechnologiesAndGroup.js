@@ -10,19 +10,25 @@ import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 
 // ** Reactstrap Imports
-import { Button, Col, Form, FormFeedback, Label, Row } from "reactstrap";
+import { Button, Col, Form, FormFeedback, Input, Label, Row } from "reactstrap";
 
 // ** Core Imports
 import { addCourseTechnologyAPI } from "../../../../core/services/api/course/add-course-technology.api";
 
 // ** Util Imports
 import { selectThemeColors } from "../../../../utility/Utils";
+import { addCourseGroupAPI } from "../../../../core/services/api/course/course-group/add-course-group.api";
+import { onFormData } from "../../../../core/utils/form-data-helper.utils";
 
 const defaultValues = {
   technologies: undefined,
 };
 
-const SelectTechnologies = ({ stepper, createCourseOptions, courseId }) => {
+const SelectTechnologiesAndGroup = ({
+  stepper,
+  createCourseOptions,
+  courseId,
+}) => {
   // ** Hooks
   const navigate = useNavigate();
 
@@ -45,12 +51,29 @@ const SelectTechnologies = ({ stepper, createCourseOptions, courseId }) => {
         convertTechnologies
       );
 
+      const { groupName, groupCapacity } = e;
+
+      const courseGroupData = {
+        groupName,
+        groupCapacity,
+        courseId,
+      };
+
+      const courseGroupFormData = onFormData(courseGroupData);
+
+      const addCourseGroup = await addCourseGroupAPI(courseGroupFormData);
+
       if (addTechnology.success) {
         toast.success("تکنولوژی های این دوره با موفقیت اضافه شد !");
-        navigate("/courses");
-      } else toast.error("مکشلی در افزودن تکنولوژی ها به وجود آمد !");
+      } else toast.error("مشکلی در افزودن تکنولوژی ها به وجود آمد !");
+
+      if (addCourseGroup.success) {
+        toast.success("گروه این دوره با موفقیت اضافه شد !");
+      } else toast.error("مشکلی در افزودن گروه به وجود آمد !");
+
+      if (addTechnology.success && addCourseGroup.success) navigate("/courses");
     } catch (error) {
-      toast.error("مکشلی در افزودن تکنولوژی ها به وجود آمد !");
+      toast.error("مشکلی در افزودن تکنولوژی ها به وجود آمد !");
     }
   };
 
@@ -59,9 +82,9 @@ const SelectTechnologies = ({ stepper, createCourseOptions, courseId }) => {
   return (
     <Fragment>
       <div className="content-header">
-        <h5 className="mb-0">تکنولوژی های دوره</h5>
+        <h5 className="mb-0">تکنولوژی و گروه دوره</h5>
         <small className="text-muted">
-          در این بخش باید تکنولوژی های دوره را انتخاب کنید.
+          در این بخش باید تکنولوژی ها و گروه دوره را انتخاب کنید.
         </small>
       </div>
       <Form onSubmit={handleSubmit(onSubmit)}>
@@ -83,7 +106,6 @@ const SelectTechnologies = ({ stepper, createCourseOptions, courseId }) => {
                   options={createCourseOptions?.technologyDtos}
                   getOptionValue={(technology) => technology.id}
                   getOptionLabel={(technology) => technology.techName}
-                  onChange={(e) => console.log(e)}
                   isClearable
                   isMulti
                   components={animatedComponents}
@@ -93,6 +115,41 @@ const SelectTechnologies = ({ stepper, createCourseOptions, courseId }) => {
             />
             {errors.technologies && (
               <FormFeedback>{errors.technologies.message}</FormFeedback>
+            )}
+          </Col>
+        </Row>
+        <Row>
+          <h6>افزودن گروه دوره</h6>
+          <Col md="6" className="mb-2">
+            <Label className="form-label" for="groupName">
+              نام گروه
+            </Label>
+            <Controller
+              control={control}
+              name="groupName"
+              id="groupName"
+              render={({ field }) => (
+                <Input invalid={errors.groupName} {...field} />
+              )}
+            />
+            {errors.groupName && (
+              <FormFeedback>{errors.groupName.message}</FormFeedback>
+            )}
+          </Col>
+          <Col md="6" className="mb-2">
+            <Label className="form-label" for="groupCapacity">
+              ظرفیت گروه
+            </Label>
+            <Controller
+              control={control}
+              name="groupCapacity"
+              id="groupCapacity"
+              render={({ field }) => (
+                <Input invalid={errors.groupCapacity} {...field} />
+              )}
+            />
+            {errors.groupCapacity && (
+              <FormFeedback>{errors.groupCapacity.message}</FormFeedback>
             )}
           </Col>
         </Row>
@@ -122,4 +179,4 @@ const SelectTechnologies = ({ stepper, createCourseOptions, courseId }) => {
   );
 };
 
-export default SelectTechnologies;
+export default SelectTechnologiesAndGroup;

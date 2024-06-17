@@ -14,12 +14,15 @@ import Breadcrumbs from "@components/breadcrumbs";
 
 // ** Core Imports
 import { addCourseGroupAPI } from "../../../core/services/api/course/course-group/add-course-group.api";
+import { updateCourseGroupAPI } from "../../../core/services/api/course/course-group/update-course-group.api";
 import { getCourseListAPI } from "../../../core/services/api/course/get-course-list.api";
 import { courseGroupFormSchema } from "../../../core/validations/course-group-form.validation";
 
 // ** Utils
 import { convertOptions } from "../../../core/utils/convert-options-helper.utils";
 import { onFormData } from "../../../core/utils/form-data-helper.utils";
+
+import { findDefaultOption } from "../../../core/utils/default-option-helper.utils";
 import { selectThemeColors } from "../../../utility/Utils";
 
 // ** Reactstrap Imports
@@ -40,8 +43,6 @@ import "@styles/base/pages/page-blog.scss";
 import "@styles/base/plugins/forms/form-quill-editor.scss";
 import "@styles/react/libs/editor/editor.scss";
 import "@styles/react/libs/react-select/_react-select.scss";
-import { findDefaultOption } from "../../../core/utils/default-option-helper.utils";
-import { updateCourseGroupAPI } from "../../../core/services/api/course/course-group/update-course-group.api";
 
 const CourseGroupForm = ({ group }) => {
   // ** States

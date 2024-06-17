@@ -5,17 +5,19 @@ import toast from "react-hot-toast";
 // ** Custom Components
 import BreadCrumbs from "@components/breadcrumbs";
 import Wizard from "@components/wizard";
-import SelectTechnologies from "../@core/components/create-course/steps/selectTechnologies";
 
 // ** Steps
 import AdvanceData from "../@core/components/create-course/steps/AdvanceData";
 import CourseFeatures from "../@core/components/create-course/steps/CourseFeatures";
 import Describe from "../@core/components/create-course/steps/Describe";
 import GlobalData from "../@core/components/create-course/steps/GlobalData";
+import SelectTechnologiesAndGroup from "../@core/components/create-course/steps/SelectTechnologiesAndGroup";
 
 // ** Core Imports
 import { createCourseAPI } from "../core/services/api/course/create-course.api";
 import { getCreateCourseAPI } from "../core/services/api/course/get-create-course.api";
+
+// ** Utils
 import { onFormData } from "../core/utils/form-data-helper.utils";
 
 const CreateCoursePage = () => {
@@ -77,7 +79,7 @@ const CreateCoursePage = () => {
         toast.success("دوره با موفقیت ثبت شد !");
         setCourseId(createCourse.id);
         stepper.next();
-      } else toast.error(createCourse.message);
+      }
     } catch (error) {
       toast.error("مشکلی در ارسال دوره به وجود آمد !");
     }
@@ -159,11 +161,11 @@ const CreateCoursePage = () => {
       ),
     },
     {
-      id: "select-technologies",
-      title: "انحخاب تکنولوژی ها",
-      subtitle: "تکنولوژی های دوره",
+      id: "select-technologies-and-group",
+      title: "انحخاب تکنولوژی و گروه دوره",
+      subtitle: "تکنولوژی هل و گروه دوره دوره",
       content: (
-        <SelectTechnologies
+        <SelectTechnologiesAndGroup
           stepper={stepper}
           handleSubmitFn={onSubmit}
           courseId={courseId}
@@ -180,7 +182,7 @@ const CreateCoursePage = () => {
 
         setCreateCourseOptions(response);
       } catch (error) {
-        toast.error("مکشلی در دریافت داده ها به وجود آمد !");
+        toast.error("مشکلی در دریافت داده ها به وجود آمد !");
       }
     };
 

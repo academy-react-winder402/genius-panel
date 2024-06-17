@@ -30,7 +30,6 @@ export const handleDeleteCourse = async (
         );
     });
   } catch (error) {
-    console.log(error);
     toast.error("مشکلی در حذف یا بازگردانی دوره به وجود آمد ...");
   }
 };

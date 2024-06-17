@@ -59,7 +59,6 @@ const CommentsPage = () => {
         setAcceptedComments(getAcceptedComments?.totalCount);
         setNotAcceptedComments(getNotAcceptedComments?.totalCount);
       } catch (error) {
-        console.log(error);
         toast.error("مشکلی در دریافت نظرات یه وجود آمد !");
       }
     };

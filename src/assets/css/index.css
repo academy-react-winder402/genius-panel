@@ -276,6 +276,10 @@ body.dark-layout
   margin-top: 20px;
 }
 
+.swal2-container.swal2-rtl.swal2-center.swal2-backdrop-show {
+  z-index: 9999 !important;
+}
+
 /* Responsive */
 @media (max-width: 1000px) {
   .course-reserve-filters {

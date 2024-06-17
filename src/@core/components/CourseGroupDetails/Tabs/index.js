@@ -5,38 +5,28 @@ import { Fragment } from "react";
 import { Nav, NavItem, NavLink, TabContent, TabPane } from "reactstrap";
 
 // ** Icons Imports
-import { Bookmark, Heart } from "react-feather";
+import { Bookmark } from "react-feather";
 
 // ** User Components
-import UserCourseReserve from "./UserCourseReserves";
-import UserFavoriteCourses from "./UserFavoriteCourses";
+import CourseUserList from "./CourseUserList";
 
-const UserTabs = ({ active, toggleTab, user }) => {
+const CourseGroupDetailsTab = ({ active, toggleTab, group }) => {
   return (
     <Fragment>
       <Nav pills className="mb-2">
         <NavItem>
           <NavLink active={active === "1"} onClick={() => toggleTab("1")}>
             <Bookmark className="font-medium-3 me-50" />
-            <span className="fw-bold">دوره های رزرو شده</span>
-          </NavLink>
-        </NavItem>
-        <NavItem>
-          <NavLink active={active === "2"} onClick={() => toggleTab("2")}>
-            <Heart className="font-medium-3 me-50" />
-            <span className="fw-bold">دوره های مورد علاقه</span>
+            <span className="fw-bold">لیست کاربران دوره</span>
           </NavLink>
         </NavItem>
       </Nav>
       <TabContent activeTab={active}>
         <TabPane tabId="1">
-          <UserCourseReserve courseReserve={user?.coursesReseves} />
-        </TabPane>
-        <TabPane tabId="2">
-          <UserFavoriteCourses favoriteCourses={user?.courses} />
+          <CourseUserList courseUserList={group?.courseUserListDto} />
         </TabPane>
       </TabContent>
     </Fragment>
   );
 };
-export default UserTabs;
+export default CourseGroupDetailsTab;

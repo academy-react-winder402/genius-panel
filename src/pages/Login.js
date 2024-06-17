@@ -1,16 +1,21 @@
 // ** React Imports
 import { useSkin } from "@hooks/useSkin";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
 import toast from "react-hot-toast";
 import { Link, useNavigate } from "react-router-dom";
 
 // ** Icons Imports
 import { Facebook, GitHub, Mail, Twitter } from "react-feather";
 
-import { loginAPI } from "../services/api/auth/login.api";
+// Core Imports
+import { loginAPI } from "../core/services/api/auth/login.api";
+import { loginFormSchema } from "../core/validations/login-form.validation";
+import { getItem, setItem } from "../core/services/common/storage.services";
 
 // ** Custom Components
 import InputPasswordToggle from "@components/input-password-toggle";
+import ErrorMessage from "../@core/components/error-message";
 
 // ** Reactstrap Imports
 import {
@@ -30,6 +35,7 @@ import illustrationsLight from "@src/assets/images/pages/login-v2.svg";
 
 // ** Styles
 import "@styles/react/pages/page-authentication.scss";
+import { useEffect } from "react";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -38,24 +44,36 @@ const Login = () => {
 
   const source = skin === "dark" ? illustrationsDark : illustrationsLight;
 
-  const { register, handleSubmit } = useForm();
+  const {
+    register,
+    handleSubmit,
+    control,
+    formState: { errors },
+  } = useForm({
+    resolver: yupResolver(loginFormSchema),
+  });
 
   const onSubmit = async (data) => {
     try {
-      const loginUser = await toast.promise(loginAPI(data), {
-        loading: "در حال وارد شدن ...",
-      });
+      const loginUser = await loginAPI(data);
 
       if (loginUser.success === true) {
         toast.success("با موفقیت وارد شدید !");
+        setItem("token", loginUser.token);
         navigate("/");
       } else {
-        toast.error(loginUser.message);
+        toast.error("کاربری با اطلاعات شما وجود ندارد !");
       }
     } catch (error) {
       toast.error("مشکلی در فرایند ورود به وجود آمد !");
     }
   };
+
+  useEffect(() => {
+    const token = getItem("token");
+
+    if (token) navigate("/");
+  }, []);
 
   return (
     <div className="auth-wrapper auth-cover">
@@ -127,7 +145,7 @@ const Login = () => {
               </g>
             </g>
           </svg>
-          <h2 className="brand-text text-primary ms-1">Genius</h2>
+          <h2 className="brand-text text-primary ms-1">نابغه</h2>
         </Link>
         <Col
           className="d-flex align-items-center auth-bg px-2 p-lg-5"
@@ -149,32 +167,41 @@ const Login = () => {
                 <Label className="form-label" for="login-email">
                   ایمیل
                 </Label>
-                <input
-                  type="email"
+                <Controller
                   id="login-email"
-                  placeholder="شماره موبایل یا جیمیل"
-                  className="form-control"
-                  {...register("phoneOrGmail")}
+                  name="phoneOrGmail"
+                  control={control}
+                  render={({ field }) => (
+                    <Input
+                      placeholder="شماره موبایل یا جیمیل"
+                      invalid={errors.phoneOrGmail && true}
+                      {...field}
+                    />
+                  )}
                 />
+                <ErrorMessage>{errors?.phoneOrGmail?.message}</ErrorMessage>
               </div>
               <div className="mb-1">
                 <div className="d-flex justify-content-between">
                   <Label className="form-label" for="login-password">
                     رمز عبور
                   </Label>
-                  <Link to="/forgot-password">
-                    <small>رمز عبور خود را فراموش کرده اید؟</small>
-                  </Link>
                 </div>
                 <InputPasswordToggle
                   className="input-group-merge"
                   id="login-password"
+                  invalid={errors.password && true}
                   {...register("password")}
                 />
+                <ErrorMessage>{errors?.password?.message}</ErrorMessage>
               </div>
               <div className="form-check mb-1">
-                <Input type="checkbox" id="remember-me" {...register("test")} />
-                <Label className="form-check-label" for="remember-me">
+                <Input
+                  type="checkbox"
+                  id="rememberMe"
+                  {...register("rememberMe")}
+                />
+                <Label className="form-check-label" for="rememberMe">
                   مرا به خاطر بسپار
                 </Label>
               </div>
@@ -182,12 +209,6 @@ const Login = () => {
                 ورود
               </Button>
             </Form>
-            <p className="text-center mt-2">
-              <span className="me-25">New on our platform?</span>
-              <Link to="/register">
-                <span>ساخت اکانت</span>
-              </Link>
-            </p>
             <div className="divider my-2">
               <div className="divider-text">یا</div>
             </div>

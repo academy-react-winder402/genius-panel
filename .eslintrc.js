@@ -23,7 +23,7 @@ module.exports = {
     "no-debugger": process.env.NODE_ENV === "production" ? "error" : "off",
 
     // Best Practices
-    eqeqeq: "error",
+    // eqeqeq: "error",
     "no-invalid-this": "error",
     "no-return-assign": "error",
     "no-unused-expressions": ["error", { allowTernary: true }],
@@ -54,7 +54,7 @@ module.exports = {
     "no-tabs": "error",
     "no-unneeded-ternary": "error",
     "no-whitespace-before-property": "error",
-    "nonblock-statement-body-position": "error",
+    // "nonblock-statement-body-position": "error",
     "object-property-newline": [
       "error",
       { allowAllPropertiesOnSameLine: true },
@@ -70,12 +70,12 @@ module.exports = {
 
     // ES6
     "arrow-spacing": "error",
-    "no-confusing-arrow": "error",
+    // "no-confusing-arrow": "error",
     "no-duplicate-imports": "error",
     "no-var": "error",
     "object-shorthand": "error",
     "prefer-const": "error",
-    "prefer-template": "error",
+    // "prefer-template": "error",
   },
 
   // rules: {

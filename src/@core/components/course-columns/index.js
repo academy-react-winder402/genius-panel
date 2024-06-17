@@ -1,161 +1,285 @@
-import { Fragment } from "react";
-import { Link } from "react-router-dom";
-
-// ** Custom Components
-import Avatar from "@components/avatar";
+// ** React Imports
+import { useState } from "react";
+import toast from "react-hot-toast";
+import { Link, useNavigate } from "react-router-dom";
 
 // ** Reactstrap Imports
 import {
   Badge,
+  Button,
   DropdownItem,
   DropdownMenu,
   DropdownToggle,
-  UncontrolledTooltip,
   UncontrolledDropdown,
 } from "reactstrap";
 
 // ** Third Party Components
 import {
-  Eye,
-  Send,
-  Edit,
-  Copy,
-  Save,
-  Info,
-  Trash,
-  PieChart,
-  Download,
-  TrendingUp,
   CheckCircle,
+  Edit,
+  Eye,
   MoreVertical,
-  ArrowDownCircle,
+  RotateCcw,
+  Trash,
+  X,
 } from "react-feather";
-import { convertDateToPersian } from "../../../core/utils/date-helper.utils";
-import { numberWithCommas } from "../../../core/utils/number-helper.utils";
 
-// ** Vars
-const invoiceStatusObj = {
-  Sent: { color: "light-secondary", icon: Send },
-  Paid: { color: "light-success", icon: CheckCircle },
-  Draft: { color: "light-primary", icon: Save },
-  Downloaded: { color: "light-info", icon: ArrowDownCircle },
-  "Past Due": { color: "light-danger", icon: Info },
-  "Partial Payment": { color: "light-warning", icon: PieChart },
-};
+// ** Core Imports
+import { getCourseReserveWithIdAPI } from "../../../core/services/api/course/course-reserve/get-course-reserve-with-id.api";
+
+// ** Util Imports
+import { handleActiveInActiveCourse } from "../../../core/utils/handle-active-inactive-course.utils";
+import { handleDeleteCourse } from "../../../core/utils/handle-delete-course.api";
+import { persianNumberFormatter } from "../../../core/utils/persian-number-formatter-helper";
+
+// ** Custom Components
+import CourseReservedModal from "./CourseReservedModal";
+
+// ** Image Imports
+import blankThumbnail from "../../../assets/images/common/blank-thumbnail.jpg";
 
 // ** Table columns
-export const columns = [
-  {
-    sortable: true,
-    minWidth: "102px",
-    sortField: "lastUpdate",
-    name: <TrendingUp size={14} />,
-    // selector: row => row.invoiceStatus,
-    cell: (row) => {
-      const color = invoiceStatusObj[row.invoiceStatus]
-          ? invoiceStatusObj[row.invoiceStatus].color
-          : "primary",
-        Icon = invoiceStatusObj[row.invoiceStatus]
-          ? invoiceStatusObj[row.invoiceStatus].icon
-          : Edit;
-      return (
-        <Fragment>
-          <Avatar
-            color={color}
-            icon={<Icon size={14} />}
-            id={`av-tooltip-${row.id}`}
-          />
-          <UncontrolledTooltip placement="top" target={`av-tooltip-${row.id}`}>
-            {convertDateToPersian(row.lastUpdate)}
-          </UncontrolledTooltip>
-        </Fragment>
-      );
-    },
-  },
+export const COURSE_COLUMNS = (redirectUrl) => [
   {
     name: "نام دوره",
     sortable: true,
-    minWidth: "300px",
-    sortField: "250px",
-    // selector: (row) => row?.title,
+    minWidth: "180px",
+    sortField: "title",
     cell: (row) => (
-      <div>
-        <span className="text-sm text-primary">{row?.title}</span>
+      <div className="d-flex justify-content-left align-items-center gap-1">
+        <img
+          src={
+            !row.tumbImageAddress ||
+            row.tumbImageAddress === "undefined" ||
+            row.tumbImageAddress === "<string>"
+              ? blankThumbnail
+              : row.tumbImageAddress
+          }
+          className="course-column-image"
+        />
+        <div className="d-flex flex-column">
+          <Link
+            to={`/courses/${row.courseId}`}
+            className="course-column-truncate text-body"
+          >
+            <span className="fw-bolder text-primary">{row.title}</span>
+          </Link>
+          <small className="text-truncate text-muted mb-0">
+            {row.typeName}
+          </small>
+        </div>
+      </div>
+    ),
+  },
+  {
+    name: "نام مدرس",
+    sortable: true,
+    minWidth: "150px",
+    sortField: "fullName",
+    cell: (row) => (
+      <div className="mr-5">
+        <span className="text-sm">{row?.fullName}</span>
       </div>
     ),
   },
   {
     name: "قیمت",
     sortable: true,
-    minWidth: "150px",
+    minWidth: "140px",
     sortField: "cost",
-    cell: (row) => <span>{numberWithCommas(row.cost) || 0} تومان</span>,
+    cell: (row) => {
+      const formattedPrice = persianNumberFormatter(row.cost) || 0;
+
+      return <span className="course-column-truncate">{formattedPrice}</span>;
+    },
+  },
+  {
+    name: "وضعیت برگزاری",
+    sortable: true,
+    minWidth: "140px",
+    sortField: "statusName",
+    cell: (row) => (
+      <span className="course-column-truncate course-column-status">
+        {row.statusName}
+      </span>
+    ),
   },
   {
     sortable: true,
-    name: "سطح دوره",
-    minWidth: "164px",
-    sortField: "levelName",
-    // selector: row => row.levelName,
+    name: "وضعیت",
+    minWidth: "120px",
+    sortField: "active",
     cell: (row) => {
+      // ** Hooks
+      const navigate = useNavigate();
+
       return (
         <Badge
           color={
-            row.levelName === "فوق پیشرفته"
+            row.isActive === true
               ? "light-success"
-              : row.levelName === "پیشرقته"
-              ? "primary"
-              : "danger"
+              : row.isActive === false
+              ? "light-danger"
+              : "light-warning"
           }
-          pill
+          className="course-column-badge cursor-pointer"
+          onClick={() =>
+            handleActiveInActiveCourse(
+              row.isActive,
+              row.courseId,
+              navigate,
+              redirectUrl
+            )
+          }
         >
-          {row.levelName}
+          {row.isActive ? "فعال" : "غیر فعال"}
         </Badge>
       );
     },
   },
   {
     sortable: true,
-    name: "مدرس",
-    sortable: true,
-    minWidth: "150px",
-    sortField: "teacherName",
-    sortName: "teacherName",
-    cell: (row) => <span>{row.teacherName}</span>,
+    name: "وضعیت حذف",
+    minWidth: "130px",
+    sortField: "isdelete",
+    cell: (row) => {
+      const navigate = useNavigate();
+
+      return (
+        <Badge
+          color={
+            row.isdelete === true
+              ? "light-danger"
+              : row.isdelete === false
+              ? "light-success"
+              : "light-warning"
+          }
+          className="course-column-is-delete"
+          onClick={() =>
+            handleDeleteCourse(row.isdelete, row.courseId, navigate)
+          }
+        >
+          {row.isdelete ? "حذف شده" : "حذف نشده"}
+        </Badge>
+      );
+    },
   },
   {
-    name: "موارد دیگر",
-    minWidth: "110px",
-    cell: (row) => (
-      <div className="column-action d-flex align-items-center">
-        {/* <UncontrolledTooltip placement="top" target={`pw-tooltip-${row?.courseId}`}>
-          نمایش دوره
-        </UncontrolledTooltip> */}
-        <UncontrolledDropdown>
-          <DropdownToggle tag="span">
-            <MoreVertical size={17} className="cursor-pointer" />
-          </DropdownToggle>
-          <DropdownMenu end>
-            <DropdownItem
-              tag={Link}
-              to={`/courses/${row.courseId}`}
-              className="w-100"
-            >
-              <Edit size={14} className="me-50" />
-              <span className="align-middle">ویرایش</span>
-            </DropdownItem>
-            <DropdownItem
-              tag="a"
-              href="/"
-              className="w-100"
-              onClick={(e) => e.preventDefault() }
-            >
-              <Trash size={14} className="me-50" />
-              <span className="align-middle">حذف</span>
-            </DropdownItem>
-          </DropdownMenu>
-        </UncontrolledDropdown>
-      </div>
-    ),
+    name: "عملیات",
+    minWidth: "160px",
+    cell: (row) => {
+      // ** States
+      const [modal, setModal] = useState(null);
+      const [courseReserve, setCourseReserve] = useState();
+
+      // ** Hooks
+      const navigate = useNavigate();
+
+      // ** Toggle modal function
+      const toggleModal = (id) => {
+        if (modal !== id) {
+          setModal(id);
+        } else {
+          setModal(null);
+        }
+      };
+
+      const fetchCourseReserve = async () => {
+        try {
+          const getCourseReserve = await getCourseReserveWithIdAPI(
+            row.courseId
+          );
+
+          setCourseReserve(getCourseReserve);
+        } catch (error) {
+          toast.error("مشکلی در دریافت لیست رزرو دوره به وجود آمد ...");
+        }
+      };
+
+      const handleCourseReserveClick = () => {
+        fetchCourseReserve();
+        toggleModal(row.courseId);
+      };
+
+      return (
+        <div className="column-action d-flex align-items-center gap-1">
+          <UncontrolledDropdown>
+            <DropdownToggle tag="span">
+              <MoreVertical size={17} className="cursor-pointer" />
+            </DropdownToggle>
+            <DropdownMenu end>
+              <DropdownItem
+                tag={Link}
+                to={`/courses/${row.courseId}`}
+                className="w-100"
+              >
+                <Eye size={14} className="me-50" />
+                <span className="align-middle">جزئیات</span>
+              </DropdownItem>
+              <DropdownItem
+                tag={Link}
+                to={`/courses/edit/${row.courseId}`}
+                className="w-100"
+              >
+                <Edit size={14} className="me-50" />
+                <span className="align-middle">ویرایش</span>
+              </DropdownItem>
+              <DropdownItem
+                className="w-100"
+                onClick={() =>
+                  handleDeleteCourse(
+                    row.isdelete,
+                    row.courseId,
+                    navigate,
+                    redirectUrl
+                  )
+                }
+              >
+                {row.isdelete ? (
+                  <RotateCcw size={14} className="me-50" />
+                ) : (
+                  <Trash size={14} className="me-50" />
+                )}
+                <span className="align-middle">
+                  {row.isdelete ? "برگرداندن" : "حذف"}
+                </span>
+              </DropdownItem>
+              <DropdownItem
+                className="w-100"
+                onClick={() =>
+                  handleActiveInActiveCourse(
+                    row.isActive,
+                    row.courseId,
+                    navigate,
+                    redirectUrl
+                  )
+                }
+              >
+                {row.isActive ? (
+                  <X size={14} className="me-50" />
+                ) : (
+                  <CheckCircle size={14} className="me-50" />
+                )}
+                <span className="align-middle">
+                  {row.isActive ? "غیر کردن دوره" : "فعال کردن دوره"}
+                </span>
+              </DropdownItem>
+            </DropdownMenu>
+          </UncontrolledDropdown>
+          <div>
+            <Button color="primary" onClick={handleCourseReserveClick}>
+              رزرو ها
+            </Button>
+            <CourseReservedModal
+              id={row.courseId}
+              title={row.title}
+              toggleModal={toggleModal}
+              modal={modal}
+              courseReserve={courseReserve}
+            />
+          </div>
+        </div>
+      );
+    },
   },
 ];

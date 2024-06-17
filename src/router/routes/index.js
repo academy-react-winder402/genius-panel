@@ -1,11 +1,12 @@
 // ** React Imports
 import { Fragment, lazy } from "react";
 import { Navigate } from "react-router-dom";
+
 // ** Layouts
 import BlankLayout from "@layouts/BlankLayout";
-import VerticalLayout from "@src/layouts/VerticalLayout";
-import HorizontalLayout from "@src/layouts/HorizontalLayout";
 import LayoutWrapper from "@src/@core/layouts/components/layout-wrapper";
+import HorizontalLayout from "@src/layouts/HorizontalLayout";
+import VerticalLayout from "@src/layouts/VerticalLayout";
 
 // ** Route Components
 import PublicRoute from "@components/routes/PublicRoute";
@@ -20,7 +21,7 @@ const getLayout = {
 };
 
 // ** Document title
-const TemplateTitle = "%s - Vuexy React Admin Template";
+const TemplateTitle = "%s - Genius React Admin Template";
 
 // ** Default Route
 const DefaultRoute = "/home";
@@ -28,7 +29,29 @@ const DefaultRoute = "/home";
 const Home = lazy(() => import("../../pages/Home"));
 const Login = lazy(() => import("../../pages/Login"));
 const Error = lazy(() => import("../../pages/Error"));
-const Courses = lazy(() => import("../../pages/courses"));
+const Users = lazy(() => import("../../pages/Users"));
+const UserDetails = lazy(() => import("../../pages/UserDetails"));
+const CreateUser = lazy(() => import("../../pages/CreateUser"));
+const EditUser = lazy(() => import("../../pages/EditUser"));
+const Courses = lazy(() => import("../../pages/Courses"));
+const MyCourses = lazy(() => import("../../pages/MyCourses"));
+const CreateCourse = lazy(() => import("../../pages/CreateCourse"));
+const EditCourse = lazy(() => import("../../pages/EditCourse"));
+const CourseReserved = lazy(() => import("../../pages/CourseReserved"));
+const CourseDetails = lazy(() => import("../../pages/CourseDetails"));
+const CourseGroups = lazy(() => import("../../pages/CourseGroups"));
+const CreateCourseGroup = lazy(() => import("../../pages/CreateCourseGroup"));
+const CourseGroupDetails = lazy(() => import("../../pages/CourseGroupDetails"));
+const EditCourseGroup = lazy(() => import("../../pages/EditCourseGroup"));
+const News = lazy(() => import("../../pages/News"));
+const NewsDetails = lazy(() => import("../../pages/NewsDetails"));
+const CreateNews = lazy(() => import("../../pages/CreateNews"));
+const EditNews = lazy(() => import("../../pages/EditNews"));
+const Categories = lazy(() => import("../../pages/Categories"));
+const EditCategory = lazy(() => import("../../pages/EditCategory"));
+const CreateCategory = lazy(() => import("../../pages/CreateCategory"));
+const Comments = lazy(() => import("../../pages/Comments"));
+const TeacherComments = lazy(() => import("../../pages/TeacherComments"));
 
 // ** Merge Routes
 const Routes = [
@@ -49,8 +72,144 @@ const Routes = [
     },
   },
   {
+    path: "/users",
+    element: <Users />,
+  },
+  {
+    path: "/users/:id",
+    element: <UserDetails />,
+  },
+  {
+    path: "/create-user",
+    element: <CreateUser />,
+  },
+  {
+    path: "/users/edit/:id",
+    element: <EditUser />,
+  },
+  {
     path: "/courses",
     element: <Courses />,
+  },
+  {
+    path: "/my-courses",
+    element: <MyCourses />,
+  },
+  {
+    path: "/course-reserved",
+    element: <CourseReserved />,
+  },
+  {
+    path: "/courses/:id",
+    element: <CourseDetails />,
+  },
+  {
+    path: "/create-course",
+    element: <CreateCourse />,
+  },
+  {
+    path: "/courses/edit/:id",
+    element: <EditCourse />,
+  },
+  {
+    path: "/course-groups",
+    element: <CourseGroups />,
+  },
+  {
+    path: "/create-course-group",
+    element: <CreateCourseGroup />,
+  },
+  {
+    path: "/course-groups/:id",
+    element: <CourseGroupDetails />,
+  },
+  {
+    path: "/course-groups/edit/:id",
+    element: <EditCourseGroup />,
+  },
+  {
+    path: "/news",
+    element: <News />,
+  },
+  {
+    path: "/news/:id",
+    element: <NewsDetails />,
+  },
+  {
+    path: "/create-news",
+    element: <CreateNews />,
+  },
+  {
+    path: "/news/edit/:id",
+    element: <EditNews />,
+  },
+  {
+    path: "/categories",
+    element: <Categories />,
+  },
+  {
+    path: "/categories/edit/:id",
+    element: <EditCategory />,
+  },
+  {
+    path: "/create-category",
+    element: <CreateCategory />,
+  },
+  {
+    element: <Comments />,
+    path: "/comments",
+    meta: {
+      appLayout: true,
+      className: "email-application",
+    },
+  },
+  {
+    element: <Comments />,
+    path: "/comments/:folder",
+    meta: {
+      appLayout: true,
+      className: "email-application",
+    },
+  },
+  {
+    element: <Comments />,
+    path: "/comments/label/:label",
+    meta: {
+      appLayout: true,
+      className: "email-application",
+    },
+  },
+  {
+    element: <Comments />,
+    path: "/comments/:filter",
+  },
+  {
+    element: <TeacherComments />,
+    path: "/teacher-comments",
+    meta: {
+      appLayout: true,
+      className: "email-application",
+    },
+  },
+  {
+    element: <TeacherComments />,
+    path: "/teacher-comments/:folder",
+    meta: {
+      appLayout: true,
+      className: "email-application",
+    },
+  },
+  {
+    element: <TeacherComments />,
+    path: "/teacher-comments/label/:label",
+    meta: {
+      appLayout: true,
+      className: "email-application",
+    },
+  },
+  {
+    element: <TeacherComments />,
+    path: "/teacher-comments/:filter",
   },
   {
     path: "*",
@@ -76,7 +235,8 @@ const MergeLayoutRoutes = (layout, defaultLayout) => {
   const LayoutRoutes = [];
 
   if (Routes) {
-    Routes.filter((route) => {
+    Routes.filter((routes) => {
+      const route = { ...routes };
       let isBlank = false;
       // ** Checks if Route layout or Default layout matches current layout
       if (
@@ -132,4 +292,4 @@ const getRoutes = (layout) => {
   return AllRoutes;
 };
 
-export { DefaultRoute, TemplateTitle, Routes, getRoutes };
+export { DefaultRoute, getRoutes, Routes, TemplateTitle };

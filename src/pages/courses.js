@@ -1,94 +1,96 @@
 // ** React Imports
-import { Link } from "react-router-dom";
-import { useState, useEffect } from "react";
-
-// Toast Import
+import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
-
-// ** Table Columns
-import { columns } from "../@core/components/course-columns";
-
-import { getCourseWithPaginationAPI } from "../core/services/api/course/get-course-with-pagination.api";
-
-// ** Third Party Components
-import ReactPaginate from "react-paginate";
-import { ChevronDown } from "react-feather";
-import DataTable from "react-data-table-component";
-
-// Hooks import
-import { useTimeOut } from "../utility/hooks/useTimeOut";
+import { useNavigate } from "react-router-dom";
 
 // ** Reactstrap Imports
-import { Button, Input, Row, Col, Card } from "reactstrap";
+import { Card, Col, Row } from "reactstrap";
+
+// ** Icon Imports
+import { Book, BookOpen, CheckCircle, Trash2 } from "react-feather";
+
+// ** Core Imports
+import { getCourseListAPI } from "../core/services/api/course/get-course-list.api";
+
+// ** Columns
+import { COURSE_COLUMNS } from "../@core/components/course-columns";
+
+// ** Utils
+import { handleDeleteCourse } from "../core/utils/delete-course.utils";
+
+// ** Custom Components
+import BreadCrumbs from "../@core/components/breadcrumbs";
+import StatsHorizontal from "../@core/components/StatsHorizontal";
+import TableServerSide from "../@core/components/TableServerSide";
 
 // ** Styles
 import "@styles/react/apps/app-invoice.scss";
 import "@styles/react/libs/tables/react-dataTable-component.scss";
 
-const CustomHeader = ({ handleFilter, handlePerPage }) => {
-  return (
-    <div className="invoice-list-table-header w-100 py-2">
-      <Row>
-        <Col lg="6" className="d-flex align-items-center px-0 px-lg-1">
-          <div className="d-flex align-items-center me-2">
-            <label htmlFor="rows-per-page">نمایش</label>
-            <Input
-              type="select"
-              id="rows-per-page"
-              onChange={handlePerPage}
-              className="form-control ms-50 pe-3"
-            >
-              <option value="5">5</option>
-              <option value="10">10</option>
-              <option value="20">20</option>
-            </Input>
-          </div>
-          <Button tag={Link} to="/apps/invoice/add" color="primary">
-            افزودن دوره
-          </Button>
-        </Col>
-        <Col
-          lg="6"
-          className="actions-right d-flex align-items-center justify-content-lg-end flex-lg-nowrap flex-wrap mt-lg-0 mt-1 pe-lg-1 p-0"
-        >
-          <div className="d-flex align-items-center">
-            <Input
-              id="search-invoice"
-              className="ms-50 me-2 w-200"
-              type="text"
-              onChange={(e) => handleFilter(e.target.value)}
-              placeholder="جستجوی دوره ها"
-            />
-          </div>
-        </Col>
-      </Row>
-    </div>
-  );
-};
-
 const CoursesPage = () => {
-  // ** Store vars
   // ** States
-  const [courses, setCourses] = useState();
+  const [allCourses, setAllCourses] = useState();
   const [sort, setSort] = useState("desc");
   const [sortColumn, setSortColumn] = useState("id");
   const [currentPage, setCurrentPage] = useState(1);
-  const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [rowsPerPage, setRowsPerPage] = useState(7);
   const [searchText, setSearchText] = useState();
+  const [activeCourses, setActiveCourses] = useState();
+  const [deletedCourses, setDeletedCourses] = useState();
+  const [openCourses, setOpenCourses] = useState();
+  const [isAllCourses, setIsAllCourses] = useState(true);
+  const [isActiveCourses, setIsActiveCourses] = useState(false);
+  const [isDeletedCourses, setIsDeletedCourses] = useState(false);
+  const [isOpenCourses, setIsOpenCourses] = useState(false);
+  const [selectedRows, setSelectedRows] = useState();
 
-  const textTimeOut = useTimeOut();
+  // ** Hooks
+  const navigate = useNavigate();
+
+  const dataToRender = () => {
+    if (isAllCourses) {
+      return allCourses;
+    } else if (isActiveCourses) {
+      return activeCourses;
+    } else if (isDeletedCourses) {
+      return deletedCourses;
+    } else if (isOpenCourses) {
+      return openCourses;
+    }
+  };
+
+  const renderTitle = () => {
+    if (isAllCourses) {
+      return "همه دوره ها";
+    } else if (isActiveCourses) {
+      return "دوره های فعال";
+    } else if (isDeletedCourses) {
+      return "دوره های حذف شده";
+    } else if (isOpenCourses) {
+      return "دوره های در حال برگزاری";
+    }
+  };
 
   useEffect(() => {
     const fetchCourses = async () => {
       try {
-        const getData = await getCourseWithPaginationAPI(
-          currentPage,
-          rowsPerPage
-        );
+        const getCourses = await getCourseListAPI(1, 1000);
+        const getActiveCourses = getCourses.courseDtos.filter((course) => {
+          return course.isActive === true;
+        });
+        const getDeletedCourses = getCourses.courseDtos.filter((course) => {
+          return course.isdelete === true;
+        });
+        const getOpenCourses = getCourses.courseDtos.filter((course) => {
+          return course.statusName == "در حال برگذاری";
+        });
 
-        setCourses(getData);
+        setAllCourses(getCourses.courseDtos);
+        setActiveCourses(getActiveCourses);
+        setDeletedCourses(getDeletedCourses);
+        setOpenCourses(getOpenCourses);
       } catch (error) {
-        toast.error("e");
+        toast.error("مشکلی در دریافت دوره ها به وجود آمد !");
       }
     };
 
@@ -98,104 +100,145 @@ const CoursesPage = () => {
   useEffect(() => {
     const fetchCourses = async () => {
       try {
-        const getCourses = await getCourseWithPaginationAPI(
-          currentPage ? currentPage : undefined,
-          rowsPerPage ? rowsPerPage : undefined,
-          sortColumn ? sortColumn : undefined,
+        const getCourses = await getCourseListAPI(
+          undefined,
+          1000,
           sort ? sort : undefined,
+          sortColumn ? sortColumn : undefined,
           searchText ? searchText : undefined
         );
+        const getActiveCourses = getCourses.courseDtos.filter((course) => {
+          return course.isActive === true;
+        });
+        const getDeletedCourses = getCourses.courseDtos.filter((course) => {
+          return course.isdelete === true;
+        });
+        const getOpenCourses = getCourses.courseDtos.filter((course) => {
+          return course.statusName == "در حال برگذاری";
+        });
 
-        setCourses(getCourses);
+        setAllCourses(getCourses.courseDtos);
+        setActiveCourses(getActiveCourses);
+        setDeletedCourses(getDeletedCourses);
+        setOpenCourses(getOpenCourses);
       } catch (error) {
-        toast.error("ارور");
+        toast.error("مشکلی در دریافت دوره ها به وجود آمد !");
       }
     };
 
     fetchCourses();
-  }, [searchText, sort, currentPage, rowsPerPage]);
-
-  const handleFilter = (val) => {
-    textTimeOut(() => {
-      setSearchText(val);
-    }, 800);
-  };
-
-  const handlePerPage = (e) => {
-    setRowsPerPage(parseInt(e.target.value));
-  };
-
-  const handlePagination = (page) => {
-    setCurrentPage(page.selected + 1);
-  };
-
-  const CustomPagination = () => {
-    const count = Number((courses.totalCount / rowsPerPage).toFixed(0));
-
-    return (
-      <ReactPaginate
-        nextLabel=""
-        breakLabel="..."
-        previousLabel=""
-        pageCount={count || 1}
-        activeClassName="active"
-        breakClassName="page-item"
-        pageClassName={"page-item"}
-        breakLinkClassName="page-link"
-        nextLinkClassName={"page-link"}
-        pageLinkClassName={"page-link"}
-        nextClassName={"page-item next"}
-        previousLinkClassName={"page-link"}
-        previousClassName={"page-item prev"}
-        onPageChange={(page) => handlePagination(page)}
-        forcePage={currentPage !== 0 ? currentPage - 1 : 0}
-        containerClassName={"pagination react-paginate justify-content-end p-1"}
-      />
-    );
-  };
-
-  const dataToRender = () => {
-    if (courses?.courseFilterDtos?.length > 0) {
-      return courses.courseFilterDtos;
-    } else if (courses?.totalCount === 0) {
-      return [];
-    } else {
-      return courses?.courseFilterDtos?.slice(0, rowsPerPage);
-    }
-  };
-
-  const handleSort = (column, sortDirection) => {
-    setSort(sortDirection);
-    setSortColumn(column.sortField);
-  };
+  }, [searchText, sort, sortColumn]);
 
   return (
     <div className="invoice-list-wrapper">
-      <Card>
-        <div className="invoice-list-dataTable react-dataTable">
-          <DataTable
-            noHeader
-            pagination
-            sortServer
-            paginationServer
-            subHeader={true}
-            columns={columns}
-            responsive={true}
-            onSort={handleSort}
-            data={dataToRender()}
-            sortIcon={<ChevronDown />}
-            className="react-dataTable"
-            defaultSortField="invoiceId"
-            paginationDefaultPage={currentPage}
-            paginationComponent={CustomPagination}
-            subHeaderComponent={
-              <CustomHeader
-                handleFilter={handleFilter}
-                handlePerPage={handlePerPage}
-              />
-            }
-          />
-        </div>
+      <BreadCrumbs
+        title="لیست دوره ها"
+        data={[
+          { title: "مدیریت دوره ها", link: "/courses" },
+          { title: "لیست دوره ها" },
+        ]}
+      />
+      <div className="app-user-list w-100">
+        <Row>
+          <Col lg="3" sm="6">
+            <StatsHorizontal
+              color="primary"
+              statTitle="همه دوره ها"
+              icon={<Book />}
+              renderStats={
+                <h3 className="fw-bolder mb-75">{allCourses?.length || 0}</h3>
+              }
+              onClick={() => {
+                setIsAllCourses(true);
+                setIsActiveCourses(false);
+                setIsDeletedCourses(false);
+                setIsOpenCourses(false);
+              }}
+              className="cursor-pointer"
+              backgroundColor={isAllCourses && "rgb(0 0 0 / 23%)"}
+            />
+          </Col>
+          <Col lg="3" sm="6">
+            <StatsHorizontal
+              color="success"
+              statTitle="دوره های فعال"
+              icon={<CheckCircle />}
+              renderStats={
+                <h3 className="fw-bolder mb-75">
+                  {activeCourses?.length || 0}
+                </h3>
+              }
+              onClick={() => {
+                setIsAllCourses(false);
+                setIsActiveCourses(true);
+                setIsDeletedCourses(false);
+                setIsOpenCourses(false);
+              }}
+              className="cursor-pointer"
+              backgroundColor={isActiveCourses && "rgb(0 0 0 / 23%)"}
+            />
+          </Col>
+          <Col lg="3" sm="6">
+            <StatsHorizontal
+              color="danger"
+              statTitle="دوره های حذف شده"
+              icon={<Trash2 size={20} />}
+              renderStats={
+                <h3 className="fw-bolder mb-75">
+                  {deletedCourses?.length || 0}
+                </h3>
+              }
+              onClick={() => {
+                setIsAllCourses(false);
+                setIsActiveCourses(false);
+                setIsDeletedCourses(true);
+                setIsOpenCourses(false);
+              }}
+              className="cursor-pointer"
+              backgroundColor={isDeletedCourses && "rgb(0 0 0 / 23%)"}
+            />
+          </Col>
+          <Col lg="3" sm="6">
+            <StatsHorizontal
+              color="warning"
+              statTitle="دوره های در حال برگزاری"
+              icon={<BookOpen size={20} />}
+              renderStats={
+                <h3 className="fw-bolder mb-75">{openCourses?.length || 0}</h3>
+              }
+              onClick={() => {
+                setIsAllCourses(false);
+                setIsActiveCourses(false);
+                setIsDeletedCourses(false);
+                setIsOpenCourses(true);
+              }}
+              className="cursor-pointer"
+              backgroundColor={isOpenCourses && "rgb(0 0 0 / 23%)"}
+            />
+          </Col>
+        </Row>
+      </div>
+      <Card className="rounded">
+        <TableServerSide
+          data={dataToRender()}
+          columns={COURSE_COLUMNS()}
+          renderTitle={renderTitle()}
+          currentPage={currentPage}
+          rowsPerPage={rowsPerPage}
+          setCurrentPage={setCurrentPage}
+          setRowsPerPage={setRowsPerPage}
+          setSearchValue={setSearchText}
+          setSort={setSort}
+          setSortColumn={setSortColumn}
+          setSelectedRows={setSelectedRows}
+          selectableRows
+          handleDeleteData={() =>
+            handleDeleteCourse(selectedRows, navigate, "/courses")
+          }
+          isCourseCreateButtonShow
+          notFoundText="دوره ای پیدا نشد !"
+          deleteSelectedRowsText="حذف یا بازگرادنی"
+        />
       </Card>
     </div>
   );

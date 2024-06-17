@@ -12,7 +12,15 @@ import { isObjEmpty } from "@utils";
 import { ArrowLeft, ArrowRight } from "react-feather";
 
 // ** Reactstrap Imports
-import { Button, Col, Form, FormFeedback, Label, Row } from "reactstrap";
+import {
+  Button,
+  Col,
+  Form,
+  FormFeedback,
+  Label,
+  Row,
+  Spinner,
+} from "reactstrap";
 
 // ** Validation Import
 import { createCourseStepThreeFormSchema } from "../../../../core/validations/create-course/create-course-step-three-form.validation";
@@ -41,6 +49,7 @@ const CourseFeatures = ({
   teacherIdState,
   classIdState,
   termIdState,
+  isLoading,
   setCourseLvlId,
   setCourseTypeIdState,
   setTeacherIdState,
@@ -347,7 +356,13 @@ const CourseFeatures = ({
             ></ArrowLeft>
             <span className="align-middle d-sm-inline-block d-none">قبلی</span>
           </Button>
-          <Button type="submit" color="primary" className="btn-next">
+          <Button
+            type="submit"
+            color="primary"
+            className="btn-next d-flex align-items-center submit-button"
+            disabled={isLoading}
+          >
+            {isLoading && <Spinner size="sm" className="loading-spinner" />}
             <span className="align-middle d-sm-inline-block d-none">
               {course ? "آپدیت" : "ایجاد"} دوره
             </span>

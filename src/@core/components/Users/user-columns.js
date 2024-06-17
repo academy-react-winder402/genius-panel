@@ -2,10 +2,12 @@
 import { useState } from "react";
 import toast from "react-hot-toast";
 import { Link, useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
+import withReactContent from "sweetalert2-react-content";
 
 // ** Custom Components
 import Avatar from "@components/avatar";
-import UserAddRole from "./UserAddRole";
+import UserAddRole from "../UserAddRole";
 
 // ** Icons Imports
 import {
@@ -77,10 +79,6 @@ const renderRole = (row) => {
     null: {
       class: "text-warning",
       icon: Settings,
-    },
-    admin: {
-      class: "text-danger",
-      icon: Slack,
     },
   };
 
@@ -204,20 +202,35 @@ export const USER_COLUMNS = [
         toggleModal(row.id);
       };
 
-      const handleDeleteUser = async () => {
-        try {
-          const deleteUser = await deleteUserAPI(row.id);
+      const MySwal = withReactContent(Swal);
 
-          if (deleteUser.success) {
-            toast.success("کاربر با موفقیت حذف شد !");
+      const handleSuspendedClick = async () => {
+        MySwal.fire({
+          title: "آیا از حذف کاربر مطمئن هستید؟",
+          text: "در صورت مطمئن بودن، کاربر را حذف کنید.",
+          icon: "warning",
+          customClass: {
+            confirmButton: "btn btn-primary",
+            cancelButton: "btn btn-danger ms-1",
+          },
+          buttonsStyling: false,
+          inputAttributes: {
+            autocapitalize: "off",
+          },
+          showCancelButton: true,
+          confirmButtonText: "بله،کاربر را حذف میکنم",
+          cancelButtonText: "انصراف",
+          showLoaderOnConfirm: true,
+          async preConfirm() {
+            const deleteUser = await deleteUserAPI(row.id);
 
-            navigate("/users");
-          } else {
-            toast.error("مشکلی در حذف کاربر به وجود آمد !");
-          }
-        } catch (error) {
-          toast.error("مشکلی در حذف کاربر به وجود آمد !");
-        }
+            if (deleteUser) {
+              toast.success(`کاربر با موفقیت حذف شد !`);
+
+              navigate("/users");
+            } else toast.error("مشکلی در حذف کاربر به وجود آمد !");
+          },
+        });
       };
 
       return (
@@ -244,7 +257,7 @@ export const USER_COLUMNS = [
                   <Archive size={14} className="me-50" />
                   <span className="align-middle">ویرایش</span>
                 </DropdownItem>
-                <DropdownItem className="w-100" onClick={handleDeleteUser}>
+                <DropdownItem className="w-100" onClick={handleSuspendedClick}>
                   <Trash2 size={14} className="me-50" />
                   <span className="align-middle">حذف</span>
                 </DropdownItem>
@@ -258,7 +271,7 @@ export const USER_COLUMNS = [
             modal={modal}
             id={row.id}
             toggleModal={toggleModal}
-            userRoles={row.userRoles}
+            redirectUrl="/users"
           />
         </div>
       );

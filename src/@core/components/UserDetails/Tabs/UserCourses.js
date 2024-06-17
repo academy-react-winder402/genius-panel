@@ -17,7 +17,7 @@ import { USER_FAVORITE_COURSES_COLUMNS } from "./user-favorite-courses-columns";
 // ** Styles
 import "@styles/react/libs/tables/react-dataTable-component.scss";
 
-const UserFavoriteCourses = ({ favoriteCourses }) => {
+const UserCourses = ({ userCourses }) => {
   // ** States
   const [currentPage, setCurrentPage] = useState(0);
   const [itemOffset, setItemOffset] = useState(0);
@@ -26,7 +26,7 @@ const UserFavoriteCourses = ({ favoriteCourses }) => {
   const [filteredData, setFilteredData] = useState([]);
 
   const endOffset = itemOffset + rowsPerPage;
-  const currentItems = favoriteCourses?.slice(itemOffset, endOffset);
+  const currentItems = userCourses?.slice(itemOffset, endOffset);
 
   // ** Function to handle filter
   const handleFilter = (e) => {
@@ -35,7 +35,7 @@ const UserFavoriteCourses = ({ favoriteCourses }) => {
     setSearchValue(value);
 
     if (value.length) {
-      updatedData = favoriteCourses.filter((reserve) => {
+      updatedData = userCourses.filter((reserve) => {
         const startsWith = reserve.title
           .toLowerCase()
           .startsWith(value.toLowerCase());
@@ -58,7 +58,7 @@ const UserFavoriteCourses = ({ favoriteCourses }) => {
   // ** Function to handle Pagination
   const handlePagination = (event) => {
     setCurrentPage(event.selected + 1);
-    const newOffset = (event.selected * rowsPerPage) % favoriteCourses?.length;
+    const newOffset = (event.selected * rowsPerPage) % userCourses?.length;
 
     setItemOffset(newOffset);
   };
@@ -90,7 +90,7 @@ const UserFavoriteCourses = ({ favoriteCourses }) => {
         pageCount={
           searchValue.length
             ? Math.ceil(filteredData.length / rowsPerPage)
-            : Math.ceil(favoriteCourses.length / rowsPerPage) || 1
+            : Math.ceil(userCourses.length / rowsPerPage) || 1
         }
         onPageChange={(page) => handlePagination(page)}
         containerClassName="pagination react-paginate separated-pagination pagination-sm justify-content-end pe-1 mt-1"
@@ -100,11 +100,11 @@ const UserFavoriteCourses = ({ favoriteCourses }) => {
 
   return (
     <Card>
-      <CardHeader tag="h4">دوره های رزرو شده</CardHeader>
+      <CardHeader tag="h4">دوره های کاربر</CardHeader>
       <div className="react-dataTable user-view-account-projects">
-        {favoriteCourses?.length === 0 ? (
+        {userCourses?.length === 0 ? (
           <span className="no-user-course-reserve-found-text">
-            دوره رزرو شده ای برای این کاربر پیدا نشد
+            دوره ای برای این کاربر پیدا نشد !
           </span>
         ) : (
           <>
@@ -164,4 +164,4 @@ const UserFavoriteCourses = ({ favoriteCourses }) => {
   );
 };
 
-export default UserFavoriteCourses;
+export default UserCourses;

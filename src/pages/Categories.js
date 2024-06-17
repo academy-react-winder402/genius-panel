@@ -17,7 +17,7 @@ import CategoriesTable from "../@core/components/Categories/CategoriesTable";
 
 const CategoriesPage = () => {
   // ** States
-  const [categories, setCategories] = useState();
+  const [categories, setCategories] = useState([]);
 
   useEffect(() => {
     const fetchCategories = async () => {

@@ -209,7 +209,7 @@ const CourseGroupsTable = ({
     } else if (courseGroups?.totalCount === 0) {
       return [];
     } else {
-      return courseGroups?.courseGroupDtos.slice(0, rowsPerPage);
+      return courseGroups?.courseGroupDtos?.slice(0, rowsPerPage);
     }
   };
 
@@ -245,7 +245,7 @@ const CourseGroupsTable = ({
               />
             }
             noDataComponent={
-              <div className="course-group-not-found-text-wrapper">
+              <div className="data-not-found-text">
                 <span>گروهی پیدا نشد !</span>
               </div>
             }

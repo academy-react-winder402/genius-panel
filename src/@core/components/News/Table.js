@@ -209,7 +209,7 @@ const NewsListTable = ({
     } else if (news?.totalCount === 0) {
       return [];
     } else {
-      return news?.news.slice(0, rowsPerPage);
+      return news?.news?.slice(0, rowsPerPage);
     }
   };
 
@@ -244,6 +244,7 @@ const NewsListTable = ({
                 handlePerPage={handlePerPage}
               />
             }
+            noDataComponent={<span className="mt-2">خبری پیدا نشد !</span>}
           />
         </div>
       </Card>

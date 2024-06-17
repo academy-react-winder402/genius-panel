@@ -11,7 +11,7 @@ import { onUserChange } from "../../../../redux/user";
 import Avatar from "@components/avatar";
 
 // ** Third Party Components
-import { Power, Settings, User } from "react-feather";
+import { Archive, Code, Power, Settings, User } from "react-feather";
 
 // ** Reactstrap Imports
 import {
@@ -38,6 +38,9 @@ const UserDropdown = () => {
 
   // ** Hooks
   const dispatch = useDispatch();
+
+  const token = localStorage.getItem("token");
+  const userId = localStorage.getItem("userId");
 
   // ** Function for handle logout
   const handleLogout = async () => {
@@ -85,18 +88,22 @@ const UserDropdown = () => {
         />
       </DropdownToggle>
       <DropdownMenu end>
-        <DropdownItem tag={Link} to="/" onClick={(e) => e.preventDefault()}>
-          <User size={14} className="me-75" />
-          <span className="align-middle">حساب کاربری</span>
+        <DropdownItem tag="a" href={`http://localhost:3000/${token}`}>
+          <Archive size={14} className="me-75" />
+          <span className="align-middle">سایت اصلی</span>
         </DropdownItem>
         <DropdownItem divider />
-        <DropdownItem
-          tag={Link}
-          to="/users/edit/1"
-          onClick={(e) => e.preventDefault()}
-        >
+        <DropdownItem tag={Link} to={`/users/${userId}`}>
+          <User size={14} className="me-75" />
+          <span className="align-middle">حساب کاربری من</span>
+        </DropdownItem>
+        <DropdownItem tag={Link} to={`/users/edit/${userId}`}>
           <Settings size={14} className="me-75" />
           <span className="align-middle">ویرایش پروفایل</span>
+        </DropdownItem>
+        <DropdownItem tag={Link} to="/my-courses">
+          <Code size={14} className="me-75" />
+          <span className="align-middle">دوره های من</span>
         </DropdownItem>
         <DropdownItem tag={Link} to="/login" onClick={handleLogout}>
           <Power size={14} className="me-75" />

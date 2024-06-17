@@ -272,8 +272,24 @@ body.dark-layout
   gap: 4px;
 }
 
-.course-group-not-found-text-wrapper {
+.data-not-found-text {
   margin-top: 20px;
+}
+
+.swal2-container.swal2-rtl.swal2-center.swal2-backdrop-show {
+  z-index: 9999 !important;
+}
+
+.submit-button {
+  gap: 5px;
+}
+
+.submit-button-text {
+  margin-top: 2px;
+}
+
+.course-details-technologies-wrapper {
+  gap: 7px;
 }
 
 /* Responsive */

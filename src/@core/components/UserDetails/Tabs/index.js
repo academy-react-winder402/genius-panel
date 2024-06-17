@@ -5,11 +5,11 @@ import { Fragment } from "react";
 import { Nav, NavItem, NavLink, TabContent, TabPane } from "reactstrap";
 
 // ** Icons Imports
-import { Bookmark, Heart } from "react-feather";
+import { Bookmark, BookOpen, Heart } from "react-feather";
 
 // ** User Components
 import UserCourseReserve from "./UserCourseReserves";
-import UserFavoriteCourses from "./UserFavoriteCourses";
+import UserCourses from "./UserCourses";
 
 const UserTabs = ({ active, toggleTab, user }) => {
   return (
@@ -23,8 +23,8 @@ const UserTabs = ({ active, toggleTab, user }) => {
         </NavItem>
         <NavItem>
           <NavLink active={active === "2"} onClick={() => toggleTab("2")}>
-            <Heart className="font-medium-3 me-50" />
-            <span className="fw-bold">دوره های مورد علاقه</span>
+            <BookOpen className="font-medium-3 me-50" />
+            <span className="fw-bold">دوره های کاربر</span>
           </NavLink>
         </NavItem>
       </Nav>
@@ -33,7 +33,7 @@ const UserTabs = ({ active, toggleTab, user }) => {
           <UserCourseReserve courseReserve={user?.coursesReseves} />
         </TabPane>
         <TabPane tabId="2">
-          <UserFavoriteCourses favoriteCourses={user?.courses} />
+          <UserCourses userCourses={user?.courses} />
         </TabPane>
       </TabContent>
     </Fragment>

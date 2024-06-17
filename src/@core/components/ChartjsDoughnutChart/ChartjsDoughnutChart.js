@@ -33,7 +33,6 @@ const ChartjsRadarChart = ({
       tooltips: {
         callbacks: {
           label(context) {
-            console.log(context);
             let label = context.label || "";
             if (label) {
               label += "Ronak: ";

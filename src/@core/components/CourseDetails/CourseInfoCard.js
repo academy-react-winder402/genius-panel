@@ -253,14 +253,16 @@ const CourseInfoCard = ({ course }) => {
                   <span>{course?.courseClassRoomName}</span>
                 </li>
                 {course && course.courseTeches.length > 0 && (
-                  <li className="mb-75">
+                  <li className="mb-75 d-flex">
                     <span className="fw-bolder me-25">تکنولوژی های دوره :</span>
-                    {course &&
-                      course?.courseTeches.map((tech) => (
-                        <Badge key={course.courseId} color="light-primary">
-                          {tech}
-                        </Badge>
-                      ))}
+                    <div className="d-flex flex-wrap course-details-technologies-wrapper">
+                      {course &&
+                        course?.courseTeches.map((tech) => (
+                          <Badge key={course.courseId} color="light-primary">
+                            {tech}
+                          </Badge>
+                        ))}
+                    </div>
                   </li>
                 )}
               </ul>

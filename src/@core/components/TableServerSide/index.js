@@ -187,24 +187,21 @@ const DataTableServerSide = ({
           </Col>
         </Row>
         <div className="react-dataTable">
-          {!currentItems || currentItems?.length === 0 ? (
-            <h5 className="text-center">{notFoundText}</h5>
-          ) : (
-            <DataTable
-              noHeader
-              pagination
-              paginationServer
-              className="react-dataTable"
-              columns={columns}
-              onSort={handleSort}
-              sortIcon={<ChevronDown size={10} />}
-              paginationComponent={CustomPagination}
-              data={currentItems}
-              selectableRows={selectableRows}
-              selectableRowsComponent={BootstrapCheckbox}
-              onSelectedRowsChange={onSelectedRows}
-            />
-          )}
+          <DataTable
+            noHeader
+            pagination
+            paginationServer
+            className="react-dataTable"
+            columns={columns}
+            onSort={handleSort}
+            sortIcon={<ChevronDown size={10} />}
+            paginationComponent={CustomPagination}
+            data={currentItems}
+            selectableRows={selectableRows}
+            selectableRowsComponent={BootstrapCheckbox}
+            onSelectedRowsChange={onSelectedRows}
+            noDataComponent={<p>{notFoundText}</p>}
+          />
         </div>
       </Card>
     </Fragment>

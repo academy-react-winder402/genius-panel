@@ -185,6 +185,13 @@ const UsersListTable = ({
     { value: 5, label: "دانشجو" },
     { value: 2, label: "استاد" },
     { value: 1, label: "مدیر" },
+    { value: 8, label: "داور" },
+    { value: 10, label: "پشتیبان" },
+    { value: 7, label: "ادمین تورنومنت" },
+    { value: 9, label: "پشتیبان تورنومنت" },
+    { value: 3, label: "کارمند.ادمین" },
+    { value: 4, label: "کارمند.نویسنده" },
+    { value: 6, label: "دستیار دوره" },
   ];
 
   const statusOptions = [

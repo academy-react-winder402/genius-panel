@@ -1,5 +1,3 @@
-// ** React Imports
-
 // ** Reactstrap Imports
 import { Card, CardBody, Col, Row } from "reactstrap";
 
@@ -9,14 +7,7 @@ import { Card, CardBody, Col, Row } from "reactstrap";
 import StatsVertical from "@components/widgets/stats/StatsVertical";
 
 // ** Icons Imports
-import {
-  Award,
-  Eye,
-  Heart,
-  MessageSquare,
-  ShoppingBag,
-  Truck,
-} from "react-feather";
+import { Eye, Heart, MessageSquare, ShoppingBag } from "react-feather";
 
 const CourseData = ({
   courseUserTotal,
@@ -25,6 +16,35 @@ const CourseData = ({
   courseLikeTotal,
   describe,
 }) => {
+  let convertedDescribe = "";
+
+  try {
+    const convertDescribe = JSON.parse(describe);
+
+    convertedDescribe = convertDescribe;
+  } catch (error) {
+    convertedDescribe = describe;
+  }
+
+  const loadContent = () => {
+    return convertedDescribe?.blocks?.map((block, ind) => {
+      switch (block.type) {
+        case "header":
+          return <h3 key={ind}>{block.data.text}</h3>;
+
+        case "paragraph":
+          return (
+            <p key={ind} className="news-details-paragraph">
+              {block.data.text}
+            </p>
+          );
+
+        default:
+          return null;
+      }
+    });
+  };
+
   return (
     <>
       <Row>
@@ -64,7 +84,7 @@ const CourseData = ({
       <Card>
         <CardBody>
           <h4>توضیحات دوره</h4>
-          <p>{describe}</p>
+          <div className="mt-2">{loadContent()}</div>
         </CardBody>
       </Card>
     </>

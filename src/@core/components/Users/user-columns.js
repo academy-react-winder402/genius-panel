@@ -80,10 +80,6 @@ const renderRole = (row) => {
       class: "text-warning",
       icon: Settings,
     },
-    admin: {
-      class: "text-danger",
-      icon: Slack,
-    },
   };
 
   const Icon = roleObj[row.userRoles] ? roleObj[row.userRoles].icon : Edit2;

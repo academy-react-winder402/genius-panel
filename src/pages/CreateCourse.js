@@ -46,6 +46,7 @@ const CreateCoursePage = () => {
   const [shortLink, setShortLink] = useState();
   const [courseId, setCourseId] = useState();
   const [createCourseOptions, setCreateCourseOptions] = useState();
+  const [isLoading, setLoading] = useState(false);
 
   const onSubmit = async () => {
     const courseData = {
@@ -72,6 +73,8 @@ const CreateCoursePage = () => {
     };
 
     try {
+      setLoading(true);
+
       const formData = onFormData(courseData);
       const createCourse = await createCourseAPI(formData);
 
@@ -81,7 +84,11 @@ const CreateCoursePage = () => {
         stepper.next();
       }
     } catch (error) {
+      setLoading(false);
+
       toast.error("مشکلی در ارسال دوره به وجود آمد !");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -152,6 +159,7 @@ const CreateCoursePage = () => {
           teacherIdState={teacherIdState}
           classIdState={classIdState}
           termIdState={termIdState}
+          isLoading={isLoading}
           setCourseLvlId={setCourseLvlId}
           setCourseTypeIdState={setCourseTypeIdState}
           setTeacherIdState={setTeacherIdState}

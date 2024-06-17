@@ -1,8 +1,9 @@
 // ** React Imports
-import { yupResolver } from "@hookform/resolvers/yup";
-import { Controller, useForm } from "react-hook-form";
-import toast from "react-hot-toast";
+import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { Controller, useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import toast from "react-hot-toast";
 
 // ** Custom Components
 import Breadcrumbs from "@components/breadcrumbs";
@@ -19,6 +20,7 @@ import {
   Input,
   Label,
   Row,
+  Spinner,
 } from "reactstrap";
 
 // ** Core Imports
@@ -32,6 +34,9 @@ import "@styles/react/libs/editor/editor.scss";
 import "@styles/react/libs/react-select/_react-select.scss";
 
 const CreateUserPage = () => {
+  // ** States
+  const [isLoading, setLoading] = useState(false);
+
   // ** Hooks
   const {
     control,
@@ -44,6 +49,8 @@ const CreateUserPage = () => {
 
   const onSubmit = async (data) => {
     try {
+      setLoading(true);
+
       const {
         firstName,
         lastName,
@@ -72,7 +79,11 @@ const CreateUserPage = () => {
         toast.error("مشکلی در افزودن کاربر به وجود آمد !");
       }
     } catch (error) {
+      setLoading(false);
+
       toast.error("مشکلی در افزودن کاربر به وجود آمد !");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -239,9 +250,16 @@ const CreateUserPage = () => {
                       </div>
                     </div>
                   </Col>
-                  <Col md="12" className="mt-50">
-                    <Button color="primary" className="me-1">
-                      افزودن کاربر
+                  <Col md="12" className="mt-50 d-flex">
+                    <Button
+                      color="primary"
+                      className="me-1 d-flex align-items-center submit-button"
+                      disabled={isLoading}
+                    >
+                      {isLoading && (
+                        <Spinner size="sm" className="loading-spinner" />
+                      )}
+                      <span className="submit-button-text"> افزودن کاربر</span>
                     </Button>
                     <Button as={Link} href="/users" color="secondary" outline>
                       کنسل

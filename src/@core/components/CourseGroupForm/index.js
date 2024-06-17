@@ -36,6 +36,7 @@ import {
   Input,
   Label,
   Row,
+  Spinner,
 } from "reactstrap";
 
 // ** Styles
@@ -48,6 +49,7 @@ const CourseGroupForm = ({ group }) => {
   // ** States
   const [courses, setCourses] = useState([]);
   const [defaultCourse, setDefaultCourse] = useState();
+  const [isLoading, setLoading] = useState(false);
 
   // ** Hooks
   const {
@@ -67,6 +69,8 @@ const CourseGroupForm = ({ group }) => {
 
   const onSubmit = async (values) => {
     try {
+      setLoading(true);
+
       const { groupName, groupCapacity, courseId } = values;
 
       const data = onFormData({
@@ -90,7 +94,11 @@ const CourseGroupForm = ({ group }) => {
         );
       }
     } catch (error) {
+      setLoading(false);
+
       toast.error(`مشکلی در ${group ? "ویرایش" : "ایجاد"} گروه به وجود آمد !`);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -215,9 +223,17 @@ const CourseGroupForm = ({ group }) => {
                       <FormFeedback>{errors.courseId.message}</FormFeedback>
                     )}
                   </Col>
-                  <Col md="12" className="mt-50">
-                    <Button type="submit" color="primary" className="me-1">
-                      {group ? "ویرایش" : "ایجاد"} گروه
+                  <Col md="12" className="mt-50 d-flex">
+                    <Button
+                      type="submit"
+                      color="primary"
+                      className="me-1 d-flex align-items-center submit-button"
+                      disabled={isLoading}
+                    >
+                      {isLoading && (
+                        <Spinner size="sm" className="loading-spinner" />
+                      )}
+                      <span>{group ? "ویرایش" : "ایجاد"} گروه</span>
                     </Button>
                     <Button
                       tag={Link}

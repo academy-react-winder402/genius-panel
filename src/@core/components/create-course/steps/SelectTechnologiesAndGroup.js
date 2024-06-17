@@ -1,5 +1,5 @@
 // ** React Imports
-import { Fragment } from "react";
+import { Fragment, useState } from "react";
 
 // ** Third Party Components
 import { ArrowLeft, ArrowRight } from "react-feather";
@@ -10,7 +10,16 @@ import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 
 // ** Reactstrap Imports
-import { Button, Col, Form, FormFeedback, Input, Label, Row } from "reactstrap";
+import {
+  Button,
+  Col,
+  Form,
+  FormFeedback,
+  Input,
+  Label,
+  Row,
+  Spinner,
+} from "reactstrap";
 
 // ** Core Imports
 import { addCourseTechnologyAPI } from "../../../../core/services/api/course/add-course-technology.api";
@@ -29,6 +38,9 @@ const SelectTechnologiesAndGroup = ({
   createCourseOptions,
   courseId,
 }) => {
+  // ** States
+  const [isLoading, setLoading] = useState(false);
+
   // ** Hooks
   const navigate = useNavigate();
 
@@ -46,6 +58,8 @@ const SelectTechnologiesAndGroup = ({
     }));
 
     try {
+      setLoading(true);
+
       const addTechnology = await addCourseTechnologyAPI(
         courseId,
         convertTechnologies
@@ -73,7 +87,11 @@ const SelectTechnologiesAndGroup = ({
 
       if (addTechnology.success && addCourseGroup.success) navigate("/courses");
     } catch (error) {
+      setLoading(false);
+
       toast.error("مشکلی در افزودن تکنولوژی ها به وجود آمد !");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -118,7 +136,7 @@ const SelectTechnologiesAndGroup = ({
             )}
           </Col>
         </Row>
-        <Row>
+        <Row className="mt-1">
           <h6>افزودن گروه دوره</h6>
           <Col md="6" className="mb-2">
             <Label className="form-label" for="groupName">
@@ -166,7 +184,13 @@ const SelectTechnologiesAndGroup = ({
             ></ArrowLeft>
             <span className="align-middle d-sm-inline-block d-none">قبلی</span>
           </Button>
-          <Button type="submit" color="primary" className="btn-next">
+          <Button
+            type="submit"
+            color="primary"
+            className="btn-next d-flex align-items-center submit-button"
+            disabled={isLoading}
+          >
+            {isLoading && <Spinner size="sm" className="loading-spinner" />}
             <span className="align-middle d-sm-inline-block d-none">ثبت</span>
             <ArrowRight
               size={14}

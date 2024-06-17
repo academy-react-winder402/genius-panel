@@ -13,7 +13,7 @@ import Warning from "@editorjs/warning";
 import Table from "editorjs-table";
 import { Fragment, useEffect, useRef } from "react";
 import toast from "react-hot-toast";
-import { Button } from "reactstrap";
+import { Button, Spinner } from "reactstrap";
 
 // ** Utils
 import Headline from "../../../../core/utils/headline-class-helper.utils";
@@ -27,6 +27,7 @@ const Describe = ({
   defaultValue,
   setDescribe,
   onSubmit,
+  isLoading,
 }) => {
   // ** Hooks
   const editorJsInstance = useRef(null);
@@ -196,7 +197,7 @@ const Describe = ({
           },
         });
       } catch (error) {
-        return null;
+        // return null;
       }
     }
   }, [defaultValue]);
@@ -227,7 +228,13 @@ const Describe = ({
           ></ArrowLeft>
           <span className="align-middle d-sm-inline-block d-none">قبلی</span>
         </Button>
-        <Button color="primary" className="btn-next" onClick={handleSaveData}>
+        <Button
+          color="primary"
+          className="btn-next d-flex align-items-center submit-button"
+          onClick={handleSaveData}
+          disabled={isLoading}
+        >
+          {isLoading && <Spinner size="sm" className="loading-spinner" />}
           <span className="align-middle d-sm-inline-block d-none">
             {defaultValue ? "ویرایش" : "ایجاد"} خبر
           </span>

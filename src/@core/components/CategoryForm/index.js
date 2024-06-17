@@ -30,6 +30,7 @@ import {
   Input,
   Label,
   Row,
+  Spinner,
 } from "reactstrap";
 
 // ** Styles
@@ -41,6 +42,7 @@ import "@styles/react/libs/react-select/_react-select.scss";
 const CategoryForm = ({ category }) => {
   // ** States
   const [files, setFiles] = useState([]);
+  const [isLoading, setLoading] = useState(false);
 
   // ** Hooks
   const {
@@ -61,6 +63,8 @@ const CategoryForm = ({ category }) => {
 
   const onSubmit = async (values) => {
     try {
+      setLoading(true);
+
       const data = onFormData({
         id: category ? category.id : undefined,
         ...values,
@@ -86,9 +90,13 @@ const CategoryForm = ({ category }) => {
         );
       }
     } catch (error) {
+      setLoading(false);
+
       toast.error(
         `مشکلی در ${category ? "ویرایش" : "ایجاد"} دسته بندی به وجود آمد !`
       );
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -212,9 +220,17 @@ const CategoryForm = ({ category }) => {
                       />
                     </div>
                   </Col>
-                  <Col md="12" className="mt-50">
-                    <Button type="submit" color="primary" className="me-1">
-                      {category ? "ویرایش" : "ایجاد"} دسته بندی
+                  <Col md="12" className="mt-50 d-flex">
+                    <Button
+                      type="submit"
+                      color="primary"
+                      className="me-1 d-flex align-items-center submit-button"
+                      disabled={isLoading}
+                    >
+                      {isLoading && (
+                        <Spinner size="sm" className="loading-spinner" />
+                      )}
+                      <span> {category ? "ویرایش" : "ایجاد"} دسته بندی</span>
                     </Button>
                     <Button
                       tag={Link}

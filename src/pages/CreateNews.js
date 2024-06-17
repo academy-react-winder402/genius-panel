@@ -29,6 +29,7 @@ const CreateNewsPage = () => {
   const [googleDescribe, setGoogleDescribe] = useState();
   const [newsCategoryId, setNewsCategoryId] = useState();
   const [keyword, setKeyword] = useState();
+  const [isLoading, setLoading] = useState(false);
 
   // ** Hooks
   const navigate = useNavigate();
@@ -46,6 +47,8 @@ const CreateNewsPage = () => {
     };
 
     try {
+      setLoading(true);
+
       const formData = onFormData(Data);
       const createBlog = await createNewsAPI(formData);
 
@@ -55,7 +58,11 @@ const CreateNewsPage = () => {
         navigate("/news");
       } else toast.error(createBlog.message);
     } catch (error) {
+      setLoading(false);
+
       toast.error("مشکلی در ارسال خیر به وجود آمد !");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -88,6 +95,7 @@ const CreateNewsPage = () => {
           setDescribe={setDescribe}
           describe={describe}
           onSubmit={onSubmit}
+          isLoading={isLoading}
         />
       ),
     },

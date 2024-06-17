@@ -280,6 +280,14 @@ body.dark-layout
   z-index: 9999 !important;
 }
 
+.submit-button {
+  gap: 5px;
+}
+
+.submit-button-text {
+  margin-top: 2px;
+}
+
 /* Responsive */
 @media (max-width: 1000px) {
   .course-reserve-filters {

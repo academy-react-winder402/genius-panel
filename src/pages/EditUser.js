@@ -24,6 +24,7 @@ const EditUserPage = () => {
   const [stepper, setStepper] = useState(null);
   const [globalData, setGlobalData] = useState();
   const [userConnection, setUserConnection] = useState(null);
+  const [isLoading, setLoading] = useState(false);
 
   // ** Hooks
   const { id } = useParams();
@@ -31,6 +32,8 @@ const EditUserPage = () => {
 
   const handleSubmitFn = async () => {
     try {
+      setLoading(true);
+
       const userData = {
         id,
         ...globalData,
@@ -47,7 +50,11 @@ const EditUserPage = () => {
         toast.error("مشکلی در ویرایش کاربر به وجود آمد !");
       }
     } catch (error) {
+      setLoading(false);
+
       toast.error("مشکلی در ویرایش کاربر به وجود آمد !");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -72,6 +79,7 @@ const EditUserPage = () => {
         <UserConnection
           stepper={stepper}
           user={userDetails}
+          isLoading={isLoading}
           userConnection={userConnection}
           setUserConnection={setUserConnection}
           handleSubmitFn={handleSubmitFn}

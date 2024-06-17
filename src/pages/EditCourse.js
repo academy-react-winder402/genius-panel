@@ -45,6 +45,7 @@ const EditCourse = () => {
   const [googleSchema, setGoogleSchema] = useState();
   const [uniqueUrlString, setUniqueUrlString] = useState();
   const [shortLink, setShortLink] = useState();
+  const [isLoading, setLoading] = useState(false);
 
   //  ** Hooks
   const { id } = useParams();
@@ -76,6 +77,8 @@ const EditCourse = () => {
     };
 
     try {
+      setLoading(true);
+
       const formData = onFormData(courseDataObj);
       const createCourse = await updateCourseAPI(formData);
 
@@ -85,7 +88,11 @@ const EditCourse = () => {
         navigate("/courses");
       } else toast.error(createCourse.message);
     } catch (error) {
+      setLoading(false);
+
       toast.error("مشکلی در ارسال دوره به وجود آمد !");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -159,6 +166,7 @@ const EditCourse = () => {
           teacherIdState={teacherIdState}
           classIdState={classIdState}
           termIdState={termIdState}
+          isLoading={isLoading}
           setCourseLvlId={setCourseLvlId}
           setCourseTypeIdState={setCourseTypeIdState}
           setTeacherIdState={setTeacherIdState}

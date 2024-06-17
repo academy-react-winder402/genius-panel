@@ -11,20 +11,12 @@ import { Badge, ListGroup, ListGroupItem } from "reactstrap";
 
 const Sidebar = ({
   sidebarOpen,
-  setOpenMail,
   allComments,
-  setIsAcceptedComments,
   acceptedComments,
   notAcceptedComments,
 }) => {
   // ** Vars
   const params = useParams();
-
-  // ** Functions To Handle Folder, Label
-  const handleFolder = () => {
-    setOpenMail(false);
-    setIsAcceptedComments(true);
-  };
 
   // ** Functions To Active List Item
   const handleActiveItem = (value) => {
@@ -55,7 +47,6 @@ const Sidebar = ({
                 <ListGroupItem
                   tag={Link}
                   to="/comments/all"
-                  onClick={() => handleFolder("all")}
                   action
                   active={
                     !Object.keys(params).length || handleActiveItem("all")

@@ -9,7 +9,16 @@ import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
 
 // ** Reactstrap Imports
-import { Button, Col, Form, FormFeedback, Input, Label, Row } from "reactstrap";
+import {
+  Button,
+  Col,
+  Form,
+  FormFeedback,
+  Input,
+  Label,
+  Row,
+  Spinner,
+} from "reactstrap";
 
 // ** Core Imports
 import { userConnectionFormSchema } from "../../../../core/validations/edit-user/user-connection-form.validation";
@@ -19,6 +28,7 @@ const MySwal = withReactContent(Swal);
 const UserConnection = ({
   stepper,
   user,
+  isLoading,
   userConnection,
   setUserConnection,
   handleSubmitFn,
@@ -207,7 +217,13 @@ const UserConnection = ({
             ></ArrowLeft>
             <span className="align-middle d-sm-inline-block d-none">قبلی</span>
           </Button>
-          <Button type="submit" color="primary" className="btn-next">
+          <Button
+            type="submit"
+            color="primary"
+            className="btn-next d-flex align-items-center submit-button"
+            disabled={isLoading}
+          >
+            {isLoading && <Spinner size="sm" className="loading-spinner" />}
             <span className="align-middle d-sm-inline-block d-none">
               ویرایش کاربر
             </span>

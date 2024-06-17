@@ -28,6 +28,7 @@ const EditNews = () => {
   const [files, setFiles] = useState([]);
   const [describe, setDescribe] = useState();
   const [updatedData, setUpdatedData] = useState();
+  const [isLoading, setLoading] = useState(false);
 
   // ** Hooks
   const { id } = useParams();
@@ -45,6 +46,8 @@ const EditNews = () => {
     };
 
     try {
+      setLoading(true);
+
       const formData = onFormData(data);
       const editBlog = await updateNewsAPI(formData);
 
@@ -54,7 +57,11 @@ const EditNews = () => {
         navigate("/news");
       } else toast.error(editBlog.message);
     } catch (error) {
+      setLoading(false);
+
       toast.error("مشکلی در ویرایش خبر به وجود آمد !");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -84,6 +91,7 @@ const EditNews = () => {
           describe={describe}
           onSubmit={onSubmit}
           defaultValue={news?.describe}
+          isLoading={isLoading}
         />
       ),
     },

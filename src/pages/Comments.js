@@ -26,7 +26,6 @@ const CommentsPage = () => {
   const [query, setQuery] = useState("");
   const [openComment, setOpenComment] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [isAcceptedComments, setIsAcceptedComments] = useState();
 
   // ** Vars
   const params = useParams();
@@ -75,7 +74,9 @@ const CommentsPage = () => {
           undefined,
           undefined,
           query,
-          params.folder === "accepted" ? true : params.folder === "not-accepted"
+          params.folder === "accepted"
+            ? true
+            : params.folder === "not-accepted" && false
         );
 
         setComments(getComments);
@@ -85,19 +86,15 @@ const CommentsPage = () => {
     };
 
     fetchComments();
-  }, [query, isAcceptedComments, params.label, params.folder, currentPage]);
+  }, [query, params.label, params.folder, currentPage]);
 
   return (
     <Fragment>
       <Sidebar
         allComments={allComments}
-        sidebarOpen={sidebarOpen}
-        setOpenComment={setOpenComment}
-        setSidebarOpen={setSidebarOpen}
-        setIsAcceptedComments={setIsAcceptedComments}
-        isAcceptedComments={isAcceptedComments}
         acceptedComments={acceptedComments}
         notAcceptedComments={notAcceptedComments}
+        sidebarOpen={sidebarOpen}
       />
       <div className="content-right">
         <div className="content-body">

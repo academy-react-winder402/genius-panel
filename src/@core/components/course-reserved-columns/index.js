@@ -1,7 +1,5 @@
 import { Link } from "react-router-dom";
 
-// ** Custom Components
-
 // ** Reactstrap Imports
 import {
   Badge,

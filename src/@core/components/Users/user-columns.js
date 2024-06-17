@@ -7,7 +7,7 @@ import withReactContent from "sweetalert2-react-content";
 
 // ** Custom Components
 import Avatar from "@components/avatar";
-import UserAddRole from "./UserAddRole";
+import UserAddRole from "../UserAddRole";
 
 // ** Icons Imports
 import {
@@ -275,7 +275,7 @@ export const USER_COLUMNS = [
             modal={modal}
             id={row.id}
             toggleModal={toggleModal}
-            userRoles={row.userRoles}
+            redirectUrl="/users"
           />
         </div>
       );

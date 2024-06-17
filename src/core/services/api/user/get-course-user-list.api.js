@@ -1,6 +1,6 @@
 import http from "../../interceptor";
 
-export const getCourseList = async (
+export const getCourseListAPI = async (
   courseId,
   pageNumber,
   rowsOfPage,

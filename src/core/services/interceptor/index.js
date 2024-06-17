@@ -13,16 +13,12 @@ const onSuccess = (response) => {
 };
 
 const onError = (err) => {
-  if (err.response?.status === 401) {
+  if (err.response.status == 401) {
     toast.error("لطفا وارد شوید !");
 
     removeItem("token");
 
     window.location.pathname = "/login";
-  }
-
-  if (err?.response?.status >= 400 && err?.response.status < 500) {
-    alert("Client Error: ", err?.response.status);
   }
 
   Promise.reject(err);

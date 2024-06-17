@@ -19,7 +19,7 @@ import {
   Row,
 } from "reactstrap";
 
-const CategoriesTable = ({ data, columns }) => {
+const CategoriesTable = ({ data = [], columns }) => {
   // ** States
   const [itemOffset, setItemOffset] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
@@ -28,7 +28,7 @@ const CategoriesTable = ({ data, columns }) => {
   const [filteredData, setFilteredData] = useState([]);
 
   const endOffset = itemOffset + rowsPerPage;
-  const currentItems = data?.slice(itemOffset, endOffset);
+  const currentItems = data && data?.slice(itemOffset, endOffset);
 
   const handlePageClick = (event, isFilter, currentPage) => {
     setCurrentPage(isFilter ? currentPage : event.selected + 1);
@@ -161,21 +161,20 @@ const CategoriesTable = ({ data, columns }) => {
           </Col>
         </Row>
         <div className="react-dataTable">
-          {!currentItems || currentItems?.length === 0 ? (
-            <h5 className="text-center">دسته بندی ای یافت نشد !</h5>
-          ) : (
-            <DataTable
-              noHeader
-              pagination
-              paginationServer
-              className="react-dataTable"
-              columns={columns}
-              onSort={handleSort}
-              sortIcon={<ChevronDown size={10} />}
-              paginationComponent={CustomPagination}
-              data={searchValue.length ? filteredData : currentItems}
-            />
-          )}
+          <DataTable
+            noHeader
+            pagination
+            paginationServer
+            className="react-dataTable"
+            columns={columns}
+            onSort={handleSort}
+            sortIcon={<ChevronDown size={10} />}
+            paginationComponent={CustomPagination}
+            data={searchValue.length ? filteredData : currentItems}
+            noDataComponent={
+              <span className="mt-2">دسته بندی ای پیدا نشد !</span>
+            }
+          />
         </div>
       </Card>
     </Fragment>

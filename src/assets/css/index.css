@@ -272,7 +272,7 @@ body.dark-layout
   gap: 4px;
 }
 
-.course-group-not-found-text-wrapper {
+.data-not-found-text {
   margin-top: 20px;
 }
 
@@ -286,6 +286,10 @@ body.dark-layout
 
 .submit-button-text {
   margin-top: 2px;
+}
+
+.course-details-technologies-wrapper {
+  gap: 7px;
 }
 
 /* Responsive */

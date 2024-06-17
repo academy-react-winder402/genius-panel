@@ -240,7 +240,7 @@ const Comments = ({
             <ul className="email-media-list">{renderComments()}</ul>
           ) : (
             <div className="no-results d-block">
-              <h5>نظری پیدا نشد !</h5>
+              <span>نظری پیدا نشد !</span>
             </div>
           )}
         </PerfectScrollbar>

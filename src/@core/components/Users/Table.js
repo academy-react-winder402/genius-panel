@@ -260,7 +260,7 @@ const UsersListTable = ({
     } else if (users?.totalCount === 0 && isFiltered) {
       return [];
     } else {
-      return users?.listUser.slice(0, rowsOfPage);
+      return users?.listUser?.slice(0, rowsOfPage);
     }
   };
 

@@ -18,7 +18,7 @@ import {
 import { addReplyCommentAPI } from "../../../core/services/api/course/course-comments/add-reply-course-comment.api";
 
 // ** Utils
-import { onFormData } from "../../../core/utils/form-data-helper.utils";
+import { onFormData } from "../../../utility/form-data-helper.utils";
 
 const CourseReplyCommentModal = ({
   commentId,

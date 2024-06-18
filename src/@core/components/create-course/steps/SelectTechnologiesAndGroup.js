@@ -4,10 +4,10 @@ import { Fragment, useState } from "react";
 // ** Third Party Components
 import { ArrowLeft, ArrowRight } from "react-feather";
 import { Controller, useForm } from "react-hook-form";
+import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 import Select from "react-select";
 import makeAnimated from "react-select/animated";
-import { useNavigate } from "react-router-dom";
-import toast from "react-hot-toast";
 
 // ** Reactstrap Imports
 import {
@@ -23,11 +23,11 @@ import {
 
 // ** Core Imports
 import { addCourseTechnologyAPI } from "../../../../core/services/api/course/add-course-technology.api";
+import { addCourseGroupAPI } from "../../../../core/services/api/course/course-group/add-course-group.api";
 
 // ** Util Imports
 import { selectThemeColors } from "../../../../utility/Utils";
-import { addCourseGroupAPI } from "../../../../core/services/api/course/course-group/add-course-group.api";
-import { onFormData } from "../../../../core/utils/form-data-helper.utils";
+import { onFormData } from "../../../../utility/form-data-helper.utils";
 
 const defaultValues = {
   technologies: undefined,

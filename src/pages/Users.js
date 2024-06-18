@@ -34,7 +34,7 @@ const Users = () => {
   const [sortType, setSortType] = useState();
   const [currentRole, setCurrentRole] = useState({
     value: "",
-    label: "انتخاب کاربران",
+    label: "انتخاب نقش",
   });
   const [currentStatus, setCurrentStatus] = useState({
     value: "",

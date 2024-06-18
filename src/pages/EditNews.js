@@ -15,7 +15,7 @@ import GlobalData from "../@core/components/CreateNews/steps/GlobalData";
 import { getNewsWithIdAPI } from "../core/services/api/news/get-news-with-id.api";
 
 // ** Utils
-import { onFormData } from "../core/utils/form-data-helper.utils";
+import { onFormData } from "../utility/form-data-helper.utils";
 import { updateNewsAPI } from "../core/services/api/news/update-news.api";
 
 const EditNews = () => {

@@ -24,7 +24,7 @@ import FileUploaderSingle from "../../FileUploaderSingle";
 
 // ** Utils
 import { selectThemeColors } from "../../../../utility/Utils";
-import { convertOptions } from "../../../../core/utils/convert-options-helper.utils";
+import { convertOptions } from "../../../../utility/convert-options-helper.utils";
 
 const defaultValues = {
   title: "",

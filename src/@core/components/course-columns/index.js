@@ -28,9 +28,9 @@ import {
 import { getCourseReserveWithIdAPI } from "../../../core/services/api/course/course-reserve/get-course-reserve-with-id.api";
 
 // ** Util Imports
-import { handleActiveInActiveCourse } from "../../../core/utils/handle-active-inactive-course.utils";
-import { handleDeleteCourse } from "../../../core/utils/handle-delete-course.api";
-import { persianNumberFormatter } from "../../../core/utils/persian-number-formatter-helper";
+import { handleActiveInactiveCourse } from "../../../utility/active-inactive-course.utils";
+import { handleDeleteCourse } from "../../../utility/delete-course-alert.utils";
+import { persianNumberFormatter } from "../../../utility/persian-number-formatter-helper";
 
 // ** Custom Components
 import CourseReservedModal from "./CourseReservedModal";
@@ -124,7 +124,7 @@ export const COURSE_COLUMNS = (redirectUrl) => [
           }
           className="course-column-badge cursor-pointer"
           onClick={() =>
-            handleActiveInActiveCourse(
+            handleActiveInactiveCourse(
               row.isActive,
               row.courseId,
               navigate,
@@ -143,8 +143,6 @@ export const COURSE_COLUMNS = (redirectUrl) => [
     minWidth: "130px",
     sortField: "isdelete",
     cell: (row) => {
-      const navigate = useNavigate();
-
       return (
         <Badge
           color={
@@ -155,9 +153,7 @@ export const COURSE_COLUMNS = (redirectUrl) => [
               : "light-warning"
           }
           className="course-column-is-delete"
-          onClick={() =>
-            handleDeleteCourse(row.isdelete, row.courseId, navigate)
-          }
+          onClick={() => handleDeleteCourse(row.isdelete, row.courseId)}
         >
           {row.isdelete ? "حذف شده" : "حذف نشده"}
         </Badge>
@@ -226,14 +222,7 @@ export const COURSE_COLUMNS = (redirectUrl) => [
               </DropdownItem>
               <DropdownItem
                 className="w-100"
-                onClick={() =>
-                  handleDeleteCourse(
-                    row.isdelete,
-                    row.courseId,
-                    navigate,
-                    redirectUrl
-                  )
-                }
+                onClick={() => handleDeleteCourse(row.isdelete, row.courseId)}
               >
                 {row.isdelete ? (
                   <RotateCcw size={14} className="me-50" />
@@ -247,7 +236,7 @@ export const COURSE_COLUMNS = (redirectUrl) => [
               <DropdownItem
                 className="w-100"
                 onClick={() =>
-                  handleActiveInActiveCourse(
+                  handleActiveInactiveCourse(
                     row.isActive,
                     row.courseId,
                     navigate,
@@ -276,6 +265,7 @@ export const COURSE_COLUMNS = (redirectUrl) => [
               toggleModal={toggleModal}
               modal={modal}
               courseReserve={courseReserve}
+              redirectUrl={redirectUrl}
             />
           </div>
         </div>

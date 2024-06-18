@@ -8,22 +8,20 @@ import { Badge, Button, Card, CardBody } from "reactstrap";
 
 // ** Third Party Components
 import { Briefcase, Check } from "react-feather";
-import Swal from "sweetalert2";
-import withReactContent from "sweetalert2-react-content";
 
 // ** Custom Components
 import Avatar from "@components/avatar";
 
 // ** Core Imports
-import { activeAndInactiveCourseAPI } from "../../../core/services/api/course/active-and-deactive-course.api";
 import { getCourseGroupAPI } from "../../../core/services/api/course/course-group/get-course-group.api";
-import { deleteCourseAPI } from "../../../core/services/api/course/delete-course.api";
 
 // ** Utils
-import { persianNumberFormatter } from "../../../core/utils/persian-number-formatter-helper";
+import { persianNumberFormatter } from "../../../utility/persian-number-formatter-helper";
 
 // ** Styles
 import "@styles/react/libs/react-select/_react-select.scss";
+import { handleDeleteCourse } from "../../../utility/delete-course-alert.utils";
+import { handleActiveInactiveCourse } from "../../../utility/active-inactive-course.utils";
 
 const levelColors = {
   "فوق پیشرفته": "light-success",
@@ -36,8 +34,6 @@ const statusColors = {
   "درحال برگزاری": "light-secondary",
   "منقضی شده": "light-warning",
 };
-
-const MySwal = withReactContent(Swal);
 
 const CourseInfoCard = ({ course }) => {
   // ** States
@@ -79,84 +75,6 @@ const CourseInfoCard = ({ course }) => {
         />
       );
     }
-  };
-
-  const handleSuspendedClick = async () => {
-    MySwal.fire({
-      title: isDeleted
-        ? "آیا از بازگردانی دوره مطمئن هستید؟"
-        : "آیا از حذف دوره مطمئن هستید ؟",
-      text: isDeleted
-        ? "در صورت بازگردانی دوره،دوره برای کاربران قابل رویت بود ."
-        : "در صورت حذف دوره، دوره دیگر برای کاربران قابل رویت نخواهد بود.",
-      icon: "warning",
-      customClass: {
-        confirmButton: "btn btn-primary",
-        cancelButton: "btn btn-danger ms-1",
-      },
-      buttonsStyling: false,
-      inputAttributes: {
-        autocapitalize: "off",
-      },
-      showCancelButton: true,
-      confirmButtonText: isDeleted ? "بازگردانی" : "حذف",
-      cancelButtonText: "انصراف",
-      showLoaderOnConfirm: true,
-      async preConfirm() {
-        const deleteCourse = await deleteCourseAPI(isDeleted, course?.courseId);
-
-        if (deleteCourse) {
-          setIsDeleted((prev) => !prev);
-          toast.success(
-            `دوره با موفقیت ${isDeleted ? "بازگردانی" : "حذف"} شد !`
-          );
-        } else toast.error("مشکلی در حذف یا بازگردانی دوره به وجود آمد !");
-      },
-    });
-  };
-
-  const handleActiveInactiveCourse = async () => {
-    MySwal.fire({
-      title: course?.isActive
-        ? "آیا از غیر فعال دوره مطمئن هستید؟"
-        : "آیا از فعال دوره مطمئن هستید ؟",
-      text: `آیا از ${
-        course?.isActive ? "غیر فعال" : "فعال"
-      } کردن دوره اطمینان کامل دارید ؟`,
-      icon: "warning",
-      customClass: {
-        confirmButton: "btn btn-primary",
-        cancelButton: "btn btn-danger ms-1",
-      },
-      buttonsStyling: false,
-      inputAttributes: {
-        autocapitalize: "off",
-      },
-      showCancelButton: true,
-      confirmButtonText: course?.isActive ? "غیر فعال کردن" : "فعال کردن",
-      cancelButtonText: "انصراف",
-      showLoaderOnConfirm: true,
-      async preConfirm() {
-        const deleteCourse = await activeAndInactiveCourseAPI(
-          !course?.isActive,
-          course?.courseId
-        );
-
-        if (deleteCourse) {
-          setIsDeleted((prev) => !prev);
-
-          toast.success(
-            `دوره با موفقیت ${isDeleted ? "فعال" : "غیر فعال"} شد !`
-          );
-          navigate(`/courses/${course?.courseId}`);
-        } else
-          toast.error(
-            `مشکلی در ${
-              course?.isActive ? "غیر فعال کردن" : "فعال کردن"
-            } دوره به وجود آمد !`
-          );
-      },
-    });
   };
 
   const formattedCoursePrice = () => persianNumberFormatter(course?.cost);
@@ -281,7 +199,9 @@ const CourseInfoCard = ({ course }) => {
                 className="ms-1"
                 color="danger"
                 outline
-                onClick={handleSuspendedClick}
+                onClick={() =>
+                  handleDeleteCourse(isDeleted, course?.courseId, setIsDeleted)
+                }
               >
                 {isDeleted ? "بازگردانی دوره" : "حذف دوره"}
               </Button>
@@ -291,7 +211,14 @@ const CourseInfoCard = ({ course }) => {
                 className="ms-1"
                 color="success"
                 outline
-                onClick={handleActiveInactiveCourse}
+                onClick={() =>
+                  handleActiveInactiveCourse(
+                    course?.isActive,
+                    course?.courseId,
+                    navigate,
+                    `/courses/${course?.courseId}`
+                  )
+                }
               >
                 {course?.isActive ? "غیر فعال کردن دوره" : "فعال کردن دوره"}
               </Button>

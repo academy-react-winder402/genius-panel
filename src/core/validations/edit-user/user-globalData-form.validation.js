@@ -1,6 +1,6 @@
 import * as yup from "yup";
 
-export const globalDataFromSchema = yup.object().shape({
+export const editUserGlobalDataFromSchema = yup.object().shape({
   fName: yup.string(),
   lName: yup.string(),
   userAbout: yup.string(),

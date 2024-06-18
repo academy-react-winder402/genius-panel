@@ -7,12 +7,12 @@ import Select from "react-select";
 import makeAnimated from "react-select/animated";
 
 // ** Core Imports
-import { globalDataFromSchema } from "../../../../core/validations/edit-user/global-data-form.validation";
+import { editUserGlobalDataFromSchema } from "../../../../core/validations/edit-user/user-globalData-form.validation";
 
 // ** Utils
 import { isObjEmpty } from "@utils";
-import { dateFormatter } from "../../../../core/utils/date-formatter.utils";
-import { convertDateToPersian } from "../../../../core/utils/date-helper.utils";
+import { dateFormatter } from "../../../../utility/date-formatter.utils";
+import { convertDateToPersian } from "../../../../utility/date-helper.utils";
 import { selectThemeColors } from "../../../../utility/Utils";
 
 // ** Third Party Components
@@ -33,7 +33,7 @@ const GlobalData = ({ stepper, user, setGlobalData }) => {
     formState: { errors },
     setValue,
   } = useForm({
-    resolver: yupResolver(globalDataFromSchema),
+    resolver: yupResolver(editUserGlobalDataFromSchema),
   });
 
   const onSubmit = (e) => {

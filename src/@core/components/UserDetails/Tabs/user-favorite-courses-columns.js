@@ -2,7 +2,7 @@
 import { Link } from "react-router-dom";
 
 // ** Utils
-import { convertDateToPersian } from "../../../../core/utils/date-helper.utils";
+import { convertDateToPersian } from "../../../../utility/date-helper.utils";
 
 // ** Image Imports
 import blankThumbnail from "../../../../assets/images/common/blank-thumbnail.jpg";

@@ -18,7 +18,7 @@ import { createCourseAPI } from "../core/services/api/course/create-course.api";
 import { getCreateCourseAPI } from "../core/services/api/course/get-create-course.api";
 
 // ** Utils
-import { onFormData } from "../core/utils/form-data-helper.utils";
+import { onFormData } from "../utility/form-data-helper.utils";
 
 const CreateCoursePage = () => {
   // ** Ref

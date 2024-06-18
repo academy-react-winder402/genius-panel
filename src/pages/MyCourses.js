@@ -16,7 +16,7 @@ import { COURSE_COLUMNS } from "../@core/components/course-columns";
 import { getCourseListAPI } from "../core/services/api/course/get-course-list.api";
 
 // ** Utils
-import { handleDeleteCourse } from "../core/utils/delete-course.utils";
+import { handleDeleteCourse } from "../utility/delete-course.utils";
 
 // ** Custom Components
 import BreadCrumbs from "../@core/components/breadcrumbs";

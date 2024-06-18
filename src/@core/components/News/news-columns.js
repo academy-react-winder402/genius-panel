@@ -12,7 +12,7 @@ import {
 } from "reactstrap";
 
 // ** Utils
-import { convertDateToPersian } from "../../../core/utils/date-helper.utils";
+import { convertDateToPersian } from "../../../utility/date-helper.utils";
 
 // ** Image Imports
 import { CheckCircle, Edit, Eye, MoreVertical, XCircle } from "react-feather";
@@ -20,7 +20,7 @@ import blankThumbnail from "../../../assets/images/common/blank-thumbnail.jpg";
 import { useState } from "react";
 import toast from "react-hot-toast";
 import { activeInactiveNewsAPI } from "../../../core/services/api/news/active-inactive-news.api";
-import { onFormData } from "../../../core/utils/form-data-helper.utils";
+import { onFormData } from "../../../utility/form-data-helper.utils";
 
 // ** Table columns
 export const NEWS_COLUMNS = [

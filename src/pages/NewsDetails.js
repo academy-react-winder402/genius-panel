@@ -16,7 +16,7 @@ import {
 
 // ** Core Imports
 import { getNewsWithIdAPI } from "../core/services/api/news/get-news-with-id.api";
-import { convertDateToPersian } from "../core/utils/date-helper.utils";
+import { convertDateToPersian } from "../utility/date-helper.utils";
 
 // ** Custom Components
 import Avatar from "@components/avatar";

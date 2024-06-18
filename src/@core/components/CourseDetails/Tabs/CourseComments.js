@@ -110,7 +110,7 @@ const CourseComments = () => {
   }, []);
 
   return (
-    <div className="invoice-list-wrapper">
+    <div className="invoice-list-wrapper course-details-comments-tab">
       <Card className="rounded">
         <TableServerSide
           data={searchText.length ? filteredData : courseComments}

@@ -16,7 +16,7 @@ import { getCourseListAPI } from "../core/services/api/course/get-course-list.ap
 import { COURSE_COLUMNS } from "../@core/components/course-columns";
 
 // ** Utils
-import { handleDeleteCourse } from "../core/utils/delete-course.utils";
+import { handleDeleteCourse } from "../utility/delete-course.utils";
 
 // ** Custom Components
 import BreadCrumbs from "../@core/components/breadcrumbs";
@@ -221,7 +221,7 @@ const CoursesPage = () => {
       <Card className="rounded">
         <TableServerSide
           data={dataToRender()}
-          columns={COURSE_COLUMNS()}
+          columns={COURSE_COLUMNS("/courses", dataToRender)}
           renderTitle={renderTitle()}
           currentPage={currentPage}
           rowsPerPage={rowsPerPage}

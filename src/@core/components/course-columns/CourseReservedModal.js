@@ -26,6 +26,7 @@ const CourseReservedModal = ({
   toggleModal,
   modal,
   courseReserve,
+  redirectUrl,
 }) => {
   // ** States
   const [currentPage, setCurrentPage] = useState(0);
@@ -165,7 +166,7 @@ const CourseReservedModal = ({
               noHeader
               pagination
               data={searchValue.length ? filteredData : currentItems}
-              columns={COURSE_RESERVED_COLUMNS}
+              columns={COURSE_RESERVED_COLUMNS(redirectUrl)}
               className="react-dataTable"
               sortIcon={<ChevronDown size={10} />}
               paginationComponent={CustomPagination}

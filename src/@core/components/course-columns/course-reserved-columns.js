@@ -12,7 +12,7 @@ import { getUserWithIdAPI } from "../../../core/services/api/user/get-user-with-
 // ** Image Imports
 import blankThumbnail from "../../../assets/images/common/blank-thumbnail.jpg";
 
-export const COURSE_RESERVED_COLUMNS = [
+export const COURSE_RESERVED_COLUMNS = (redirectUrl) => [
   {
     name: "نام رزرو کننده",
     reorder: true,
@@ -59,5 +59,5 @@ export const COURSE_RESERVED_COLUMNS = [
       );
     },
   },
-  ...COURSE_RESERVED_COMMON_COLUMNS("/courses"),
+  ...COURSE_RESERVED_COMMON_COLUMNS(redirectUrl),
 ];

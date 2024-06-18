@@ -292,6 +292,18 @@ body.dark-layout
   gap: 7px;
 }
 
+.user-columns-dropdown .dropend .dropdown-toggle::after {
+  display: none !important;
+}
+
+.course-details-comments-tab .rounded.card .card {
+  margin-bottom: 5px !important;
+}
+
+.dashboard-card-medal-congratulations-text {
+  width: 180px;
+}
+
 /* Responsive */
 @media (max-width: 1000px) {
   .course-reserve-filters {

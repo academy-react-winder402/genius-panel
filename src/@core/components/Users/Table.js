@@ -1,5 +1,6 @@
 // ** React Imports
 import { forwardRef, Fragment } from "react";
+import { Link } from "react-router-dom";
 
 // ** Table Columns
 import { USER_COLUMNS } from "./user-columns";
@@ -9,6 +10,9 @@ import DataTable from "react-data-table-component";
 import { ChevronDown, FileText, Share } from "react-feather";
 import ReactPaginate from "react-paginate";
 import Select from "react-select";
+
+// ** Core Imports
+import { USER_ROLES } from "../../../core/data/user-roles.data";
 
 // ** Utils
 import { selectThemeColors } from "@utils";
@@ -33,7 +37,6 @@ import {
 // ** Styles
 import "@styles/react/libs/react-select/_react-select.scss";
 import "@styles/react/libs/tables/react-dataTable-component.scss";
-import { Link } from "react-router-dom";
 
 // ** Table Header
 const CustomHeader = ({
@@ -179,21 +182,6 @@ const UsersListTable = ({
   setCurrentRole,
   setCurrentStatus,
 }) => {
-  // ** User filter options
-  const roleOptions = [
-    { value: "", label: "انتخاب نقش" },
-    { value: 5, label: "دانشجو" },
-    { value: 2, label: "استاد" },
-    { value: 1, label: "مدیر" },
-    { value: 8, label: "داور" },
-    { value: 10, label: "پشتیبان" },
-    { value: 7, label: "ادمین تورنومنت" },
-    { value: 9, label: "پشتیبان تورنومنت" },
-    { value: 3, label: "کارمند.ادمین" },
-    { value: 4, label: "کارمند.نویسنده" },
-    { value: 6, label: "دستیار دوره" },
-  ];
-
   const statusOptions = [
     { value: "", label: "انتخاب وضعیت" },
     { value: true, label: "کاربران فعال" },
@@ -282,7 +270,7 @@ const UsersListTable = ({
               <Select
                 isClearable={false}
                 value={currentRole}
-                options={roleOptions}
+                options={USER_ROLES}
                 className="react-select"
                 classNamePrefix="select"
                 theme={selectThemeColors}

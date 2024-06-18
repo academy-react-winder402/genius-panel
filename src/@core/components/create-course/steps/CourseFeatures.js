@@ -27,8 +27,8 @@ import { createCourseStepThreeFormSchema } from "../../../../core/validations/cr
 
 // ** Utils
 import { selectThemeColors } from "../../../../utility/Utils";
-import { findDefaultOption } from "../../../../core/utils/default-option-helper.utils";
-import { convertOptions } from "../../../../core/utils/convert-options-helper.utils";
+import { convertOptions } from "../../../../utility/convert-options-helper.utils";
+import { findDefaultOption } from "../../../../utility/default-option-helper.utils";
 
 const defaultValues = {
   courseType: undefined,

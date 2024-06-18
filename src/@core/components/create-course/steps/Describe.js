@@ -15,10 +15,10 @@ import { Fragment, useEffect, useRef } from "react";
 import toast from "react-hot-toast";
 
 // ** Reactstrap imports
-import { Button, Input } from "reactstrap";
+import { Button } from "reactstrap";
 
 // ** Utils
-import Headline from "../../../../core/utils/headline-class-helper.utils";
+import Headline from "../../../../utility/headline-class-helper.utils";
 
 // ** Icon Imports
 import { ArrowLeft, ArrowRight } from "react-feather";

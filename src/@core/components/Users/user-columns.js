@@ -17,7 +17,6 @@ import {
   FileText,
   MoreVertical,
   Settings,
-  Slack,
   Trash2,
   User,
 } from "react-feather";
@@ -36,7 +35,8 @@ import {
 import { deleteUserAPI } from "../../../core/services/api/user/delete-user.api";
 
 // ** Utils
-import { convertDateToPersian } from "../../../core/utils/date-helper.utils";
+import { convertDateToPersian } from "../../../utility/date-helper.utils";
+import { renderRoleName } from "../../../utility/render-role-name-helper.utils";
 
 // ** Renders Client Columns
 const renderClient = (row) => {
@@ -84,18 +84,6 @@ const renderRole = (row) => {
 
   const Icon = roleObj[row.userRoles] ? roleObj[row.userRoles].icon : Edit2;
 
-  const renderRoleName = () => {
-    if (row.userRoles?.includes("Administrator")) {
-      return "مدیر";
-    } else if (row.userRoles?.includes("Teacher")) {
-      return "استاد";
-    } else if (row.userRoles?.includes("Student")) {
-      return "دانشجو";
-    } else {
-      return "کاربر نابغه";
-    }
-  };
-
   return (
     <span className="text-truncate text-capitalize align-middle">
       <Icon
@@ -104,7 +92,7 @@ const renderRole = (row) => {
           roleObj[row.userRoles] ? roleObj[row.userRoles].class : ""
         } me-50`}
       />
-      {renderRoleName()}
+      {renderRoleName(row.userRoles)}
     </span>
   );
 };
@@ -234,7 +222,7 @@ export const USER_COLUMNS = [
       };
 
       return (
-        <div className="d-flex gap-1">
+        <div className="d-flex gap-1 user-columns-dropdown">
           <div className="column-action">
             <UncontrolledDropdown direction="right">
               <DropdownToggle tag="div" className="btn btn-sm" caret>

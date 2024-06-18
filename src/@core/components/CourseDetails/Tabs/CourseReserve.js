@@ -124,61 +124,56 @@ const CourseReserve = () => {
     <Card>
       <CardHeader tag="h4">رزرو کنندگان دوره</CardHeader>
       <div className="react-dataTable user-view-account-projects">
-        {courseReserve?.length === 0 ? (
-          <span>رزروی برای این دوره پیدا نشد</span>
-        ) : (
-          <>
-            <Row className="justify-content-end align-items-center mx-0 course-reserve-filters">
-              <Col md="6" sm="12">
-                <div className="d-flex align-items-center">
-                  <Label for="sort-select">تعداد نمایش در صفحه</Label>
-                  <Input
-                    className="dataTable-select course-reserve-rows-per-page-input"
-                    type="select"
-                    id="sort-select"
-                    value={rowsPerPage}
-                    onChange={(e) => handlePerPage(e)}
-                  >
-                    <option value={5}>5</option>
-                    <option value={7}>7</option>
-                    <option value={10}>10</option>
-                    <option value={25}>25</option>
-                    <option value={50}>50</option>
-                    <option value={75}>75</option>
-                    <option value={100}>100</option>
-                  </Input>
-                </div>
-              </Col>
-              <Col
-                md="6"
-                sm="12"
-                className="d-flex align-items-center justify-content-end course-reserve-filters-search"
+        <Row className="justify-content-end align-items-center mx-0 course-reserve-filters">
+          <Col md="6" sm="12">
+            <div className="d-flex align-items-center">
+              <Label for="sort-select">تعداد نمایش در صفحه</Label>
+              <Input
+                className="dataTable-select course-reserve-rows-per-page-input"
+                type="select"
+                id="sort-select"
+                value={rowsPerPage}
+                onChange={(e) => handlePerPage(e)}
               >
-                <Label className="me-1" for="search-input">
-                  جستجو
-                </Label>
-                <Input
-                  className="dataTable-filter mb-50"
-                  type="text"
-                  bsSize="sm"
-                  id="search-input"
-                  value={searchValue}
-                  onChange={handleFilter}
-                />
-              </Col>
-            </Row>
-            <DataTable
-              noHeader
-              pagination
-              data={searchValue.length ? filteredData : currentItems}
-              columns={COURSE_RESERVED_COLUMNS}
-              className="react-dataTable"
-              sortIcon={<ChevronDown size={10} />}
-              paginationComponent={CustomPagination}
-              paginationDefaultPage={currentPage + 1}
+                <option value={5}>5</option>
+                <option value={7}>7</option>
+                <option value={10}>10</option>
+                <option value={25}>25</option>
+                <option value={50}>50</option>
+                <option value={75}>75</option>
+                <option value={100}>100</option>
+              </Input>
+            </div>
+          </Col>
+          <Col
+            md="6"
+            sm="12"
+            className="d-flex align-items-center justify-content-end course-reserve-filters-search"
+          >
+            <Label className="me-1" for="search-input">
+              جستجو
+            </Label>
+            <Input
+              className="dataTable-filter mb-50"
+              type="text"
+              bsSize="sm"
+              id="search-input"
+              value={searchValue}
+              onChange={handleFilter}
             />
-          </>
-        )}
+          </Col>
+        </Row>
+        <DataTable
+          noHeader
+          pagination
+          data={searchValue.length ? filteredData : currentItems}
+          columns={COURSE_RESERVED_COLUMNS(`/courses/${id}`)}
+          className="react-dataTable"
+          sortIcon={<ChevronDown size={10} />}
+          paginationComponent={CustomPagination}
+          paginationDefaultPage={currentPage + 1}
+          noDataComponent={<p className="my-1">رزروی برای این دوره پیدا نشد</p>}
+        />
       </div>
     </Card>
   );

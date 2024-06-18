@@ -16,7 +16,7 @@ import { sendReserveToCourseAPI } from "../../../core/services/api/course/course
 import { getCourseByIdAPI } from "../../../core/services/api/course/get-course-by-id.api";
 
 // ** Utils Imports
-import { convertDateToPersian } from "../../../core/utils/date-helper.utils";
+import { convertDateToPersian } from "../../../utility/date-helper.utils";
 
 export const COURSE_RESERVED_COMMON_COLUMNS = (redirectUrl) => [
   {

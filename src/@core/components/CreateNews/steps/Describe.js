@@ -16,7 +16,7 @@ import toast from "react-hot-toast";
 import { Button, Spinner } from "reactstrap";
 
 // ** Utils
-import Headline from "../../../../core/utils/headline-class-helper.utils";
+import Headline from "../../../../utility/headline-class-helper.utils";
 
 // ** Icon Imports
 import { ArrowLeft, ArrowRight } from "react-feather";

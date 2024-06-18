@@ -18,7 +18,7 @@ import Avatar from "@components/avatar";
 import { deleteCourseGroupAPI } from "../../../core/services/api/course/course-group/delete-course-group.api";
 
 // ** Utils
-import { onFormData } from "../../../core/utils/form-data-helper.utils";
+import { onFormData } from "../../../utility/form-data-helper.utils";
 
 // ** Styles
 import "@styles/react/libs/react-select/_react-select.scss";

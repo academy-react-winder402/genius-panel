@@ -19,7 +19,8 @@ import UserAddRole from "../UserAddRole";
 import { deleteUserAPI } from "../../../core/services/api/user/delete-user.api";
 
 // ** Utils
-import { convertDateToPersian } from "../../../core/utils/date-helper.utils";
+import { convertDateToPersian } from "../../../utility/date-helper.utils";
+import { renderRoleName } from "../../../utility/render-role-name-helper.utils";
 
 // ** Styles
 import "@styles/react/libs/react-select/_react-select.scss";
@@ -106,18 +107,6 @@ const UserInfoCard = ({ user }) => {
         }
       },
     });
-  };
-
-  const renderRoleName = (roleName) => {
-    if (roleName === "Administrator") {
-      return "مدیر";
-    } else if (roleName === "Teacher") {
-      return "استاد";
-    } else if (roleName === "Student") {
-      return "دانشجو";
-    } else if (roleName === "Employee.Admin") {
-      return "کارمند.ادمین";
-    }
   };
 
   // ** Toggle modal function

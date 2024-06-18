@@ -18,7 +18,7 @@ import { getEditCourseAPI } from "../core/services/api/course/get-edit-course.ap
 import { updateCourseAPI } from "../core/services/api/course/update-course.api";
 
 // ** Utils
-import { onFormData } from "../core/utils/form-data-helper.utils";
+import { onFormData } from "../utility/form-data-helper.utils";
 
 const EditCourse = () => {
   // ** Ref

@@ -17,7 +17,7 @@ import { updateNewsCategoryAPI } from "../../../core/services/api/news/update-ne
 import { categoryFormSchema } from "../../../core/validations/create-category-form.validation";
 
 // ** Utils
-import { onFormData } from "../../../core/utils/form-data-helper.utils";
+import { onFormData } from "../../../utility/form-data-helper.utils";
 
 // ** Reactstrap Imports
 import {

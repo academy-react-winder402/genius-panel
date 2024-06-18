@@ -2,7 +2,7 @@
 import { Fragment, useState } from "react";
 import toast from "react-hot-toast";
 import PerfectScrollbar from "react-perfect-scrollbar";
-import { Navigate, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
 
@@ -11,7 +11,7 @@ import { addReplyCommentAPI } from "../../../core/services/api/course/course-com
 import { deleteCourseCommentAPI } from "../../../core/services/api/course/course-comments/delete-course-comment.api";
 
 // ** Utils
-import { onFormData } from "../../../core/utils/form-data-helper.utils";
+import { onFormData } from "../../../utility/form-data-helper.utils";
 
 // ** Custom Components
 import Avatar from "@components/avatar";
@@ -23,7 +23,6 @@ import {
   CheckCircle,
   ChevronLeft,
   MoreVertical,
-  Trash,
   Trash2,
   XCircle,
 } from "react-feather";
@@ -43,8 +42,8 @@ import {
   Row,
   UncontrolledDropdown,
 } from "reactstrap";
-import { rejectCourseCommentAPI } from "../../../core/services/api/course/course-comments/reject-course-comment.api";
 import { acceptCourseCommentAPI } from "../../../core/services/api/course/course-comments/accept-course-comment.api";
+import { rejectCourseCommentAPI } from "../../../core/services/api/course/course-comments/reject-course-comment.api";
 
 const CommentDetails = ({ comment, openComment, setOpenComment }) => {
   // ** States

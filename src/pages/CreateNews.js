@@ -13,7 +13,7 @@ import GlobalData from "../@core/components/CreateNews/steps/GlobalData";
 
 // ** Core Imports
 import { createNewsAPI } from "../core/services/api/news/create-news.api";
-import { onFormData } from "../core/utils/form-data-helper.utils";
+import { onFormData } from "../utility/form-data-helper.utils";
 
 const CreateNewsPage = () => {
   // ** Ref

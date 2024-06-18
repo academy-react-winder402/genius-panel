@@ -17,7 +17,7 @@ const CardMedal = ({ dashboardData }) => {
   return (
     <Card className="card-congratulations-medal">
       <CardBody>
-        <h5>
+        <h5 className="text-truncate dashboard-card-medal-congratulations-text">
           تبریک میگویم 🎉 {`${user?.fName || "کاربر"} ${user?.lName || "عزیز"}`}
           !
         </h5>

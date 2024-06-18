@@ -13,7 +13,7 @@ import {
 import { Edit, MoreVertical, Trash } from "react-feather";
 
 // ** Utils
-import { persianNumberFormatter } from "../../../core/utils/persian-number-formatter-helper";
+import { persianNumberFormatter } from "../../../utility/persian-number-formatter-helper";
 
 // ** Table columns
 export const columns = [

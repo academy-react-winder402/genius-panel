@@ -14,18 +14,16 @@ const onSuccess = (response) => {
 };
 
 const onError = (err) => {
+  err.response.data.ErrorMessage.map((errorMessage) => {
+    toast.error(errorMessage);
+  });
+
   if (err.response.status === 401) {
     toast.error("لطفا وارد شوید !");
 
     removeItem("token");
 
     window.location.pathname = "/login";
-  }
-
-  if (err.response.status === 422) {
-    err.response.data.ErrorMessage.map((errorMessage) => {
-      toast.error(errorMessage);
-    });
   }
 
   Promise.reject(err);

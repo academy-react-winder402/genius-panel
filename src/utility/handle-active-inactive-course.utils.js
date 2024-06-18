@@ -2,7 +2,7 @@
 import toast from "react-hot-toast";
 
 // ** Core Imports
-import { activeAndInactiveCourseAPI } from "../services/api/course/active-and-deactive-course.api";
+import { activeAndInactiveCourseAPI } from "../core/services/api/course/active-and-deactive-course.api";
 
 export const handleActiveInActiveCourse = async (
   active,

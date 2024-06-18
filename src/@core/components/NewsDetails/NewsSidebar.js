@@ -8,7 +8,7 @@ import { adminNewsFilterListAPI } from "../../../core/services/api/news/admin-ne
 import { getNewsCategoryListsAPI } from "../../../core/services/api/news/get-news-category-lists";
 
 // ** Utils
-import { convertDateToPersian } from "../../../core/utils/date-helper.utils";
+import { convertDateToPersian } from "../../../utility/date-helper.utils";
 
 // ** Third Party Components
 import classnames from "classnames";

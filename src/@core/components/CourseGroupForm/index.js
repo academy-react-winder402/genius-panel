@@ -19,10 +19,9 @@ import { getCourseListAPI } from "../../../core/services/api/course/get-course-l
 import { courseGroupFormSchema } from "../../../core/validations/course-group-form.validation";
 
 // ** Utils
-import { convertOptions } from "../../../core/utils/convert-options-helper.utils";
-import { onFormData } from "../../../core/utils/form-data-helper.utils";
-
-import { findDefaultOption } from "../../../core/utils/default-option-helper.utils";
+import { convertOptions } from "../../../utility/convert-options-helper.utils";
+import { findDefaultOption } from "../../../utility/default-option-helper.utils";
+import { onFormData } from "../../../utility/form-data-helper.utils";
 import { selectThemeColors } from "../../../utility/Utils";
 
 // ** Reactstrap Imports

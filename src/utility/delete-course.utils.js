@@ -2,7 +2,7 @@
 import toast from "react-hot-toast";
 
 // ** Core Imports
-import { deleteCourseAPI } from "../services/api/course/delete-course.api";
+import { deleteCourseAPI } from "../core/services/api/course/delete-course.api";
 
 export const handleDeleteCourse = async (
   selectedRows,

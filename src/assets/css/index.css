@@ -300,6 +300,10 @@ body.dark-layout
   margin-bottom: 5px !important;
 }
 
+.dashboard-card-medal-congratulations-text {
+  width: 180px;
+}
+
 /* Responsive */
 @media (max-width: 1000px) {
   .course-reserve-filters {

@@ -33,7 +33,7 @@ const Users = lazy(() => import("../../pages/Users"));
 const UserDetails = lazy(() => import("../../pages/UserDetails"));
 const CreateUser = lazy(() => import("../../pages/CreateUser"));
 const EditUser = lazy(() => import("../../pages/EditUser"));
-const Courses = lazy(() => import("../../pages/Courses"));
+const Courses = lazy(() => import("../../pages/CoursesPage"));
 const MyCourses = lazy(() => import("../../pages/MyCourses"));
 const CreateCourse = lazy(() => import("../../pages/CreateCourse"));
 const EditCourse = lazy(() => import("../../pages/EditCourse"));

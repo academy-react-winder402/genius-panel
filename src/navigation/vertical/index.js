@@ -4,7 +4,7 @@ import CategoriesPage from "../../pages/Categories";
 import CommentsPage from "../../pages/Comments";
 import CourseGroupsPage from "../../pages/CourseGroups";
 import CourseReservedPage from "../../pages/CourseReserved";
-import CoursesPage from "../../pages/Courses";
+import CoursesPage from "../../pages/CoursesPage";
 import CreateCategoryPage from "../../pages/CreateCategory";
 import CreateCoursePage from "../../pages/CreateCourse";
 import CreateNewsPage from "../../pages/CreateNews";
